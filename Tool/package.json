@@ -6,10 +6,14 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:optimized": "next build && node scripts/optimize-build.js",
+    "build:package": "node scripts/build-package.js",
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write .",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "analyze": "ANALYZE=true npm run build",
+    "size-check": "npm run build && node scripts/optimize-build.js"
   },
   "keywords": [
     "tools",
