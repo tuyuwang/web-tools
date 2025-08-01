@@ -43,6 +43,15 @@ const tools: Tool[] = [
     popular: true,
   },
   {
+    id: 'text-analyze',
+    name: '文本分析工具',
+    description: '分析文本的字符数、词数、行数等统计信息。',
+    href: '/tools/text/analyze',
+    icon: FileText,
+    category: 'text',
+    popular: false,
+  },
+  {
     id: 'image-compress',
     name: '图片压缩工具',
     description: '在线压缩图片，优化图片大小，支持质量调节。',
@@ -50,6 +59,15 @@ const tools: Tool[] = [
     icon: Image,
     category: 'image',
     popular: true,
+  },
+  {
+    id: 'image-convert',
+    name: '图片格式转换',
+    description: '将图片转换为不同格式，支持JPEG、PNG、WebP等。',
+    href: '/tools/image/convert',
+    icon: Image,
+    category: 'image',
+    popular: false,
   },
   {
     id: 'dev-format',
@@ -61,6 +79,15 @@ const tools: Tool[] = [
     popular: true,
   },
   {
+    id: 'dev-json',
+    name: 'JSON工具',
+    description: '格式化、验证、压缩JSON数据，支持自定义缩进。',
+    href: '/tools/dev/json',
+    icon: Code,
+    category: 'dev',
+    popular: false,
+  },
+  {
     id: 'utility-qr',
     name: '二维码生成器',
     description: '生成自定义二维码，支持文本和URL，可下载使用。',
@@ -68,6 +95,15 @@ const tools: Tool[] = [
     icon: QrCode,
     category: 'utility',
     popular: true,
+  },
+  {
+    id: 'utility-password',
+    name: '密码生成器',
+    description: '生成安全、随机的密码，支持自定义长度和字符类型。',
+    href: '/tools/utility/password',
+    icon: Palette,
+    category: 'utility',
+    popular: false,
   },
 ];
 
