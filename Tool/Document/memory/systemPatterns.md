@@ -5,11 +5,11 @@
 ### 整体架构
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   用户浏览器    │    │   CDN/边缘节点  │    │   静态文件存储  │
+│   用户浏览器    │    │  Cloudflare CDN │    │  Cloudflare Pages│
 │                 │    │                 │    │                 │
-│  - PWA缓存      │◄──►│  - 缓存策略     │◄──►│  - HTML/CSS/JS  │
-│  - 离线功能     │    │  - 压缩优化     │    │  - 图片资源     │
-│  - 本地存储     │    │  - 安全策略     │    │  - 字体文件     │
+│  - PWA缓存      │◄──►│  - 边缘缓存     │◄──►│  - 静态文件存储 │
+│  - 离线功能     │    │  - 压缩优化     │    │  - HTML/CSS/JS  │
+│  - 本地存储     │    │  - 安全策略     │    │  - 图片资源     │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
 
@@ -30,11 +30,12 @@
 ## 关键技术决策
 
 ### 1. 静态网站生成（SSG）
-**决策**: 使用Next.js的静态生成功能
+**决策**: 使用Next.js的静态导出功能
 **原因**: 
 - 高可用性，无服务器依赖
 - 快速加载，SEO友好
 - 成本低，易于扩展
+- 兼容Cloudflare Pages部署
 
 ### 2. 客户端处理
 **决策**: 所有工具功能在浏览器中执行
@@ -56,6 +57,14 @@
 - 代码复用性高
 - 易于维护和测试
 - 团队协作友好
+
+### 5. Cloudflare Pages部署
+**决策**: 使用Cloudflare Pages进行静态部署
+**原因**:
+- 全球CDN网络，访问速度快
+- 自动HTTPS和压缩
+- 零配置部署
+- 免费额度充足
 
 ## 使用中的设计模式
 
@@ -205,6 +214,52 @@ const cacheConfig = {
   maxAge: 31536000, // 1年
   immutable: true,
   staleWhileRevalidate: 86400 // 1天
+};
+```
+
+## 部署模式
+
+### 1. 静态导出模式
+```typescript
+// next.config.js
+const nextConfig = {
+  output: 'export', // 静态导出
+  trailingSlash: true, // 支持Cloudflare Pages路由
+  images: {
+    unoptimized: true, // 禁用图片优化
+  },
+};
+```
+
+### 2. Cloudflare Pages配置模式
+```toml
+# wrangler.toml
+[build]
+command = "npm run build"
+publish = "out"
+
+[build.environment]
+NODE_VERSION = "18"
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
+```
+
+### 3. 构建优化模式
+```typescript
+// 代码分割和懒加载
+const ToolComponent = dynamic(() => import(`../tools/${toolId}`), {
+  loading: () => <ToolSkeleton />,
+  ssr: false // 客户端渲染
+});
+
+// 静态资源优化
+const staticAssets = {
+  images: '/images/',
+  fonts: '/fonts/',
+  icons: '/icons/'
 };
 ```
 
