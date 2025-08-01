@@ -13,7 +13,8 @@
     "format": "prettier --write .",
     "type-check": "tsc --noEmit",
     "analyze": "ANALYZE=true npm run build",
-    "size-check": "npm run build && node scripts/optimize-build.js"
+    "size-check": "npm run build && node scripts/optimize-build.js",
+    "build:static": "next build && next export"
   },
   "keywords": [
     "tools",

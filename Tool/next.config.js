@@ -7,6 +7,7 @@ const nextConfig = {
   images: {
     formats: ['image/webp', 'image/avif'],
     minimumCacheTTL: 60,
+    unoptimized: true, // Cloudflare Pages 需要禁用图片优化
   },
   
   // 实验性功能
@@ -17,11 +18,14 @@ const nextConfig = {
     optimizePackageImports: ['lucide-react'],
   },
   
-  // 输出配置
-  output: 'standalone',
+  // 输出配置 - 改为静态导出
+  output: 'export',
   
   // 禁用开发工具
   productionBrowserSourceMaps: false,
+  
+  // 禁用服务器端功能
+  trailingSlash: true,
   
   // 优化webpack配置
   webpack: (config, { dev, isServer }) => {

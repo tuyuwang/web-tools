@@ -2,17 +2,32 @@
 
 ## 🚀 快速部署
 
-### 方法一：本地部署
+### 方法一：Cloudflare Pages 部署（推荐）
+
+```bash
+# 1. 运行部署脚本
+./deploy-cloudflare.sh
+
+# 2. 在 Cloudflare Dashboard 中配置：
+#    - 构建命令: npm run build
+#    - 构建输出目录: out
+#    - Node.js 版本: 18
+```
+
+### 方法二：本地部署
 
 ```bash
 # 1. 安装依赖
 npm ci --only=production
 
-# 2. 启动生产服务器
-npm start
+# 2. 构建项目
+npm run build
+
+# 3. 启动本地服务器
+npx serve out
 ```
 
-### 方法二：Docker 部署
+### 方法三：Docker 部署
 
 ```bash
 # 1. 构建 Docker 镜像
@@ -22,7 +37,7 @@ docker build -t tool-website .
 docker run -p 3000:3000 tool-website
 ```
 
-### 方法三：PM2 部署
+### 方法四：PM2 部署
 
 ```bash
 # 1. 安装 PM2

@@ -84,7 +84,7 @@ export default function QRCodePage() {
     if (text) {
       generateQRCode();
     }
-  }, [text, size, errorLevel]);
+  }, [text, size, errorLevel, generateQRCode]);
 
   return (
     <div className="max-w-6xl mx-auto space-y-8">
