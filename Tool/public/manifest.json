@@ -1,0 +1,101 @@
+{
+  "name": "工具集 - 高效实用的在线工具",
+  "short_name": "工具集",
+  "description": "提供文本处理、图片编辑、开发工具等实用功能的在线工具网站",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "zh-CN",
+  "categories": ["utilities", "productivity", "developer"],
+  "icons": [
+    {
+      "src": "/icons/icon-72x72.svg",
+      "sizes": "72x72",
+      "type": "image/svg+xml",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-96x96.svg",
+      "sizes": "96x96",
+      "type": "image/svg+xml",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-128x128.svg",
+      "sizes": "128x128",
+      "type": "image/svg+xml",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-144x144.svg",
+      "sizes": "144x144",
+      "type": "image/svg+xml",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-152x152.svg",
+      "sizes": "152x152",
+      "type": "image/svg+xml",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-192x192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-384x384.svg",
+      "sizes": "384x384",
+      "type": "image/svg+xml",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icons/icon-512x512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "文本处理",
+      "short_name": "文本",
+      "description": "快速访问文本处理工具",
+      "url": "/tools/text",
+      "icons": [
+        {
+          "src": "/icons/text-96x96.svg",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "图片处理",
+      "short_name": "图片",
+      "description": "快速访问图片处理工具",
+      "url": "/tools/image",
+      "icons": [
+        {
+          "src": "/icons/image-96x96.svg",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "开发工具",
+      "short_name": "开发",
+      "description": "快速访问开发工具",
+      "url": "/tools/dev",
+      "icons": [
+        {
+          "src": "/icons/dev-96x96.svg",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ]
+} 

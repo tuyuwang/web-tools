@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Download, RotateCcw, Copy } from 'lucide-react';
 import QRCode from 'qrcode';
 
@@ -11,7 +11,7 @@ export default function QRCodePage() {
   const [errorLevel, setErrorLevel] = useState<'L' | 'M' | 'Q' | 'H'>('M');
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const generateQRCode = async () => {
+  const generateQRCode = useCallback(async () => {
     if (!text) return;
 
     setIsGenerating(true);
@@ -31,7 +31,7 @@ export default function QRCodePage() {
     } finally {
       setIsGenerating(false);
     }
-  };
+  }, [text, size, errorLevel]);
 
   const handleDownload = () => {
     if (qrCodeUrl) {

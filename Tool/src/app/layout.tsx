@@ -1,9 +1,19 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { Navigation } from '@/components/navigation';
+import { ThemeProvider } from '@/components/theme-provider';
+import { SWRegister } from '@/components/sw-register';
+import { PWAInstaller } from '@/components/pwa-installer';
 
 const inter = Inter({ subsets: ['latin'] });
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
 
 export const metadata: Metadata = {
   title: '工具集 - 高效实用的在线工具',
@@ -57,6 +67,13 @@ export const metadata: Metadata = {
   verification: {
     google: 'your-google-verification-code',
   },
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: '工具集',
+  },
+
 };
 
 export default function RootLayout({
@@ -67,12 +84,16 @@ export default function RootLayout({
   return (
     <html lang="zh-CN">
       <body className={inter.className}>
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-          <Navigation />
-          <main className="container mx-auto px-4 py-8">
-            {children}
-          </main>
-        </div>
+        <ThemeProvider>
+          <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+            <Navigation />
+            <main className="container mx-auto px-4 py-8">
+              {children}
+            </main>
+          </div>
+          <SWRegister />
+          <PWAInstaller />
+        </ThemeProvider>
       </body>
     </html>
   );
