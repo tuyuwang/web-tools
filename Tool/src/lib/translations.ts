@@ -210,11 +210,27 @@ export interface Translations {
       description: string;
       features: string[];
     };
-    calculator: {
-      title: string;
-      description: string;
-      features: string[];
-    };
+          calculator: {
+        title: string;
+        description: string;
+        features: string[];
+        display: string;
+        clear: string;
+        operations: {
+          add: string;
+          subtract: string;
+          multiply: string;
+          divide: string;
+          percentage: string;
+          plusMinus: string;
+        };
+        instructions: {
+          step1: string;
+          step2: string;
+          step3: string;
+          step4: string;
+        };
+      };
     randomGenerator: {
       title: string;
       description: string;
@@ -543,6 +559,10 @@ export interface Translations {
     loading: string;
     error: string;
     success: string;
+    encode: string;
+    decode: string;
+    copy: string;
+    clear: string;
   };
   
   // 主题切换
@@ -712,6 +732,10 @@ export const translations: Record<Locale, Translations> = {
       loading: '加载中...',
       error: '出错了',
       success: '成功',
+      encode: '编码',
+      decode: '解码',
+      copy: '复制',
+      clear: '清空',
     },
     theme: {
       light: '浅色',
@@ -914,7 +938,7 @@ export const translations: Record<Locale, Translations> = {
           alternating: { name: '交错大小写', description: '交替转换大小写' },
           inverse: { name: '反转大小写', description: '反转文本的大小写' },
         },
-        instructions: {
+        instructionSteps: {
           step1: '选择要转换的文本格式',
           step2: '选择转换目标格式',
           step3: '点击生成按钮',
@@ -941,13 +965,13 @@ export const translations: Record<Locale, Translations> = {
           phone: '123-456-7890',
           wifi: 'WIFI:S:MyNetwork;T:WPA;P:mypassword;H:false;',
         },
-                 instructionSteps: {
-           step1: '选择要生成二维码的类型',
-           step2: '输入内容或选择快速输入',
-           step3: '调整尺寸和纠错级别',
-           step4: '点击生成按钮',
-           step5: '查看生成的二维码',
-         },
+        instructionSteps: {
+          step1: '选择要生成二维码的类型',
+          step2: '输入内容或选择快速输入',
+          step3: '调整尺寸和纠错级别',
+          step4: '点击生成按钮',
+          step5: '查看生成的二维码',
+        },
       },
       passwordGenerator: {
         generationSettings: '密码生成设置',
@@ -1279,6 +1303,10 @@ export const translations: Record<Locale, Translations> = {
       loading: 'Loading...',
       error: 'Error',
       success: 'Success',
+      encode: 'Encode',
+      decode: 'Decode',
+      copy: 'Copy',
+      clear: 'Clear',
     },
     theme: {
       light: 'Light',
