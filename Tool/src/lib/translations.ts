@@ -834,7 +834,23 @@ export const translations: Record<Locale, Translations> = {
           '科学计算功能',
           '单位转换工具',
           '历史记录功能'
-        ]
+        ],
+        display: '显示',
+        clear: '清除',
+        operations: {
+          add: '加',
+          subtract: '减',
+          multiply: '乘',
+          divide: '除',
+          percentage: '百分比',
+          plusMinus: '正负',
+        },
+        instructions: {
+          step1: '输入第一个数字',
+          step2: '选择操作符',
+          step3: '输入第二个数字',
+          step4: '点击等于按钮获取结果',
+        },
       },
       randomGenerator: {
         title: '随机数生成器',
@@ -1400,6 +1416,12 @@ export const translations: Record<Locale, Translations> = {
       calculator: {
         title: 'Calculator',
         description: 'Powerful online calculator with scientific calculation and unit conversion support.',
+        features: [
+          'Basic mathematical operations',
+          'Scientific calculation functions',
+          'Unit conversion tools',
+          'History record function'
+        ],
         display: 'Display',
         clear: 'Clear',
         operations: {
