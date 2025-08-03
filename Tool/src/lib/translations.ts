@@ -1541,7 +1541,7 @@ export const translations: Record<Locale, Translations> = {
           alternating: { name: 'Alternating Case', description: 'Alternate case conversion' },
           inverse: { name: 'Inverse Case', description: 'Reverse text case' },
         },
-        instructions: {
+        instructionSteps: {
           step1: 'Select the text format to convert',
           step2: 'Select the target format for conversion',
           step3: 'Click the generate button',
