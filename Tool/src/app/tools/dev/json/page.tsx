@@ -2,8 +2,16 @@
 
 import { useState } from 'react';
 import { Copy, RotateCcw, CheckCircle, XCircle, Minus, Plus } from 'lucide-react';
+import { useToolTranslations } from '@/components/tool-translations';
+import { useLanguage } from '@/components/language-provider';
 
 export default function JsonToolPage() {
+  const { getToolTranslation, getUITranslation, getToolPageTranslation } = useToolTranslations();
+  const { t } = useLanguage();
+  const toolTranslation = getToolTranslation('dev-json');
+  const ui = getUITranslation();
+  const pageTranslation = getToolPageTranslation('dev-json');
+  
   const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
   const [isValid, setIsValid] = useState<boolean | null>(null);
@@ -108,11 +116,7 @@ export default function JsonToolPage() {
   };
 
   const handleSampleClick = () => {
-    const sample = JSON.stringify(sampleJson, null, 2);
-    setInput(sample);
-    setOutput(sample);
-    setIsValid(true);
-    setError('');
+    setInput(JSON.stringify(sampleJson, null, 2));
   };
 
   return (
@@ -122,166 +126,148 @@ export default function JsonToolPage() {
           JSON工具
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          格式化、验证、压缩JSON数据，支持自定义缩进
+          JSON格式化、压缩、验证和美化工具
         </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* 输入区域 */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-              输入JSON
-            </h2>
-            <div className="flex space-x-2">
+        <div className="space-y-6">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                {ui.labels.input}
+              </h2>
               <button
                 onClick={handleSampleClick}
-                className="px-3 py-1 text-sm bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 text-green-700 dark:text-green-300 rounded-md transition-colors"
+                className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
               >
-                示例
+                加载示例
+              </button>
+            </div>
+
+            <textarea
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="请输入JSON数据..."
+              className="w-full h-64 p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
+            />
+
+            {/* 缩进设置 */}
+            <div className="mt-4 flex items-center gap-4">
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                缩进大小:
+              </label>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setIndentSize(Math.max(1, indentSize - 1))}
+                  className="p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                >
+                  <Minus className="w-4 h-4" />
+                </button>
+                <span className="w-8 text-center text-sm font-medium text-gray-900 dark:text-white">
+                  {indentSize}
+                </span>
+                <button
+                  onClick={() => setIndentSize(indentSize + 1)}
+                  className="p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                >
+                  <Plus className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            {/* 操作按钮 */}
+            <div className="mt-4 flex gap-2">
+              <button
+                onClick={formatJson}
+                disabled={!input.trim()}
+                className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
+              >
+                格式化
+              </button>
+              <button
+                onClick={compressJson}
+                disabled={!input.trim()}
+                className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
+              >
+                压缩
               </button>
               <button
                 onClick={clearAll}
-                className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-md transition-colors"
+                className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white font-medium rounded-lg transition-colors duration-200"
               >
-                清空
+                <RotateCcw className="w-4 h-4" />
               </button>
             </div>
-          </div>
 
-          <textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="在此输入JSON数据..."
-            className="w-full h-64 p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-mono text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-
-          {/* 验证状态 */}
-          {isValid !== null && (
-            <div className={`flex items-center space-x-2 p-3 rounded-lg ${
-              isValid 
-                ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800' 
-                : 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800'
-            }`}>
-              {isValid ? (
-                <CheckCircle className="h-5 w-5 text-green-600" />
-              ) : (
-                <XCircle className="h-5 w-5 text-red-600" />
-              )}
-              <span className={`text-sm font-medium ${
-                isValid ? 'text-green-800 dark:text-green-200' : 'text-red-800 dark:text-red-200'
-              }`}>
-                {isValid ? 'JSON格式有效' : 'JSON格式无效'}
-              </span>
-            </div>
-          )}
-
-          {error && (
-            <div className="bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-200 dark:border-red-800">
-              <div className="text-sm text-red-800 dark:text-red-200">
-                <strong>错误信息:</strong> {error}
+            {/* 验证状态 */}
+            {isValid !== null && (
+              <div className="mt-4 flex items-center gap-2">
+                {isValid ? (
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                ) : (
+                  <XCircle className="w-4 h-4 text-red-500" />
+                )}
+                <span className={`text-sm ${isValid ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                  {isValid ? 'JSON格式有效' : 'JSON格式无效'}
+                </span>
               </div>
-            </div>
-          )}
+            )}
+
+            {/* 错误信息 */}
+            {error && (
+              <div className="mt-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                <div className="flex items-center gap-2">
+                  <XCircle className="w-4 h-4 text-red-500" />
+                  <span className="text-sm text-red-700 dark:text-red-300">{error}</span>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* 输出区域 */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-              处理结果
-            </h2>
-            <div className="flex space-x-2">
-              <button
-                onClick={copyOutput}
-                disabled={!output}
-                className="px-3 py-1 text-sm bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 text-blue-700 dark:text-blue-300 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                复制
-              </button>
+        <div className="space-y-6">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                {ui.labels.output}
+              </h2>
+              {output && (
+                <button
+                  onClick={copyOutput}
+                  className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                  title={ui.buttons.copy}
+                >
+                  <Copy className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+
+            <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg min-h-64">
+              {output ? (
+                <pre className="text-sm text-gray-900 dark:text-white overflow-auto whitespace-pre-wrap">
+                  {output}
+                </pre>
+              ) : (
+                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                  处理后的JSON将显示在这里
+                </div>
+              )}
             </div>
           </div>
 
-          <textarea
-            value={output}
-            readOnly
-            placeholder="处理后的JSON将显示在这里..."
-            className="w-full h-64 p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-sm resize-none"
-          />
-        </div>
-      </div>
-
-      {/* 操作按钮 */}
-      <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-            操作选项
-          </h3>
-          
-          {/* 缩进设置 */}
-          <div className="flex items-center space-x-4">
-            <label className="text-sm text-gray-600 dark:text-gray-400">
-              缩进大小:
-            </label>
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={() => setIndentSize(Math.max(1, indentSize - 1))}
-                className="p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-              >
-                <Minus className="h-4 w-4" />
-              </button>
-              <span className="w-8 text-center text-sm font-medium text-gray-900 dark:text-white">
-                {indentSize}
-              </span>
-              <button
-                onClick={() => setIndentSize(Math.min(8, indentSize + 1))}
-                className="p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-              >
-                <Plus className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <button
-            onClick={formatJson}
-            className="py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors flex items-center justify-center space-x-2"
-          >
-            <CheckCircle className="h-5 w-5" />
-            <span>格式化JSON</span>
-          </button>
-
-          <button
-            onClick={compressJson}
-            className="py-3 px-6 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors flex items-center justify-center space-x-2"
-          >
-            <RotateCcw className="h-5 w-5" />
-            <span>压缩JSON</span>
-          </button>
-        </div>
-      </div>
-
-      {/* 使用说明 */}
-      <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg border border-blue-200 dark:border-blue-800">
-        <h3 className="text-lg font-semibold text-blue-800 dark:text-blue-200 mb-3">
-          使用说明
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-blue-700 dark:text-blue-300">
-          <div>
-            <h4 className="font-medium mb-2">格式化功能</h4>
-            <ul className="space-y-1">
-              <li>• 自动验证JSON格式</li>
-              <li>• 添加适当的缩进</li>
-              <li>• 提高可读性</li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-medium mb-2">压缩功能</h4>
-            <ul className="space-y-1">
-              <li>• 移除所有空白字符</li>
-              <li>• 减少文件大小</li>
-              <li>• 适合网络传输</li>
+          {/* 功能说明 */}
+          <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg">
+            <h3 className="text-lg font-semibold text-blue-800 dark:text-blue-200 mb-4">
+              功能说明
+            </h3>
+            <ul className="space-y-2 text-blue-700 dark:text-blue-300 text-sm">
+              <li>• <strong>格式化</strong>: 美化JSON格式，提高可读性</li>
+              <li>• <strong>压缩</strong>: 移除所有空格和换行，减小文件大小</li>
+              <li>• <strong>验证</strong>: 检查JSON语法是否正确</li>
+              <li>• <strong>缩进</strong>: 自定义缩进空格数量</li>
             </ul>
           </div>
         </div>

@@ -4,10 +4,15 @@ import { ToolLayout } from '@/components/tool-layout';
 import { useState } from 'react';
 import { FileText, Table, FileSpreadsheet, FileCheck, FileX, Download, Upload, Copy, Check } from 'lucide-react';
 import { useToolTranslations } from '@/components/tool-translations';
+import { useLanguage } from '@/components/language-provider';
 
 export default function OfficeToolsPage() {
-  const { getToolTranslation } = useToolTranslations();
+  const { getToolTranslation, getUITranslation, getToolPageTranslation } = useToolTranslations();
+  const { t } = useLanguage();
   const toolTranslation = getToolTranslation('office');
+  const ui = getUITranslation();
+  const pageTranslation = getToolPageTranslation('office');
+  
   const [activeTab, setActiveTab] = useState('document');
   const [inputText, setInputText] = useState('');
   const [outputText, setOutputText] = useState('');
@@ -15,9 +20,22 @@ export default function OfficeToolsPage() {
   const [jsonData, setJsonData] = useState('');
 
   const tabs = [
-    { id: 'document', name: '文档处理', icon: FileText },
-    { id: 'table', name: '表格工具', icon: Table },
-    { id: 'csv', name: 'CSV工具', icon: FileSpreadsheet },
+    { id: 'document', name: pageTranslation.documentProcessing, icon: FileText },
+    { id: 'table', name: pageTranslation.tableGenerator, icon: Table },
+    { id: 'csv', name: pageTranslation.csvJsonConverter, icon: FileSpreadsheet },
+  ];
+
+  const documentOperations = [
+    { id: 'uppercase', name: pageTranslation.features.caseConversion, description: '转换为大写' },
+    { id: 'lowercase', name: '转换为小写', description: '转换为小写' },
+    { id: 'capitalize', name: '首字母大写', description: '每个单词首字母大写' },
+    { id: 'removeSpaces', name: '清理空格', description: '移除多余空格' },
+    { id: 'removeEmptyLines', name: '移除空行', description: '移除空白行' },
+    { id: 'sortLines', name: '排序行', description: '按字母顺序排序' },
+    { id: 'reverseLines', name: '反转行', description: '反转行顺序' },
+    { id: 'countWords', name: '统计字数', description: '计算单词数量' },
+    { id: 'countCharacters', name: '统计字符', description: '计算字符数量' },
+    { id: 'countLines', name: '统计行数', description: '计算行数' },
   ];
 
   const handleDocumentProcess = (type: string) => {
@@ -103,192 +121,198 @@ export default function OfficeToolsPage() {
   };
 
   const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
+    if (text && navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+    }
   };
 
   return (
     <ToolLayout>
-      <div className="text-center">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          {toolTranslation.title}
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          {toolTranslation.description}
-        </p>
-      </div>
-
-      {/* 标签页 */}
-      <div className="flex space-x-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-              activeTab === tab.id
-                ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
-                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-            }`}
-          >
-            <tab.icon className="h-4 w-4" />
-            <span>{tab.name}</span>
-          </button>
-        ))}
-      </div>
-
-      {/* 文档处理工具 */}
-      {activeTab === 'document' && (
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                输入文本
-              </h3>
-              <textarea
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                placeholder="在此输入要处理的文本..."
-                className="w-full h-64 p-4 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-white"
-              />
-            </div>
-            
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  处理结果
-                </h3>
-                {outputText && (
-                  <button
-                    onClick={() => copyToClipboard(outputText)}
-                    className="flex items-center space-x-1 text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400"
-                  >
-                    <Copy className="h-4 w-4" />
-                    <span>复制</span>
-                  </button>
-                )}
-              </div>
-              <textarea
-                value={outputText}
-                readOnly
-                placeholder="处理结果将显示在这里..."
-                className="w-full h-64 p-4 border border-gray-300 rounded-lg resize-none bg-gray-50 dark:bg-gray-900 dark:border-gray-600 dark:text-white"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
-            {[
-              { name: '转大写', action: 'uppercase', icon: FileText },
-              { name: '转小写', action: 'lowercase', icon: FileText },
-              { name: '首字母大写', action: 'capitalize', icon: FileText },
-              { name: '去除多余空格', action: 'removeSpaces', icon: FileText },
-              { name: '去除空行', action: 'removeEmptyLines', icon: FileText },
-              { name: '排序行', action: 'sortLines', icon: FileText },
-              { name: '反转行', action: 'reverseLines', icon: FileText },
-              { name: '统计字数', action: 'countWords', icon: FileCheck },
-              { name: '统计字符', action: 'countCharacters', icon: FileCheck },
-              { name: '统计行数', action: 'countLines', icon: FileCheck },
-            ].map((tool) => (
-              <button
-                key={tool.action}
-                onClick={() => handleDocumentProcess(tool.action)}
-                className="flex flex-col items-center space-y-2 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800 transition-colors"
-              >
-                <tool.icon className="h-6 w-6 text-primary-600" />
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  {tool.name}
-                </span>
-              </button>
-            ))}
-          </div>
+      <div className="max-w-6xl mx-auto space-y-8">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            {toolTranslation.title}
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            {toolTranslation.description}
+          </p>
         </div>
-      )}
 
-      {/* CSV工具 */}
-      {activeTab === 'csv' && (
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                CSV数据
-              </h3>
-              <textarea
-                value={csvData}
-                onChange={(e) => setCsvData(e.target.value)}
-                placeholder="输入CSV数据，第一行为表头..."
-                className="w-full h-64 p-4 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-white"
-              />
-              <button
-                onClick={handleCsvToJson}
-                className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-              >
-                <FileSpreadsheet className="h-4 w-4" />
-                <span>CSV转JSON</span>
-              </button>
-            </div>
-            
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                JSON数据
-              </h3>
-              <textarea
-                value={jsonData}
-                onChange={(e) => setJsonData(e.target.value)}
-                placeholder="输入JSON数组数据..."
-                className="w-full h-64 p-4 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-white"
-              />
-              <button
-                onClick={handleJsonToCsv}
-                className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-              >
-                <FileSpreadsheet className="h-4 w-4" />
-                <span>JSON转CSV</span>
-              </button>
-            </div>
-          </div>
+        {/* 标签页 */}
+        <div className="flex space-x-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
+                activeTab === tab.id
+                  ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+              }`}
+            >
+              <tab.icon className="w-4 h-4" />
+              <span>{tab.name}</span>
+            </button>
+          ))}
         </div>
-      )}
 
-      {/* 表格工具 */}
-      {activeTab === 'table' && (
-        <div className="space-y-6">
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              表格生成器
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
-              快速生成HTML表格，支持自定义样式和内容
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  表格数据 (JSON格式)
-                </label>
-                <textarea
-                  placeholder='[{"name": "张三", "age": 25, "city": "北京"}, {"name": "李四", "age": 30, "city": "上海"}]'
-                  className="w-full h-32 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-white"
-                />
+        {/* 内容区域 */}
+        <div className="mt-8">
+          {activeTab === 'document' && (
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* 输入区域 */}
+                <div className="space-y-4">
+                  <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                      {ui.labels.input}
+                    </h2>
+                    <textarea
+                      value={inputText}
+                      onChange={(e) => setInputText(e.target.value)}
+                      placeholder={ui.placeholders.enterText}
+                      className="w-full h-64 p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+                </div>
+
+                {/* 输出区域 */}
+                <div className="space-y-4">
+                  <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+                    <div className="flex items-center justify-between mb-4">
+                      <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                        {ui.labels.output}
+                      </h2>
+                      {outputText && (
+                        <button
+                          onClick={() => copyToClipboard(outputText)}
+                          className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                          title={ui.buttons.copy}
+                        >
+                          <Copy className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
+                    <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg min-h-64">
+                      {outputText ? (
+                        <div className="text-gray-900 dark:text-white whitespace-pre-wrap">
+                          {outputText}
+                        </div>
+                      ) : (
+                        <div className="text-gray-500 dark:text-gray-400 text-center py-8">
+                          {ui.messages.processing}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  生成的HTML表格
-                </label>
-                <div className="w-full h-32 p-3 border border-gray-300 rounded-lg bg-gray-50 dark:bg-gray-900 dark:border-gray-600 dark:text-white overflow-auto">
-                  <code className="text-sm text-gray-600 dark:text-gray-400">
-                    &lt;table&gt;<br/>
-                    &nbsp;&nbsp;&lt;thead&gt;<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;tr&gt;&lt;th&gt;姓名&lt;/th&gt;&lt;th&gt;年龄&lt;/th&gt;&lt;th&gt;城市&lt;/th&gt;&lt;/tr&gt;<br/>
-                    &nbsp;&nbsp;&lt;/thead&gt;<br/>
-                    &nbsp;&nbsp;&lt;tbody&gt;<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;tr&gt;&lt;td&gt;张三&lt;/td&gt;&lt;td&gt;25&lt;/td&gt;&lt;td&gt;北京&lt;/td&gt;&lt;/tr&gt;<br/>
-                    &nbsp;&nbsp;&lt;/tbody&gt;<br/>
-                    &lt;/table&gt;
-                  </code>
+
+              {/* 操作选项 */}
+              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                  {pageTranslation.features.documentProcessing}
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {documentOperations.map((operation) => (
+                    <button
+                      key={operation.id}
+                      onClick={() => handleDocumentProcess(operation.id)}
+                      disabled={!inputText}
+                      className="p-4 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-300 dark:hover:border-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-left"
+                    >
+                      <div className="font-medium text-gray-900 dark:text-white">
+                        {operation.name}
+                      </div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                        {operation.description}
+                      </div>
+                    </button>
+                  ))}
                 </div>
               </div>
             </div>
-          </div>
+          )}
+
+          {activeTab === 'csv' && (
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* CSV输入 */}
+                <div className="space-y-4">
+                  <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                      CSV {ui.labels.input}
+                    </h2>
+                    <textarea
+                      value={csvData}
+                      onChange={(e) => setCsvData(e.target.value)}
+                      placeholder="请输入CSV数据..."
+                      className="w-full h-64 p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                    <button
+                      onClick={handleCsvToJson}
+                      disabled={!csvData}
+                      className="mt-4 w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
+                    >
+                      {pageTranslation.features.csvToJson}
+                    </button>
+                  </div>
+                </div>
+
+                {/* JSON输出 */}
+                <div className="space-y-4">
+                  <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                      JSON {ui.labels.output}
+                    </h2>
+                    <textarea
+                      value={jsonData}
+                      onChange={(e) => setJsonData(e.target.value)}
+                      placeholder="JSON数据将显示在这里..."
+                      className="w-full h-64 p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                    <button
+                      onClick={handleJsonToCsv}
+                      disabled={!jsonData}
+                      className="mt-4 w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
+                    >
+                      {pageTranslation.features.jsonToCsv}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'table' && (
+            <div className="space-y-6">
+              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                  {pageTranslation.tableGenerator}
+                </h2>
+                <div className="text-center py-8">
+                  <Table className="w-12 h-12 mx-auto text-gray-400 mb-4" />
+                  <p className="text-gray-600 dark:text-gray-400">
+                    {ui.messages.processing}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-      )}
+
+        {/* 使用说明 */}
+        <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg">
+          <h3 className="text-lg font-semibold text-blue-800 dark:text-blue-200 mb-4">
+            {pageTranslation.instructions}
+          </h3>
+          <ul className="space-y-2 text-blue-700 dark:text-blue-300">
+            {pageTranslation.instructionSteps.map((step: string, index: number) => (
+              <li key={index}>• {step}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
     </ToolLayout>
   );
 } 

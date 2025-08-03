@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { Send, RotateCcw, Copy, Clock, CheckCircle, XCircle } from 'lucide-react';
+import { useToolTranslations } from '@/components/tool-translations';
+import { useLanguage } from '@/components/language-provider';
 
 interface ApiResponse {
   status: number;
@@ -19,6 +21,12 @@ interface RequestHistory {
 }
 
 export default function ApiTestPage() {
+  const { getToolTranslation, getUITranslation, getToolPageTranslation } = useToolTranslations();
+  const { t } = useLanguage();
+  const toolTranslation = getToolTranslation('dev-api');
+  const ui = getUITranslation();
+  const pageTranslation = getToolPageTranslation('dev-api');
+  
   const [method, setMethod] = useState('GET');
   const [url, setUrl] = useState('https://jsonplaceholder.typicode.com/posts/1');
   const [headers, setHeaders] = useState('{\n  "Content-Type": "application/json"\n}');
@@ -32,7 +40,7 @@ export default function ApiTestPage() {
 
   const sendRequest = async () => {
     if (!url.trim()) {
-      setError('请输入URL');
+      setError(ui.messages.error);
       return;
     }
 
@@ -120,77 +128,76 @@ export default function ApiTestPage() {
 
   const copyResponse = async () => {
     if (response && navigator.clipboard) {
-      const responseText = JSON.stringify(response.data, null, 2);
+      const responseText = JSON.stringify(response, null, 2);
       await navigator.clipboard.writeText(responseText);
     }
   };
 
   const loadFromHistory = (item: RequestHistory) => {
-    setMethod(item.method);
     setUrl(item.url);
+    setMethod(item.method);
   };
 
   const getStatusColor = (status: number) => {
     if (status >= 200 && status < 300) return 'text-green-600';
     if (status >= 300 && status < 400) return 'text-blue-600';
     if (status >= 400 && status < 500) return 'text-yellow-600';
-    if (status >= 500) return 'text-red-600';
-    return 'text-gray-600';
+    return 'text-red-600';
   };
 
   const getStatusIcon = (status: number) => {
-    if (status >= 200 && status < 300) return <CheckCircle className="w-4 h-4 text-green-600" />;
-    return <XCircle className="w-4 h-4 text-red-600" />;
+    if (status >= 200 && status < 300) return <CheckCircle className="w-4 h-4" />;
+    return <XCircle className="w-4 h-4" />;
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8">
+    <div className="max-w-6xl mx-auto space-y-8">
       <div className="text-center">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
           API测试工具
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          测试API接口，发送HTTP请求并查看响应结果
+          测试和调试API接口，支持多种HTTP方法和请求头配置
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* 请求配置 */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="space-y-6">
           <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
               请求配置
             </h2>
 
             <div className="space-y-4">
-              {/* 请求方法和URL */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="md:col-span-1">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    请求方法
-                  </label>
-                  <select
-                    value={method}
-                    onChange={(e) => setMethod(e.target.value)}
-                    className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                  >
-                    {methods.map((m) => (
-                      <option key={m} value={m}>{m}</option>
-                    ))}
-                  </select>
-                </div>
-                <div className="md:col-span-3">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    URL
-                  </label>
-                  <input
-                    type="url"
-                    value={url}
-                    onChange={(e) => setUrl(e.target.value)}
-                    placeholder="https://api.example.com/endpoint"
-                    className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
+              {/* HTTP方法 */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  HTTP方法
+                </label>
+                <select
+                  value={method}
+                  onChange={(e) => setMethod(e.target.value)}
+                  className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  {methods.map((m) => (
+                    <option key={m} value={m}>{m}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* URL */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  URL
+                </label>
+                <input
+                  type="url"
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  placeholder="请输入API地址"
+                  className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
               </div>
 
               {/* 请求头 */}
@@ -201,8 +208,8 @@ export default function ApiTestPage() {
                 <textarea
                   value={headers}
                   onChange={(e) => setHeaders(e.target.value)}
-                  rows={4}
-                  className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-mono text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="请输入请求头"
+                  className="w-full h-32 p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
                 />
               </div>
 
@@ -215,168 +222,146 @@ export default function ApiTestPage() {
                   <textarea
                     value={body}
                     onChange={(e) => setBody(e.target.value)}
-                    placeholder="输入请求体内容..."
-                    rows={6}
-                    className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-mono text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="请输入请求体内容"
+                    className="w-full h-32 p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
                   />
                 </div>
               )}
 
               {/* 操作按钮 */}
-              <div className="flex flex-wrap gap-3">
+              <div className="flex gap-2">
                 <button
                   onClick={sendRequest}
                   disabled={loading}
-                  className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
                 >
                   {loading ? (
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      发送中...
+                    </>
                   ) : (
-                    <Send className="w-4 h-4" />
+                    <>
+                      <Send className="w-4 h-4" />
+                      发送请求
+                    </>
                   )}
-                  {loading ? '发送中...' : '发送请求'}
                 </button>
                 <button
                   onClick={clearAll}
-                  className="flex items-center gap-2 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                  className="px-4 py-3 bg-gray-500 hover:bg-gray-600 text-white font-medium rounded-lg transition-colors duration-200"
                 >
                   <RotateCcw className="w-4 h-4" />
-                  清空
                 </button>
               </div>
-
-              {/* 错误信息 */}
-              {error && (
-                <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-                  <p className="text-red-700 dark:text-red-300">{error}</p>
-                </div>
-              )}
             </div>
           </div>
 
-          {/* 响应结果 */}
-          {response && (
+          {/* 历史记录 */}
+          {history.length > 0 && (
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  响应结果
-                </h2>
-                <div className="flex items-center gap-4">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                历史记录
+              </h3>
+              <div className="space-y-2">
+                {history.map((item) => (
+                  <div
+                    key={item.id}
+                    onClick={() => loadFromHistory(item)}
+                    className="p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-gray-900 dark:text-white">
+                        {item.method} {item.url}
+                      </span>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                        {item.timestamp.toLocaleTimeString()}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* 响应结果 */}
+        <div className="space-y-6">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                响应结果
+              </h2>
+              {response && (
+                <button
+                  onClick={copyResponse}
+                  className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                  title={ui.buttons.copy}
+                >
+                  <Copy className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+
+            {error && (
+              <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                <div className="flex items-center gap-2">
+                  <XCircle className="w-4 h-4 text-red-500" />
+                  <span className="text-red-700 dark:text-red-300">{error}</span>
+                </div>
+              </div>
+            )}
+
+            {response && (
+              <div className="space-y-4">
+                {/* 状态信息 */}
+                <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
                   <div className="flex items-center gap-2">
                     {getStatusIcon(response.status)}
-                    <span className={`text-sm font-medium ${getStatusColor(response.status)}`}>
+                    <span className={`font-medium ${getStatusColor(response.status)}`}>
                       {response.status} {response.statusText}
                     </span>
                   </div>
-                  <div className="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-400">
+                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                     <Clock className="w-4 h-4" />
                     {response.time}ms
                   </div>
-                  <button
-                    onClick={copyResponse}
-                    className="flex items-center gap-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded transition-colors"
-                  >
-                    <Copy className="w-3 h-3" />
-                    复制
-                  </button>
                 </div>
-              </div>
 
-              <div className="space-y-4">
                 {/* 响应头 */}
                 <div>
-                  <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     响应头
-                  </h3>
-                  <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg max-h-32 overflow-y-auto">
-                    <pre className="text-xs font-mono text-gray-900 dark:text-white">
-                      {Object.entries(response.headers).map(([key, value]) => `${key}: ${value}`).join('\n')}
+                  </h4>
+                  <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                    <pre className="text-xs text-gray-900 dark:text-white overflow-auto">
+                      {JSON.stringify(response.headers, null, 2)}
                     </pre>
                   </div>
                 </div>
 
                 {/* 响应数据 */}
                 <div>
-                  <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     响应数据
-                  </h3>
-                  <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg max-h-96 overflow-y-auto">
-                    <pre className="text-xs font-mono text-gray-900 dark:text-white">
-                      {typeof response.data === 'string' ? response.data : JSON.stringify(response.data, null, 2)}
+                  </h4>
+                  <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                    <pre className="text-xs text-gray-900 dark:text-white overflow-auto">
+                      {typeof response.data === 'string' 
+                        ? response.data 
+                        : JSON.stringify(response.data, null, 2)
+                      }
                     </pre>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
 
-        {/* 历史记录 */}
-        <div className="space-y-6">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              请求历史
-            </h2>
-            
-            {history.length > 0 ? (
-              <div className="space-y-2">
-                {history.map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => loadFromHistory(item)}
-                    className="w-full p-3 text-left bg-gray-50 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg transition-colors"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-medium text-blue-600 dark:text-blue-400">
-                        {item.method}
-                      </span>
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
-                        {item.timestamp.toLocaleTimeString()}
-                      </span>
-                    </div>
-                    <div className="text-xs text-gray-700 dark:text-gray-300 mt-1 truncate">
-                      {item.url}
-                    </div>
-                  </button>
-                ))}
-              </div>
-            ) : (
+            {!response && !error && !loading && (
               <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                <Send className="h-8 w-8 mx-auto mb-2 text-gray-300" />
-                <p className="text-sm">暂无请求历史</p>
+                发送请求后，响应结果将显示在这里
               </div>
             )}
-          </div>
-
-          {/* 快速示例 */}
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              快速示例
-            </h3>
-            <div className="space-y-2">
-              <button
-                onClick={() => {
-                  setMethod('GET');
-                  setUrl('https://jsonplaceholder.typicode.com/posts/1');
-                  setHeaders('{\n  "Content-Type": "application/json"\n}');
-                  setBody('');
-                }}
-                className="w-full p-2 text-left text-sm bg-gray-50 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 rounded transition-colors"
-              >
-                JSONPlaceholder API
-              </button>
-              <button
-                onClick={() => {
-                  setMethod('POST');
-                  setUrl('https://jsonplaceholder.typicode.com/posts');
-                  setHeaders('{\n  "Content-Type": "application/json"\n}');
-                  setBody('{\n  "title": "测试标题",\n  "body": "测试内容",\n  "userId": 1\n}');
-                }}
-                className="w-full p-2 text-left text-sm bg-gray-50 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 rounded transition-colors"
-              >
-                POST 请求示例
-              </button>
-            </div>
           </div>
         </div>
       </div>
