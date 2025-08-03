@@ -3,6 +3,7 @@
 import { ToolLayout } from '@/components/tool-layout';
 import { useState, useEffect } from 'react';
 import { Plus, Search, Edit3, Trash2, Save, X, FileText } from 'lucide-react';
+import { useToolTranslations } from '@/components/tool-translations';
 
 interface Note {
   id: string;
@@ -13,6 +14,8 @@ interface Note {
 }
 
 export default function NotesPage() {
+  const { getToolTranslation } = useToolTranslations();
+  const toolTranslation = getToolTranslation('learn-notes');
   const [notes, setNotes] = useState<Note[]>([]);
   const [currentNote, setCurrentNote] = useState<Note | null>(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -80,10 +83,10 @@ export default function NotesPage() {
           <div className="mb-8">
             <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
               <FileText className="inline-block w-8 h-8 mr-3 text-blue-600" />
-              笔记工具
+              {toolTranslation.title}
             </h1>
             <p className="text-gray-600 dark:text-gray-300">
-              创建、编辑和管理你的笔记
+              {toolTranslation.description}
             </p>
           </div>
 

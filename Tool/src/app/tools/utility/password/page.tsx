@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { Copy, RotateCcw, Eye, EyeOff } from 'lucide-react';
 import { ToolLayout } from '@/components/tool-layout';
+import { useToolTranslations } from '@/components/tool-translations';
+import { useLanguage } from '@/components/language-provider';
 
 export default function PasswordGeneratorPage() {
   const [password, setPassword] = useState('');
@@ -13,6 +15,12 @@ export default function PasswordGeneratorPage() {
   const [includeSymbols, setIncludeSymbols] = useState(false);
   const [excludeSimilar, setExcludeSimilar] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
+
+  const { getToolTranslation, getUITranslation, getToolPageTranslation } = useToolTranslations();
+  const { t } = useLanguage();
+  const toolTranslation = getToolTranslation('utility-password');
+  const ui = getUITranslation();
+  const pageTranslation = getToolPageTranslation('utility-password');
 
   const generatePassword = () => {
     const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -55,7 +63,7 @@ export default function PasswordGeneratorPage() {
   };
 
   const getPasswordStrength = () => {
-    if (!password) return { score: 0, label: '无', color: 'text-gray-400' };
+    if (!password) return { score: 0, label: ui.strength.none, color: 'text-gray-400' };
     
     let score = 0;
     if (password.length >= 8) score++;
@@ -65,7 +73,7 @@ export default function PasswordGeneratorPage() {
     if (/[0-9]/.test(password)) score++;
     if (/[^A-Za-z0-9]/.test(password)) score++;
 
-    const labels = ['很弱', '弱', '一般', '强', '很强', '极强'];
+    const labels = [ui.strength.veryWeak, ui.strength.weak, ui.strength.medium, ui.strength.strong, ui.strength.veryStrong, ui.strength.extremelyStrong];
     const colors = ['text-red-500', 'text-orange-500', 'text-yellow-500', 'text-blue-500', 'text-green-500', 'text-green-600'];
     
     return {
@@ -82,10 +90,10 @@ export default function PasswordGeneratorPage() {
       <div className="max-w-4xl mx-auto space-y-8">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            密码生成器
+            {toolTranslation.title}
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            生成安全、随机的密码
+            {toolTranslation.description}
           </p>
         </div>
 
@@ -94,14 +102,14 @@ export default function PasswordGeneratorPage() {
           <div className="space-y-6">
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                生成设置
+                {pageTranslation.generationSettings}
               </h2>
 
               <div className="space-y-4">
                 {/* 密码长度 */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    密码长度: {length}
+                    {pageTranslation.passwordLength}: {length}
                   </label>
                   <input
                     type="range"
@@ -120,7 +128,7 @@ export default function PasswordGeneratorPage() {
                 {/* 字符类型 */}
                 <div className="space-y-3">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    包含字符类型
+                    {pageTranslation.characterTypes}
                   </label>
                   <div className="space-y-2">
                     <label className="flex items-center">
@@ -130,7 +138,7 @@ export default function PasswordGeneratorPage() {
                         onChange={(e) => setIncludeUppercase(e.target.checked)}
                         className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                       />
-                      <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">大写字母 (A-Z)</span>
+                      <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">{pageTranslation.characterOptions.uppercase}</span>
                     </label>
                     <label className="flex items-center">
                       <input
@@ -139,7 +147,7 @@ export default function PasswordGeneratorPage() {
                         onChange={(e) => setIncludeLowercase(e.target.checked)}
                         className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                       />
-                      <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">小写字母 (a-z)</span>
+                      <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">{pageTranslation.characterOptions.lowercase}</span>
                     </label>
                     <label className="flex items-center">
                       <input
@@ -148,7 +156,7 @@ export default function PasswordGeneratorPage() {
                         onChange={(e) => setIncludeNumbers(e.target.checked)}
                         className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                       />
-                      <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">数字 (0-9)</span>
+                      <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">{pageTranslation.characterOptions.numbers}</span>
                     </label>
                     <label className="flex items-center">
                       <input
@@ -157,7 +165,7 @@ export default function PasswordGeneratorPage() {
                         onChange={(e) => setIncludeSymbols(e.target.checked)}
                         className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                       />
-                      <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">特殊字符 (!@#$%^&*)</span>
+                      <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">{pageTranslation.characterOptions.symbols}</span>
                     </label>
                     <label className="flex items-center">
                       <input
@@ -166,7 +174,7 @@ export default function PasswordGeneratorPage() {
                         onChange={(e) => setExcludeSimilar(e.target.checked)}
                         className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                       />
-                      <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">排除相似字符 (il1Lo0O)</span>
+                      <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">{pageTranslation.characterOptions.excludeSimilar}</span>
                     </label>
                   </div>
                 </div>
@@ -176,7 +184,7 @@ export default function PasswordGeneratorPage() {
                   onClick={generatePassword}
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200"
                 >
-                  生成密码
+                  {ui.buttons.generate}
                 </button>
               </div>
             </div>
@@ -186,7 +194,7 @@ export default function PasswordGeneratorPage() {
           <div className="space-y-6">
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                生成的密码
+                {pageTranslation.generatedPassword}
               </h2>
 
               <div className="space-y-4">
@@ -197,7 +205,7 @@ export default function PasswordGeneratorPage() {
                     value={password}
                     readOnly
                     className="w-full p-3 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-lg"
-                    placeholder="点击生成按钮创建密码"
+                    placeholder={ui.placeholders.enterText}
                   />
                   <button
                     onClick={() => setShowPassword(!showPassword)}
@@ -211,7 +219,7 @@ export default function PasswordGeneratorPage() {
                 {password && (
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">密码强度:</span>
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{pageTranslation.passwordStrength}:</span>
                       <span className={`text-sm font-medium ${strength.color}`}>
                         {strength.label}
                       </span>
@@ -238,14 +246,14 @@ export default function PasswordGeneratorPage() {
                     className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
                   >
                     <Copy className="w-4 h-4" />
-                    复制密码
+                    {ui.buttons.copy}
                   </button>
                   <button
                     onClick={generatePassword}
                     className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
                   >
                     <RotateCcw className="w-4 h-4" />
-                    重新生成
+                    {ui.buttons.regenerate}
                   </button>
                 </div>
               </div>
@@ -254,14 +262,12 @@ export default function PasswordGeneratorPage() {
             {/* 安全提示 */}
             <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
               <h3 className="text-sm font-medium text-blue-800 dark:text-blue-200 mb-2">
-                安全提示
+                {pageTranslation.securityTips}
               </h3>
               <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-                <li>• 使用至少12位长度的密码</li>
-                <li>• 包含大小写字母、数字和特殊字符</li>
-                <li>• 避免使用个人信息作为密码</li>
-                <li>• 定期更换密码</li>
-                <li>• 不同账户使用不同密码</li>
+                {pageTranslation.securityTipsList.map((tip: string, index: number) => (
+                  <li key={index}>• {tip}</li>
+                ))}
               </ul>
             </div>
           </div>

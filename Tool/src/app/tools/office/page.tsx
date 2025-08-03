@@ -3,8 +3,11 @@
 import { ToolLayout } from '@/components/tool-layout';
 import { useState } from 'react';
 import { FileText, Table, FileSpreadsheet, FileCheck, FileX, Download, Upload, Copy, Check } from 'lucide-react';
+import { useToolTranslations } from '@/components/tool-translations';
 
 export default function OfficeToolsPage() {
+  const { getToolTranslation } = useToolTranslations();
+  const toolTranslation = getToolTranslation('office');
   const [activeTab, setActiveTab] = useState('document');
   const [inputText, setInputText] = useState('');
   const [outputText, setOutputText] = useState('');
@@ -107,10 +110,10 @@ export default function OfficeToolsPage() {
     <ToolLayout>
       <div className="text-center">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          办公工具
+          {toolTranslation.title}
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          文档处理、表格转换等办公实用工具
+          {toolTranslation.description}
         </p>
       </div>
 

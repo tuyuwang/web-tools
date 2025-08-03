@@ -3,6 +3,7 @@
 import { ToolLayout } from '@/components/tool-layout';
 import { useState, useRef, useCallback } from 'react';
 import { Upload, Download, RotateCcw, Image as ImageIcon } from 'lucide-react';
+import { useToolTranslations } from '@/components/tool-translations';
 
 interface FilterOption {
   name: string;
@@ -11,6 +12,8 @@ interface FilterOption {
 }
 
 export default function ImageFilterPage() {
+  const { getToolTranslation } = useToolTranslations();
+  const toolTranslation = getToolTranslation('image-filter');
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedFilter, setSelectedFilter] = useState<string>('none');
   const [filterIntensity, setFilterIntensity] = useState(100);
@@ -124,10 +127,10 @@ export default function ImageFilterPage() {
     <ToolLayout>
       <div className="text-center">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          图片滤镜工具
+          {toolTranslation.title}
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          为图片添加各种滤镜效果，包括黑白、复古、冷色调等
+          {toolTranslation.description}
         </p>
       </div>
 

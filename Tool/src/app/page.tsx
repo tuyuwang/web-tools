@@ -1,30 +1,33 @@
+'use client';
+
 import Link from 'next/link';
+import { useLanguage } from '@/components/language-provider';
 
 export default function HomePage() {
+  const { t } = useLanguage();
+
   return (
     <div className="space-y-16">
       {/* Hero Section */}
       <section className="text-center py-16">
         <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-          高效实用的
-          <span className="text-blue-600">在线工具</span>
+          {t.home.hero.title}
         </h1>
         <p className="text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
-          提供文本处理、图片编辑、开发工具等实用功能，让您的工作更简单、更高效。
-          无需注册，免费使用，保护隐私。
+          {t.home.hero.subtitle}
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href="/tools"
             className="btn btn-primary text-lg px-8 py-3"
           >
-            开始使用
+            {t.home.hero.cta.start}
           </Link>
           <Link
             href="/about"
             className="btn btn-outline text-lg px-8 py-3"
           >
-            了解更多
+            {t.home.hero.cta.learnMore}
           </Link>
         </div>
       </section>
@@ -33,7 +36,7 @@ export default function HomePage() {
       <section className="py-16">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-12">
-            核心特性
+            {t.home.features.title}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
@@ -43,10 +46,10 @@ export default function HomePage() {
                 </svg>
               </div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                快速高效
+                {t.home.features.items.fast.title}
               </h3>
               <p className="text-gray-600 dark:text-gray-400">
-                所有工具都在浏览器中运行，无需上传文件，保护您的隐私。
+                {t.home.features.items.fast.description}
               </p>
             </div>
             
@@ -57,10 +60,10 @@ export default function HomePage() {
                 </svg>
               </div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                安全可靠
+                {t.home.features.items.secure.title}
               </h3>
               <p className="text-gray-600 dark:text-gray-400">
-                客户端处理，数据不会上传到服务器，确保您的信息安全。
+                {t.home.features.items.secure.description}
               </p>
             </div>
             
@@ -71,10 +74,10 @@ export default function HomePage() {
                 </svg>
               </div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                免费使用
+                {t.home.features.items.free.title}
               </h3>
               <p className="text-gray-600 dark:text-gray-400">
-                所有工具完全免费，无需注册，无广告干扰，专注用户体验。
+                {t.home.features.items.free.description}
               </p>
             </div>
           </div>

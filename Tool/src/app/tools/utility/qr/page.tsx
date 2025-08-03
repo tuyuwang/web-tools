@@ -4,6 +4,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { Download, RotateCcw, Copy } from 'lucide-react';
 import QRCode from 'qrcode';
 import { ToolLayout } from '@/components/tool-layout';
+import { useToolTranslations } from '@/components/tool-translations';
+import { useLanguage } from '@/components/language-provider';
 
 export default function QRCodePage() {
   const [text, setText] = useState('');
@@ -11,6 +13,12 @@ export default function QRCodePage() {
   const [size, setSize] = useState(256);
   const [errorLevel, setErrorLevel] = useState<'L' | 'M' | 'Q' | 'H'>('M');
   const [isGenerating, setIsGenerating] = useState(false);
+
+  const { getToolTranslation, getUITranslation, getToolPageTranslation } = useToolTranslations();
+  const { t } = useLanguage();
+  const toolTranslation = getToolTranslation('utility-qr');
+  const ui = getUITranslation();
+  const pageTranslation = getToolPageTranslation('utility-qr');
 
   const generateQRCode = useCallback(async () => {
     if (!text) return;
@@ -67,18 +75,18 @@ export default function QRCodePage() {
   };
 
   const errorLevels = [
-    { value: 'L', label: '低 (7%)', description: '可恢复7%的数据' },
-    { value: 'M', label: '中 (15%)', description: '可恢复15%的数据' },
-    { value: 'Q', label: '高 (25%)', description: '可恢复25%的数据' },
-    { value: 'H', label: '最高 (30%)', description: '可恢复30%的数据' },
+    { value: 'L', ...pageTranslation.errorLevels.low },
+    { value: 'M', ...pageTranslation.errorLevels.medium },
+    { value: 'Q', ...pageTranslation.errorLevels.high },
+    { value: 'H', ...pageTranslation.errorLevels.highest },
   ];
 
   const sampleTexts = [
-    { name: '网址', text: 'https://example.com' },
-    { name: '文本', text: 'Hello World!' },
-    { name: '邮箱', text: 'contact@example.com' },
-    { name: '电话', text: 'tel:+1234567890' },
-    { name: 'WiFi', text: 'WIFI:T:WPA;S:MyWiFi;P:password123;;' },
+    { name: pageTranslation.sampleTexts.url, text: 'https://example.com' },
+    { name: pageTranslation.sampleTexts.text, text: 'Hello World!' },
+    { name: pageTranslation.sampleTexts.email, text: 'contact@example.com' },
+    { name: pageTranslation.sampleTexts.phone, text: 'tel:+1234567890' },
+    { name: pageTranslation.sampleTexts.wifi, text: 'WIFI:T:WPA;S:MyWiFi;P:password123;;' },
   ];
 
   useEffect(() => {
@@ -92,10 +100,10 @@ export default function QRCodePage() {
       <div className="max-w-6xl mx-auto space-y-8">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            二维码生成器
+            {toolTranslation.title}
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            生成自定义二维码，支持文本、网址、联系方式等
+            {toolTranslation.description}
           </p>
         </div>
 
@@ -104,20 +112,20 @@ export default function QRCodePage() {
           <div className="space-y-6">
             <div>
               <label htmlFor="text" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                输入内容
+                {pageTranslation.inputContent}
               </label>
               <textarea
                 id="text"
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                placeholder="输入要生成二维码的文本、网址、联系方式等..."
+                placeholder={ui.placeholders.enterContent}
                 className="textarea w-full h-32"
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                二维码尺寸
+                {pageTranslation.qrCodeSize}
               </label>
               <input
                 type="range"
@@ -137,7 +145,7 @@ export default function QRCodePage() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                纠错级别
+                {pageTranslation.errorCorrectionLevel}
               </label>
               <div className="grid grid-cols-2 gap-2">
                 {errorLevels.map((level) => (
@@ -163,7 +171,7 @@ export default function QRCodePage() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                快速输入
+                {pageTranslation.quickInput}
               </label>
               <div className="flex flex-wrap gap-2">
                 {sampleTexts.map((sample) => (
@@ -184,7 +192,7 @@ export default function QRCodePage() {
                 className="btn btn-outline flex items-center gap-2"
               >
                 <RotateCcw className="h-4 w-4" />
-                清空
+                {ui.buttons.clear}
               </button>
             </div>
           </div>
@@ -193,19 +201,19 @@ export default function QRCodePage() {
           <div className="space-y-6">
             <div className="text-center">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                生成的二维码
+                {pageTranslation.generatedQrCode}
               </h3>
               <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8">
                 {qrCodeUrl ? (
                   <div className="space-y-4">
                     <img
                       src={qrCodeUrl}
-                      alt="生成的二维码"
+                      alt={pageTranslation.generatedQrCode}
                       className="mx-auto"
                       style={{ width: size, height: size }}
                     />
                     <div className="text-sm text-gray-600 dark:text-gray-400">
-                      尺寸: {size}px × {size}px
+                      {ui.labels.size}: {size}px × {size}px
                     </div>
                   </div>
                 ) : (
@@ -214,7 +222,7 @@ export default function QRCodePage() {
                       <span className="text-gray-400">QR</span>
                     </div>
                     <p className="text-gray-600 dark:text-gray-400">
-                      输入内容后将自动生成二维码
+                      {ui.messages.processing}
                     </p>
                   </div>
                 )}
@@ -228,14 +236,14 @@ export default function QRCodePage() {
                   className="btn btn-primary flex items-center gap-2"
                 >
                   <Download className="h-4 w-4" />
-                  下载二维码
+                  {ui.buttons.download}
                 </button>
                 <button
                   onClick={handleCopy}
                   className="btn btn-outline flex items-center gap-2"
                 >
                   <Copy className="h-4 w-4" />
-                  复制图片
+                  {ui.buttons.copy}
                 </button>
               </div>
             )}
@@ -244,14 +252,12 @@ export default function QRCodePage() {
 
         <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-6">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            使用说明
+            {pageTranslation.instructions}
           </h3>
           <ul className="space-y-2 text-gray-600 dark:text-gray-400">
-            <li>• 在输入框中输入要生成二维码的内容</li>
-            <li>• 调整二维码尺寸和纠错级别</li>
-            <li>• 二维码会自动生成并显示在右侧</li>
-            <li>• 可以下载或复制生成的二维码图片</li>
-            <li>• 支持文本、网址、邮箱、电话、WiFi等多种格式</li>
+            {pageTranslation.instructionSteps.map((step: string, index: number) => (
+              <li key={index}>• {step}</li>
+            ))}
           </ul>
         </div>
       </div>

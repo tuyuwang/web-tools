@@ -3,6 +3,8 @@
 import { ToolLayout } from '@/components/tool-layout';
 import { useState } from 'react';
 import { Heart, Scale, Activity, TrendingUp, Info } from 'lucide-react';
+import { useToolTranslations } from '@/components/tool-translations';
+import { useLanguage } from '@/components/language-provider';
 
 interface BMICategory {
   range: string;
@@ -12,57 +14,49 @@ interface BMICategory {
   bgColor: string;
 }
 
-const bmiCategories: BMICategory[] = [
-  {
-    range: '< 18.5',
-    category: '体重过轻',
-    description: '体重低于正常范围，建议适当增重',
-    color: 'text-blue-600',
-    bgColor: 'bg-blue-50 dark:bg-blue-900/20',
-  },
-  {
-    range: '18.5 - 24.9',
-    category: '正常体重',
-    description: '体重在健康范围内，继续保持',
-    color: 'text-green-600',
-    bgColor: 'bg-green-50 dark:bg-green-900/20',
-  },
-  {
-    range: '25.0 - 29.9',
-    category: '超重',
-    description: '体重略高于正常范围，建议适当减重',
-    color: 'text-yellow-600',
-    bgColor: 'bg-yellow-50 dark:bg-yellow-900/20',
-  },
-  {
-    range: '30.0 - 34.9',
-    category: '肥胖（一级）',
-    description: '体重明显超标，建议制定减重计划',
-    color: 'text-orange-600',
-    bgColor: 'bg-orange-50 dark:bg-orange-900/20',
-  },
-  {
-    range: '35.0 - 39.9',
-    category: '肥胖（二级）',
-    description: '体重严重超标，建议咨询医生',
-    color: 'text-red-600',
-    bgColor: 'bg-red-50 dark:bg-red-900/20',
-  },
-  {
-    range: '≥ 40.0',
-    category: '肥胖（三级）',
-    description: '体重极度超标，需要医疗干预',
-    color: 'text-red-800',
-    bgColor: 'bg-red-100 dark:bg-red-900/30',
-  },
-];
-
 export default function BMICalculator() {
+  const { getToolTranslation, getUITranslation, getToolPageTranslation } = useToolTranslations();
+  const { t } = useLanguage();
+  const toolTranslation = getToolTranslation('health-bmi');
+  const ui = getUITranslation();
+  const pageTranslation = getToolPageTranslation('health-bmi');
+  
   const [weight, setWeight] = useState('');
   const [height, setHeight] = useState('');
   const [bmi, setBmi] = useState<number | null>(null);
   const [category, setCategory] = useState<BMICategory | null>(null);
   const [idealWeight, setIdealWeight] = useState({ min: 0, max: 0 });
+
+  const bmiCategories: BMICategory[] = [
+    {
+      range: pageTranslation.bmiCategories.underweight.range,
+      category: pageTranslation.bmiCategories.underweight.status,
+      description: pageTranslation.bmiCategories.underweight.description,
+      color: 'text-blue-600',
+      bgColor: 'bg-blue-50 dark:bg-blue-900/20',
+    },
+    {
+      range: pageTranslation.bmiCategories.normal.range,
+      category: pageTranslation.bmiCategories.normal.status,
+      description: pageTranslation.bmiCategories.normal.description,
+      color: 'text-green-600',
+      bgColor: 'bg-green-50 dark:bg-green-900/20',
+    },
+    {
+      range: pageTranslation.bmiCategories.overweight.range,
+      category: pageTranslation.bmiCategories.overweight.status,
+      description: pageTranslation.bmiCategories.overweight.description,
+      color: 'text-yellow-600',
+      bgColor: 'bg-yellow-50 dark:bg-yellow-900/20',
+    },
+    {
+      range: pageTranslation.bmiCategories.obese.range,
+      category: pageTranslation.bmiCategories.obese.status,
+      description: pageTranslation.bmiCategories.obese.description,
+      color: 'text-red-600',
+      bgColor: 'bg-red-50 dark:bg-red-900/20',
+    },
+  ];
 
   const calculateBMI = () => {
     const weightKg = parseFloat(weight);
@@ -80,12 +74,8 @@ export default function BMICalculator() {
         selectedCategory = bmiCategories[1];
       } else if (bmiValue < 30) {
         selectedCategory = bmiCategories[2];
-      } else if (bmiValue < 35) {
-        selectedCategory = bmiCategories[3];
-      } else if (bmiValue < 40) {
-        selectedCategory = bmiCategories[4];
       } else {
-        selectedCategory = bmiCategories[5];
+        selectedCategory = bmiCategories[3];
       }
       setCategory(selectedCategory);
 
@@ -100,167 +90,165 @@ export default function BMICalculator() {
     if (bmiValue < 18.5) return bmiCategories[0];
     if (bmiValue < 25) return bmiCategories[1];
     if (bmiValue < 30) return bmiCategories[2];
-    if (bmiValue < 35) return bmiCategories[3];
-    if (bmiValue < 40) return bmiCategories[4];
-    return bmiCategories[5];
+    return bmiCategories[3];
   };
 
   return (
     <ToolLayout>
-      <div className="text-center">
-        <div className="flex items-center justify-center mb-4">
-          <Heart className="h-8 w-8 text-primary-600 mr-3" />
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            BMI计算器
+      <div className="max-w-4xl mx-auto space-y-8">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            {toolTranslation.title}
           </h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            {toolTranslation.description}
+          </p>
         </div>
-        <p className="text-gray-600 dark:text-gray-400">
-          计算身体质量指数，评估体重健康状况
-        </p>
-      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* 左侧：输入和计算 */}
-        <div className="space-y-6">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-600">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-              输入信息
-            </h2>
-            
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  体重 (kg)
-                </label>
-                <input
-                  type="number"
-                  value={weight}
-                  onChange={(e) => setWeight(e.target.value)}
-                  placeholder="请输入体重"
-                  step="0.1"
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-white"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  身高 (cm)
-                </label>
-                <input
-                  type="number"
-                  value={height}
-                  onChange={(e) => setHeight(e.target.value)}
-                  placeholder="请输入身高"
-                  step="0.1"
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-white"
-                />
-              </div>
-
-              <button
-                onClick={calculateBMI}
-                disabled={!weight || !height}
-                className="w-full px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
-              >
-                <Scale className="h-5 w-5 mr-2" />
-                计算BMI
-              </button>
-            </div>
-          </div>
-
-          {bmi !== null && (
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-600">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                计算结果
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* 输入区域 */}
+          <div className="space-y-6">
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                {pageTranslation.title}
               </h2>
-              
-              <div className="text-center mb-6">
-                <div className="text-4xl font-bold text-primary-600 mb-2">
-                  {bmi.toFixed(1)}
-                </div>
-                <div className="text-gray-600 dark:text-gray-400">
-                  您的BMI指数
-                </div>
-              </div>
 
-              {category && (
-                <div className={`p-4 rounded-lg ${category.bgColor}`}>
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className={`font-semibold ${category.color}`}>
-                      {category.category}
-                    </h3>
-                    <span className={`text-sm ${category.color}`}>
-                      {category.range}
-                    </span>
+              <div className="space-y-4">
+                {/* 身高输入 */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    {pageTranslation.height}
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      value={height}
+                      onChange={(e) => setHeight(e.target.value)}
+                      placeholder={ui.placeholders.enterNumber}
+                      className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                      cm
+                    </div>
                   </div>
-                  <p className="text-sm text-gray-700 dark:text-gray-300">
-                    {category.description}
-                  </p>
                 </div>
-              )}
 
-              {idealWeight.min > 0 && (
-                <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                  <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2">
-                    理想体重范围
-                  </h4>
-                  <p className="text-sm text-blue-800 dark:text-blue-200">
-                    {idealWeight.min.toFixed(1)} - {idealWeight.max.toFixed(1)} kg
-                  </p>
+                {/* 体重输入 */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    {pageTranslation.weight}
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      value={weight}
+                      onChange={(e) => setWeight(e.target.value)}
+                      placeholder={ui.placeholders.enterNumber}
+                      className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                      kg
+                    </div>
+                  </div>
                 </div>
-              )}
+
+                {/* 计算按钮 */}
+                <button
+                  onClick={calculateBMI}
+                  disabled={!weight || !height}
+                  className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
+                >
+                  <Scale className="w-5 h-5" />
+                  {pageTranslation.calculate}
+                </button>
+              </div>
             </div>
-          )}
+          </div>
+
+          {/* 结果区域 */}
+          <div className="space-y-6">
+            {bmi && (
+              <>
+                {/* BMI结果 */}
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+                  <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                    {pageTranslation.result}
+                  </h2>
+                  
+                  <div className="text-center space-y-4">
+                    <div className="text-4xl font-bold text-blue-600">
+                      {bmi.toFixed(1)}
+                    </div>
+                    <div className="text-lg text-gray-600 dark:text-gray-400">
+                      BMI
+                    </div>
+                    
+                    {category && (
+                      <div className={`p-4 rounded-lg ${category.bgColor}`}>
+                        <div className={`text-lg font-semibold ${category.color}`}>
+                          {category.category}
+                        </div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                          {category.description}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* 理想体重范围 */}
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                    理想体重范围
+                  </h3>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-green-600">
+                      {idealWeight.min.toFixed(1)} - {idealWeight.max.toFixed(1)} kg
+                    </div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                      基于您的身高计算
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* BMI分类说明 */}
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                BMI分类标准
+              </h3>
+              <div className="space-y-3">
+                {bmiCategories.map((cat, index) => (
+                  <div key={index} className={`p-3 rounded-lg ${cat.bgColor}`}>
+                    <div className="flex justify-between items-center">
+                      <span className={`font-medium ${cat.color}`}>
+                        {cat.category}
+                      </span>
+                      <span className="text-sm text-gray-600 dark:text-gray-400">
+                        {cat.range}
+                      </span>
+                    </div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                      {cat.description}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* 右侧：BMI分类表 */}
-        <div className="space-y-6">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-600">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-              BMI分类标准
-            </h2>
-            
-            <div className="space-y-3">
-              {bmiCategories.map((cat, index) => (
-                <div
-                  key={index}
-                  className={`p-4 rounded-lg border-2 ${
-                    bmi !== null && getBMICategory(bmi).category === cat.category
-                      ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                      : 'border-gray-200 dark:border-gray-600'
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <span className={`font-medium ${cat.color}`}>
-                      {cat.category}
-                    </span>
-                    <span className="text-sm text-gray-600 dark:text-gray-400">
-                      {cat.range}
-                    </span>
-                  </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {cat.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg">
-            <div className="flex items-start space-x-3">
-              <Info className="h-5 w-5 text-yellow-600 mt-0.5" />
-              <div>
-                <h3 className="font-medium text-yellow-900 dark:text-yellow-100 mb-2">
-                  使用说明
-                </h3>
-                <ul className="text-sm text-yellow-800 dark:text-yellow-200 space-y-1">
-                  <li>• BMI = 体重(kg) / 身高(m)²</li>
-                  <li>• 适用于18-65岁的成年人</li>
-                  <li>• 不适用于运动员、孕妇等特殊人群</li>
-                  <li>• 仅供参考，具体健康建议请咨询医生</li>
-                </ul>
-              </div>
-            </div>
-          </div>
+        {/* 使用说明 */}
+        <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg">
+          <h3 className="text-lg font-semibold text-blue-800 dark:text-blue-200 mb-4">
+            {pageTranslation.instructions}
+          </h3>
+          <ul className="space-y-2 text-blue-700 dark:text-blue-300">
+            {pageTranslation.instructionSteps.map((step: string, index: number) => (
+              <li key={index}>• {step}</li>
+            ))}
+          </ul>
         </div>
       </div>
     </ToolLayout>

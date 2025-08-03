@@ -4,13 +4,16 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Wrench } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';
+import { LanguageToggle } from './language-toggle';
+import { useLanguage } from './language-provider';
 
 export function Navigation() {
   const pathname = usePathname();
+  const { t, locale, setLocale } = useLanguage();
 
   const navItems = [
-    { href: '/', label: '首页', icon: Home },
-    { href: '/tools', label: '工具', icon: Wrench },
+    { href: '/', label: t.nav.home, icon: Home },
+    { href: '/tools', label: t.nav.tools, icon: Wrench },
   ];
 
   return (
@@ -46,6 +49,7 @@ export function Navigation() {
                 </Link>
               );
             })}
+            <LanguageToggle onLanguageChange={setLocale} currentLocale={locale} />
             <ThemeToggle />
           </div>
         </div>

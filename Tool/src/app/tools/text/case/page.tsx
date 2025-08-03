@@ -3,10 +3,17 @@
 import { useState } from 'react';
 import { Copy, RotateCcw } from 'lucide-react';
 import { ToolLayout } from '@/components/tool-layout';
+import { useToolTranslations } from '@/components/tool-translations';
+import { useLanguage } from '@/components/language-provider';
 
 export default function TextCaseConverterPage() {
   const [inputText, setInputText] = useState('');
   const [outputText, setOutputText] = useState('');
+  const { getToolTranslation, getUITranslation, getToolPageTranslation } = useToolTranslations();
+  const { t } = useLanguage();
+  const toolTranslation = getToolTranslation('text-case');
+  const ui = getUITranslation();
+  const pageTranslation = getToolPageTranslation('text-case');
 
   const convertCase = (type: string) => {
     switch (type) {
@@ -55,12 +62,12 @@ export default function TextCaseConverterPage() {
   };
 
   const caseTypes = [
-    { id: 'uppercase', name: '全部大写', description: '将所有字母转换为大写' },
-    { id: 'lowercase', name: '全部小写', description: '将所有字母转换为小写' },
-    { id: 'capitalize', name: '首字母大写', description: '每个单词的首字母大写' },
-    { id: 'titlecase', name: '标题格式', description: '每个单词首字母大写，其余小写' },
-    { id: 'alternating', name: '交替大小写', description: '字母交替大小写' },
-    { id: 'inverse', name: '大小写反转', description: '反转当前的大小写状态' },
+    { id: 'uppercase', ...pageTranslation.caseTypes.uppercase },
+    { id: 'lowercase', ...pageTranslation.caseTypes.lowercase },
+    { id: 'capitalize', ...pageTranslation.caseTypes.capitalize },
+    { id: 'titlecase', ...pageTranslation.caseTypes.titlecase },
+    { id: 'alternating', ...pageTranslation.caseTypes.alternating },
+    { id: 'inverse', ...pageTranslation.caseTypes.inverse },
   ];
 
   return (
@@ -68,10 +75,10 @@ export default function TextCaseConverterPage() {
       <div className="max-w-6xl mx-auto space-y-8">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            文本大小写转换
+            {toolTranslation.title}
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            快速转换文本的大小写格式
+            {toolTranslation.description}
           </p>
         </div>
 
@@ -80,13 +87,13 @@ export default function TextCaseConverterPage() {
           <div className="space-y-6">
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                输入文本
+                {pageTranslation.inputText}
               </h2>
               
               <textarea
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
-                placeholder="在此输入要转换的文本..."
+                placeholder={ui.placeholders.enterText}
                 className="w-full h-48 p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
               
@@ -96,7 +103,7 @@ export default function TextCaseConverterPage() {
                   className="px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors flex items-center gap-2"
                 >
                   <RotateCcw className="w-4 h-4" />
-                  清空
+                  {ui.buttons.clear}
                 </button>
               </div>
             </div>
@@ -107,13 +114,13 @@ export default function TextCaseConverterPage() {
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  转换结果
+                  {pageTranslation.outputText}
                 </h2>
                 {outputText && (
                   <button
                     onClick={() => copyToClipboard(outputText)}
                     className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
-                    title="复制结果"
+                    title={ui.buttons.copy}
                   >
                     <Copy className="w-4 h-4" />
                   </button>
@@ -127,7 +134,7 @@ export default function TextCaseConverterPage() {
                   </div>
                 ) : (
                   <div className="text-gray-500 dark:text-gray-400 text-center py-8">
-                    转换后的文本将显示在这里
+                    {ui.messages.processing}
                   </div>
                 )}
               </div>
@@ -138,7 +145,7 @@ export default function TextCaseConverterPage() {
         {/* 转换选项 */}
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            转换选项
+            {pageTranslation.conversionOptions}
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -163,14 +170,12 @@ export default function TextCaseConverterPage() {
         {/* 使用说明 */}
         <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg">
           <h3 className="text-lg font-semibold text-blue-800 dark:text-blue-200 mb-4">
-            使用说明
+            {pageTranslation.instructions}
           </h3>
           <ul className="space-y-2 text-blue-700 dark:text-blue-300">
-            <li>• 在左侧输入框中输入要转换的文本</li>
-            <li>• 点击右侧的转换选项进行大小写转换</li>
-            <li>• 转换结果会实时显示在右侧区域</li>
-            <li>• 可以点击复制按钮复制转换后的文本</li>
-            <li>• 支持多种大小写转换格式</li>
+            {pageTranslation.instructionSteps.map((step: string, index: number) => (
+              <li key={index}>• {step}</li>
+            ))}
           </ul>
         </div>
       </div>

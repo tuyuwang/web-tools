@@ -2,14 +2,16 @@
 
 import { Moon, Sun, Monitor } from 'lucide-react';
 import { useTheme } from './theme-provider';
+import { useLanguage } from './language-provider';
 
 export function ThemeToggle() {
   const { theme, setTheme, resolvedTheme } = useTheme();
+  const { t } = useLanguage();
 
   const themes = [
-    { value: 'light', label: '浅色', icon: Sun },
-    { value: 'dark', label: '深色', icon: Moon },
-    { value: 'system', label: '系统', icon: Monitor },
+    { value: 'light', label: t.theme.light, icon: Sun },
+    { value: 'dark', label: t.theme.dark, icon: Moon },
+    { value: 'system', label: t.theme.system, icon: Monitor },
   ] as const;
 
   return (

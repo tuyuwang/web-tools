@@ -1,8 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useToolTranslations } from '@/components/tool-translations';
 
 export default function TextAnalyzePage() {
+  const { getToolTranslation } = useToolTranslations();
+  const toolTranslation = getToolTranslation('text-analyze');
   const [text, setText] = useState('');
   const [stats, setStats] = useState({
     characters: 0,
@@ -29,10 +32,10 @@ export default function TextAnalyzePage() {
     <div className="max-w-6xl mx-auto space-y-8">
       <div className="text-center">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          文本分析工具
+          {toolTranslation.title}
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          分析文本的字符数、词数、行数等统计信息
+          {toolTranslation.description}
         </p>
       </div>
 

@@ -2,8 +2,11 @@
 
 import { useState, useRef } from 'react';
 import { Upload, Download, RotateCcw } from 'lucide-react';
+import { useToolTranslations } from '@/components/tool-translations';
 
 export default function ImageConvertPage() {
+  const { getToolTranslation } = useToolTranslations();
+  const toolTranslation = getToolTranslation('image-convert');
   const [originalImage, setOriginalImage] = useState<File | null>(null);
   const [originalUrl, setOriginalUrl] = useState<string>('');
   const [convertedUrl, setConvertedUrl] = useState<string>('');
@@ -80,10 +83,10 @@ export default function ImageConvertPage() {
     <div className="max-w-4xl mx-auto space-y-8">
       <div className="text-center">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          图片格式转换
+          {toolTranslation.title}
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          将图片转换为不同格式，支持JPEG、PNG、WebP等格式
+          {toolTranslation.description}
         </p>
       </div>
 

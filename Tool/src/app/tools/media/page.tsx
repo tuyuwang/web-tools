@@ -3,8 +3,16 @@
 import { ToolLayout } from '@/components/tool-layout';
 import { useState, useRef } from 'react';
 import { Play, Pause, Volume2, VolumeX, Download, Upload, Music, Video, Image, FileAudio, FileVideo, Settings } from 'lucide-react';
+import { useToolTranslations } from '@/components/tool-translations';
+import { useLanguage } from '@/components/language-provider';
 
 export default function MediaToolsPage() {
+  const { getToolTranslation, getUITranslation, getToolPageTranslation } = useToolTranslations();
+  const { t } = useLanguage();
+  const toolTranslation = getToolTranslation('media');
+  const ui = getUITranslation();
+  const pageTranslation = getToolPageTranslation('media');
+  
   const [activeTab, setActiveTab] = useState('audio');
   const [audioFile, setAudioFile] = useState<File | null>(null);
   const [videoFile, setVideoFile] = useState<File | null>(null);
@@ -16,9 +24,9 @@ export default function MediaToolsPage() {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const tabs = [
-    { id: 'audio', name: '音频工具', icon: Music },
-    { id: 'video', name: '视频工具', icon: Video },
-    { id: 'converter', name: '格式转换', icon: FileAudio },
+    { id: 'audio', name: pageTranslation.tabs.audio, icon: Music },
+    { id: 'video', name: pageTranslation.tabs.video, icon: Video },
+    { id: 'converter', name: pageTranslation.tabs.converter, icon: FileAudio },
   ];
 
   const handleFileUpload = (file: File, type: 'audio' | 'video') => {
@@ -67,29 +75,29 @@ export default function MediaToolsPage() {
   };
 
   const audioFormats = [
-    { name: 'MP3', description: '最常用的音频格式，兼容性好' },
-    { name: 'WAV', description: '无损音频格式，文件较大' },
-    { name: 'AAC', description: '苹果设备常用格式' },
-    { name: 'OGG', description: '开源音频格式' },
-    { name: 'FLAC', description: '无损压缩格式' },
+    { name: pageTranslation.audioFormats.mp3.name, description: pageTranslation.audioFormats.mp3.description },
+    { name: pageTranslation.audioFormats.wav.name, description: pageTranslation.audioFormats.wav.description },
+    { name: pageTranslation.audioFormats.aac.name, description: pageTranslation.audioFormats.aac.description },
+    { name: pageTranslation.audioFormats.ogg.name, description: pageTranslation.audioFormats.ogg.description },
+    { name: pageTranslation.audioFormats.flac.name, description: pageTranslation.audioFormats.flac.description },
   ];
 
   const videoFormats = [
-    { name: 'MP4', description: '最常用的视频格式' },
-    { name: 'AVI', description: '传统视频格式' },
-    { name: 'MOV', description: '苹果设备常用格式' },
-    { name: 'WebM', description: '网页视频格式' },
-    { name: 'MKV', description: '开源容器格式' },
+    { name: pageTranslation.videoFormats.mp4.name, description: pageTranslation.videoFormats.mp4.description },
+    { name: pageTranslation.videoFormats.avi.name, description: pageTranslation.videoFormats.avi.description },
+    { name: pageTranslation.videoFormats.mov.name, description: pageTranslation.videoFormats.mov.description },
+    { name: pageTranslation.videoFormats.webm.name, description: pageTranslation.videoFormats.webm.description },
+    { name: pageTranslation.videoFormats.mkv.name, description: pageTranslation.videoFormats.mkv.description },
   ];
 
   return (
     <ToolLayout>
       <div className="text-center">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          媒体工具
+          {toolTranslation.title}
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          音频、视频处理和格式转换工具
+          {toolTranslation.description}
         </p>
       </div>
 
@@ -99,282 +107,189 @@ export default function MediaToolsPage() {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+            className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
               activeTab === tab.id
-                ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
+                ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm'
                 : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
             }`}
           >
-            <tab.icon className="h-4 w-4" />
+            <tab.icon className="w-4 h-4" />
             <span>{tab.name}</span>
           </button>
         ))}
       </div>
 
-      {/* 音频工具 */}
-      {activeTab === 'audio' && (
-        <div className="space-y-6">
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              音频播放器
-            </h3>
-            
-            {/* 文件上传 */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                选择音频文件
-              </label>
-              <div className="flex items-center space-x-4">
-                <input
-                  type="file"
-                  accept="audio/*"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) handleFileUpload(file, 'audio');
-                  }}
-                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100 dark:file:bg-primary-900 dark:file:text-primary-300"
-                />
-                {audioFile && (
-                  <span className="text-sm text-gray-600 dark:text-gray-400">
-                    {audioFile.name}
-                  </span>
-                )}
+      {/* 内容区域 */}
+      <div className="mt-8">
+        {activeTab === 'audio' && (
+          <div className="space-y-6">
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                {pageTranslation.tabs.audio}
+              </h2>
+              
+              {/* 文件上传 */}
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {ui.labels.input}
+                </label>
+                <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center">
+                  <Upload className="w-8 h-8 mx-auto text-gray-400 mb-2" />
+                  <p className="text-gray-600 dark:text-gray-400">
+                    {ui.placeholders.chooseFile}
+                  </p>
+                  <input
+                    type="file"
+                    accept="audio/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleFileUpload(file, 'audio');
+                    }}
+                    className="mt-2"
+                  />
+                </div>
               </div>
-            </div>
 
-            {/* 音频播放器 */}
-            {audioFile && (
-              <div className="space-y-4">
-                <audio
-                  ref={audioRef}
-                  onTimeUpdate={handleTimeUpdate}
-                  onLoadedMetadata={handleTimeUpdate}
-                  className="w-full"
-                  controls
-                />
-                
-                {/* 自定义控制器 */}
+              {/* 音频播放器 */}
+              {audioFile && (
                 <div className="space-y-4">
+                  <audio
+                    ref={audioRef}
+                    onTimeUpdate={handleTimeUpdate}
+                    className="w-full"
+                    controls
+                  />
+                  
+                  {/* 控制按钮 */}
                   <div className="flex items-center space-x-4">
                     <button
                       onClick={handlePlayPause}
-                      className="flex items-center justify-center w-12 h-12 bg-primary-600 text-white rounded-full hover:bg-primary-700 transition-colors"
+                      className="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
                     >
-                      {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
+                      {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+                      <span>{isPlaying ? pageTranslation.controls.pause : pageTranslation.controls.play}</span>
                     </button>
                     
                     <div className="flex items-center space-x-2">
-                      <Volume2 className="h-4 w-4 text-gray-500" />
+                      <Volume2 className="w-4 h-4 text-gray-500" />
                       <input
                         type="range"
                         min="0"
                         max="100"
                         value={volume}
-                        onChange={(e) => handleVolumeChange(parseInt(e.target.value))}
-                        className="w-24"
-                      />
-                      <span className="text-sm text-gray-600 dark:text-gray-400 w-8">
-                        {volume}%
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center space-x-2">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">
-                      {formatTime(currentTime)}
-                    </span>
-                    <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                      <div
-                        className="bg-primary-600 h-2 rounded-full"
-                        style={{ width: `${(currentTime / duration) * 100}%` }}
+                        onChange={(e) => handleVolumeChange(Number(e.target.value))}
+                        className="w-20"
                       />
                     </div>
-                    <span className="text-sm text-gray-600 dark:text-gray-400">
-                      {formatTime(duration)}
-                    </span>
                   </div>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
 
-          {/* 音频信息 */}
-          {audioFile && (
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                音频信息
-              </h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div>
-                  <span className="text-sm text-gray-600 dark:text-gray-400">文件名</span>
-                  <p className="font-medium">{audioFile.name}</p>
-                </div>
-                <div>
-                  <span className="text-sm text-gray-600 dark:text-gray-400">文件大小</span>
-                  <p className="font-medium">{(audioFile.size / 1024 / 1024).toFixed(2)} MB</p>
-                </div>
-                <div>
-                  <span className="text-sm text-gray-600 dark:text-gray-400">文件类型</span>
-                  <p className="font-medium">{audioFile.type}</p>
-                </div>
-                <div>
-                  <span className="text-sm text-gray-600 dark:text-gray-400">时长</span>
-                  <p className="font-medium">{formatTime(duration)}</p>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* 视频工具 */}
-      {activeTab === 'video' && (
-        <div className="space-y-6">
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              视频播放器
-            </h3>
-            
-            {/* 文件上传 */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                选择视频文件
-              </label>
-              <div className="flex items-center space-x-4">
-                <input
-                  type="file"
-                  accept="video/*"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) handleFileUpload(file, 'video');
-                  }}
-                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100 dark:file:bg-primary-900 dark:file:text-primary-300"
-                />
-                {videoFile && (
-                  <span className="text-sm text-gray-600 dark:text-gray-400">
-                    {videoFile.name}
-                  </span>
-                )}
-              </div>
-            </div>
-
-            {/* 视频播放器 */}
-            {videoFile && (
-              <div className="space-y-4">
-                <video
-                  ref={videoRef}
-                  controls
-                  className="w-full max-w-2xl mx-auto rounded-lg"
-                />
-                
-                {/* 视频信息 */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div>
-                    <span className="text-sm text-gray-600 dark:text-gray-400">文件名</span>
-                    <p className="font-medium">{videoFile.name}</p>
-                  </div>
-                  <div>
-                    <span className="text-sm text-gray-600 dark:text-gray-400">文件大小</span>
-                    <p className="font-medium">{(videoFile.size / 1024 / 1024).toFixed(2)} MB</p>
-                  </div>
-                  <div>
-                    <span className="text-sm text-gray-600 dark:text-gray-400">文件类型</span>
-                    <p className="font-medium">{videoFile.type}</p>
-                  </div>
-                  <div>
-                    <span className="text-sm text-gray-600 dark:text-gray-400">分辨率</span>
-                    <p className="font-medium">-</p>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* 格式转换 */}
-      {activeTab === 'converter' && (
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* 音频格式 */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                音频格式转换
-              </h3>
-              <div className="space-y-3">
-                {audioFormats.map((format) => (
-                  <div key={format.name} className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
-                    <div>
-                      <h4 className="font-medium text-gray-900 dark:text-white">{format.name}</h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">{format.description}</p>
+              {/* 格式信息 */}
+              <div className="mt-6">
+                <h3 className="text-md font-medium text-gray-900 dark:text-white mb-3">
+                  {ui.labels.format}
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {audioFormats.map((format) => (
+                    <div key={format.name} className="p-3 border border-gray-200 dark:border-gray-600 rounded-lg">
+                      <div className="font-medium text-gray-900 dark:text-white">{format.name}</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">{format.description}</div>
                     </div>
-                    <button className="px-3 py-1 text-sm bg-primary-600 text-white rounded hover:bg-primary-700 transition-colors">
-                      转换
-                    </button>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
+          </div>
+        )}
 
-            {/* 视频格式 */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                视频格式转换
-              </h3>
-              <div className="space-y-3">
-                {videoFormats.map((format) => (
-                  <div key={format.name} className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
-                    <div>
-                      <h4 className="font-medium text-gray-900 dark:text-white">{format.name}</h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">{format.description}</p>
+        {activeTab === 'video' && (
+          <div className="space-y-6">
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                {pageTranslation.tabs.video}
+              </h2>
+              
+              {/* 文件上传 */}
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {ui.labels.input}
+                </label>
+                <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center">
+                  <Upload className="w-8 h-8 mx-auto text-gray-400 mb-2" />
+                  <p className="text-gray-600 dark:text-gray-400">
+                    {ui.placeholders.chooseFile}
+                  </p>
+                  <input
+                    type="file"
+                    accept="video/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleFileUpload(file, 'video');
+                    }}
+                    className="mt-2"
+                  />
+                </div>
+              </div>
+
+              {/* 视频播放器 */}
+              {videoFile && (
+                <div className="space-y-4">
+                  <video
+                    ref={videoRef}
+                    className="w-full rounded-lg"
+                    controls
+                  />
+                </div>
+              )}
+
+              {/* 格式信息 */}
+              <div className="mt-6">
+                <h3 className="text-md font-medium text-gray-900 dark:text-white mb-3">
+                  {ui.labels.format}
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {videoFormats.map((format) => (
+                    <div key={format.name} className="p-3 border border-gray-200 dark:border-gray-600 rounded-lg">
+                      <div className="font-medium text-gray-900 dark:text-white">{format.name}</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">{format.description}</div>
                     </div>
-                    <button className="px-3 py-1 text-sm bg-primary-600 text-white rounded hover:bg-primary-700 transition-colors">
-                      转换
-                    </button>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           </div>
+        )}
 
-          {/* 批量转换 */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              批量转换
-            </h3>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  选择文件
-                </label>
-                <input
-                  type="file"
-                  multiple
-                  accept="audio/*,video/*"
-                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100 dark:file:bg-primary-900 dark:file:text-primary-300"
-                />
+        {activeTab === 'converter' && (
+          <div className="space-y-6">
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                {pageTranslation.tabs.converter}
+              </h2>
+              
+              <div className="text-center py-8">
+                <Settings className="w-12 h-12 mx-auto text-gray-400 mb-4" />
+                <p className="text-gray-600 dark:text-gray-400">
+                  {ui.messages.processing}
+                </p>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  目标格式
-                </label>
-                <select className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-white">
-                  <option value="">选择格式</option>
-                  <option value="mp3">MP3</option>
-                  <option value="wav">WAV</option>
-                  <option value="aac">AAC</option>
-                  <option value="mp4">MP4</option>
-                  <option value="avi">AVI</option>
-                </select>
-              </div>
-              <button className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
-                <Settings className="h-4 w-4" />
-                <span>开始批量转换</span>
-              </button>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
+
+      {/* 使用说明 */}
+      <div className="mt-8 bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg">
+        <h3 className="text-lg font-semibold text-blue-800 dark:text-blue-200 mb-4">
+          {pageTranslation.instructions}
+        </h3>
+        <ul className="space-y-2 text-blue-700 dark:text-blue-300">
+          {pageTranslation.instructionSteps.map((step: string, index: number) => (
+            <li key={index}>• {step}</li>
+          ))}
+        </ul>
+      </div>
     </ToolLayout>
   );
 } 

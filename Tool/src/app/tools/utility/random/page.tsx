@@ -3,8 +3,11 @@
 import { useState } from 'react';
 import { RotateCcw, Copy, Dice1 } from 'lucide-react';
 import { ToolLayout } from '@/components/tool-layout';
+import { useToolTranslations } from '@/components/tool-translations';
 
 export default function RandomGeneratorPage() {
+  const { getToolTranslation } = useToolTranslations();
+  const toolTranslation = getToolTranslation('utility-random');
   const [minValue, setMinValue] = useState('1');
   const [maxValue, setMaxValue] = useState('100');
   const [count, setCount] = useState('1');
@@ -46,10 +49,10 @@ export default function RandomGeneratorPage() {
       <div className="max-w-4xl mx-auto space-y-8">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            随机数生成器
+            {toolTranslation.title}
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            生成随机数字，支持自定义范围和数量
+            {toolTranslation.description}
           </p>
         </div>
 

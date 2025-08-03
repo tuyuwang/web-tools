@@ -2,8 +2,13 @@
 
 import { useState } from 'react';
 import { Copy, RotateCcw } from 'lucide-react';
+import { useToolTranslations } from '@/components/tool-translations';
+import { useLanguage } from '@/components/language-provider';
 
 export default function TextEncodePage() {
+  const { getToolTranslation } = useToolTranslations();
+  const toolTranslation = getToolTranslation('text-encode');
+  const { t } = useLanguage();
   const [inputText, setInputText] = useState('');
   const [outputText, setOutputText] = useState('');
   const [mode, setMode] = useState<'encode' | 'decode'>('encode');
@@ -67,19 +72,19 @@ export default function TextEncodePage() {
   };
 
   const types = [
-    { id: 'base64', name: 'Base64', description: 'Base64编码/解码' },
-    { id: 'url', name: 'URL', description: 'URL编码/解码' },
-    { id: 'html', name: 'HTML', description: 'HTML实体编码/解码' },
+    { id: 'base64', name: 'Base64', description: toolTranslation.features?.[0] || 'Base64编码/解码' },
+    { id: 'url', name: 'URL', description: toolTranslation.features?.[1] || 'URL编码/解码' },
+    { id: 'html', name: 'HTML', description: toolTranslation.features?.[2] || 'HTML实体编码/解码' },
   ];
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       <div className="text-center">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          编码解码工具
+          {toolTranslation.title}
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          支持Base64、URL、HTML实体的编码和解码
+          {toolTranslation.description}
         </p>
       </div>
 
@@ -94,7 +99,7 @@ export default function TextEncodePage() {
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
             }`}
           >
-            编码
+            {t.common.encode || '编码'}
           </button>
           <button
             onClick={() => setMode('decode')}
@@ -104,7 +109,7 @@ export default function TextEncodePage() {
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
             }`}
           >
-            解码
+            {t.common.decode || '解码'}
           </button>
         </div>
 
@@ -153,7 +158,7 @@ export default function TextEncodePage() {
               className="btn btn-outline flex items-center gap-2"
             >
               <RotateCcw className="h-4 w-4" />
-              清空
+              {t.common.clear || '清空'}
             </button>
           </div>
         </div>
@@ -179,7 +184,7 @@ export default function TextEncodePage() {
               className="btn btn-primary flex items-center gap-2"
             >
               <Copy className="h-4 w-4" />
-              复制结果
+              {t.common.copy || '复制'}
             </button>
           </div>
         </div>
@@ -190,11 +195,11 @@ export default function TextEncodePage() {
           使用说明
         </h3>
         <ul className="space-y-2 text-gray-600 dark:text-gray-400">
-          <li>• 选择编码或解码模式</li>
-          <li>• 选择编码类型（Base64、URL、HTML）</li>
-          <li>• 在左侧输入框中输入要转换的文本</li>
-          <li>• 点击转换按钮进行编码或解码</li>
-          <li>• 转换结果会显示在右侧输出框中</li>
+          <li>• {t.common.selectMode || '选择编码或解码模式'}</li>
+          <li>• {t.common.selectType || '选择编码类型（Base64、URL、HTML）'}</li>
+          <li>• {t.common.inputText || '在左侧输入框中输入要转换的文本'}</li>
+          <li>• {t.common.clickConvert || '点击转换按钮进行编码或解码'}</li>
+          <li>• {t.common.resultDisplay || '转换结果会显示在右侧输出框中'}</li>
         </ul>
       </div>
     </div>

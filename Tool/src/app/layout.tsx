@@ -3,6 +3,8 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { Navigation } from '@/components/navigation';
 import { ThemeProvider } from '@/components/theme-provider';
+import { LanguageProvider } from '@/components/language-provider';
+import { MetadataProvider } from '@/components/metadata-provider';
 import { SWRegister } from '@/components/sw-register';
 import { PWAInstaller } from '@/components/pwa-installer';
 import { Analytics } from '@/components/analytics';
@@ -86,15 +88,18 @@ export default function RootLayout({
     <html lang="zh-CN">
       <body className={inter.className}>
         <ThemeProvider>
-          <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-            <Navigation />
-            <main className="container mx-auto px-4 py-8">
-              {children}
-            </main>
-          </div>
-          <SWRegister />
-          <PWAInstaller />
-          <Analytics />
+          <LanguageProvider>
+            <MetadataProvider />
+            <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+              <Navigation />
+              <main className="container mx-auto px-4 py-8">
+                {children}
+              </main>
+            </div>
+            <SWRegister />
+            <PWAInstaller />
+            <Analytics />
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>
