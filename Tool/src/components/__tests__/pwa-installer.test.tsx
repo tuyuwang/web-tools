@@ -1,4 +1,5 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import '@testing-library/jest-dom';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import { PWAInstaller } from '../pwa-installer'
 
 // 模拟beforeinstallprompt事件
@@ -43,7 +44,9 @@ describe('PWAInstaller', () => {
     render(<PWAInstaller />)
     
     // 触发beforeinstallprompt事件
-    window.dispatchEvent(event)
+    await act(async () => {
+      window.dispatchEvent(event)
+    })
     
     await waitFor(() => {
       expect(screen.getByText('安装工具集')).toBeInTheDocument()
@@ -56,14 +59,18 @@ describe('PWAInstaller', () => {
     
     render(<PWAInstaller />)
     
-    window.dispatchEvent(event)
+    await act(async () => {
+      window.dispatchEvent(event)
+    })
     
     await waitFor(() => {
       expect(screen.getByText('安装工具集')).toBeInTheDocument()
     })
     
     const installButton = screen.getByText('安装')
-    fireEvent.click(installButton)
+    await act(async () => {
+      fireEvent.click(installButton)
+    })
     
     expect(mockBeforeInstallPrompt.prompt).toHaveBeenCalled()
   })
@@ -74,14 +81,18 @@ describe('PWAInstaller', () => {
     
     render(<PWAInstaller />)
     
-    window.dispatchEvent(event)
+    await act(async () => {
+      window.dispatchEvent(event)
+    })
     
     await waitFor(() => {
       expect(screen.getByText('安装工具集')).toBeInTheDocument()
     })
     
     const dismissButton = screen.getByText('稍后')
-    fireEvent.click(dismissButton)
+    await act(async () => {
+      fireEvent.click(dismissButton)
+    })
     
     await waitFor(() => {
       expect(screen.queryByText('安装工具集')).not.toBeInTheDocument()

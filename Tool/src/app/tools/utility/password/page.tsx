@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Copy, RefreshCw, Eye, EyeOff } from 'lucide-react';
+import { Copy, RotateCcw, Eye, EyeOff } from 'lucide-react';
+import { ToolLayout } from '@/components/tool-layout';
 
 export default function PasswordGeneratorPage() {
   const [password, setPassword] = useState('');
@@ -9,8 +10,8 @@ export default function PasswordGeneratorPage() {
   const [includeUppercase, setIncludeUppercase] = useState(true);
   const [includeLowercase, setIncludeLowercase] = useState(true);
   const [includeNumbers, setIncludeNumbers] = useState(true);
-  const [includeSymbols, setIncludeSymbols] = useState(true);
-  const [excludeSimilar, setExcludeSimilar] = useState(false);
+  const [includeSymbols, setIncludeSymbols] = useState(false);
+  const [excludeSimilar, setExcludeSimilar] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
 
   const generatePassword = () => {
@@ -26,13 +27,13 @@ export default function PasswordGeneratorPage() {
     if (includeNumbers) chars += numbers;
     if (includeSymbols) chars += symbols;
 
+    if (excludeSimilar) {
+      chars = chars.split('').filter(char => !similar.includes(char)).join('');
+    }
+
     if (chars === '') {
       setPassword('');
       return;
-    }
-
-    if (excludeSimilar) {
-      chars = chars.split('').filter(char => !similar.includes(char)).join('');
     }
 
     let result = '';
@@ -43,7 +44,7 @@ export default function PasswordGeneratorPage() {
     setPassword(result);
   };
 
-  const copyToClipboard = async () => {
+  const copyPassword = async () => {
     if (password && navigator.clipboard) {
       try {
         await navigator.clipboard.writeText(password);
@@ -64,196 +65,208 @@ export default function PasswordGeneratorPage() {
     if (/[0-9]/.test(password)) score++;
     if (/[^A-Za-z0-9]/.test(password)) score++;
 
-    if (score <= 2) return { score, label: '弱', color: 'text-red-500' };
-    if (score <= 4) return { score, label: '中', color: 'text-yellow-500' };
-    return { score, label: '强', color: 'text-green-500' };
+    const labels = ['很弱', '弱', '一般', '强', '很强', '极强'];
+    const colors = ['text-red-500', 'text-orange-500', 'text-yellow-500', 'text-blue-500', 'text-green-500', 'text-green-600'];
+    
+    return {
+      score: Math.min(score, 5),
+      label: labels[Math.min(score, 5)],
+      color: colors[Math.min(score, 5)]
+    };
   };
 
   const strength = getPasswordStrength();
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          密码生成器
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          生成安全、随机的密码，支持自定义长度和字符类型
-        </p>
-      </div>
+    <ToolLayout>
+      <div className="max-w-4xl mx-auto space-y-8">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            密码生成器
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            生成安全、随机的密码
+          </p>
+        </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* 密码显示区域 */}
-        <div className="space-y-6">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              生成的密码
-            </h2>
-            
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="flex-1 relative">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  readOnly
-                  className="w-full p-3 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-lg"
-                  placeholder="点击生成按钮创建密码"
-                />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* 设置区域 */}
+          <div className="space-y-6">
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                生成设置
+              </h2>
+
+              <div className="space-y-4">
+                {/* 密码长度 */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    密码长度: {length}
+                  </label>
+                  <input
+                    type="range"
+                    min="4"
+                    max="64"
+                    value={length}
+                    onChange={(e) => setLength(Number(e.target.value))}
+                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+                  />
+                  <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    <span>4</span>
+                    <span>64</span>
+                  </div>
+                </div>
+
+                {/* 字符类型 */}
+                <div className="space-y-3">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    包含字符类型
+                  </label>
+                  <div className="space-y-2">
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={includeUppercase}
+                        onChange={(e) => setIncludeUppercase(e.target.checked)}
+                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">大写字母 (A-Z)</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={includeLowercase}
+                        onChange={(e) => setIncludeLowercase(e.target.checked)}
+                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">小写字母 (a-z)</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={includeNumbers}
+                        onChange={(e) => setIncludeNumbers(e.target.checked)}
+                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">数字 (0-9)</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={includeSymbols}
+                        onChange={(e) => setIncludeSymbols(e.target.checked)}
+                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">特殊字符 (!@#$%^&*)</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={excludeSimilar}
+                        onChange={(e) => setExcludeSimilar(e.target.checked)}
+                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">排除相似字符 (il1Lo0O)</span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* 生成按钮 */}
                 <button
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                  onClick={generatePassword}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200"
                 >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  生成密码
                 </button>
               </div>
-              <button
-                onClick={copyToClipboard}
-                className="p-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
-                title="复制密码"
-              >
-                <Copy className="h-5 w-5" />
-              </button>
-            </div>
-
-            {/* 密码强度 */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600 dark:text-gray-400">密码强度</span>
-                <span className={`text-sm font-medium ${strength.color}`}>
-                  {strength.label}
-                </span>
-              </div>
-              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                <div
-                  className={`h-2 rounded-full transition-all ${
-                    strength.score <= 2 ? 'bg-red-500' :
-                    strength.score <= 4 ? 'bg-yellow-500' : 'bg-green-500'
-                  }`}
-                  style={{ width: `${(strength.score / 6) * 100}%` }}
-                />
-              </div>
             </div>
           </div>
 
-          <button
-            onClick={generatePassword}
-            className="w-full py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors flex items-center justify-center space-x-2"
-          >
-            <RefreshCw className="h-5 w-5" />
-            <span>生成新密码</span>
-          </button>
-        </div>
+          {/* 结果区域 */}
+          <div className="space-y-6">
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                生成的密码
+              </h2>
 
-        {/* 设置选项 */}
-        <div className="space-y-6">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              生成设置
-            </h2>
+              <div className="space-y-4">
+                {/* 密码显示 */}
+                <div className="relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    value={password}
+                    readOnly
+                    className="w-full p-3 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-lg"
+                    placeholder="点击生成按钮创建密码"
+                  />
+                  <button
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                  >
+                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                </div>
 
-            {/* 密码长度 */}
-            <div className="space-y-2 mb-6">
-              <div className="flex items-center justify-between">
-                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  密码长度: {length}
-                </label>
-              </div>
-              <input
-                type="range"
-                min="4"
-                max="64"
-                value={length}
-                onChange={(e) => setLength(parseInt(e.target.value))}
-                className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
-              />
-              <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400">
-                <span>4</span>
-                <span>64</span>
+                {/* 密码强度 */}
+                {password && (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">密码强度:</span>
+                      <span className={`text-sm font-medium ${strength.color}`}>
+                        {strength.label}
+                      </span>
+                    </div>
+                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                      <div
+                        className={`h-2 rounded-full transition-all duration-300 ${
+                          strength.score <= 1 ? 'bg-red-500' :
+                          strength.score <= 2 ? 'bg-orange-500' :
+                          strength.score <= 3 ? 'bg-yellow-500' :
+                          strength.score <= 4 ? 'bg-blue-500' : 'bg-green-500'
+                        }`}
+                        style={{ width: `${(strength.score / 5) * 100}%` }}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* 操作按钮 */}
+                <div className="flex gap-2">
+                  <button
+                    onClick={copyPassword}
+                    disabled={!password}
+                    className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
+                  >
+                    <Copy className="w-4 h-4" />
+                    复制密码
+                  </button>
+                  <button
+                    onClick={generatePassword}
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
+                  >
+                    <RotateCcw className="w-4 h-4" />
+                    重新生成
+                  </button>
+                </div>
               </div>
             </div>
 
-            {/* 字符类型 */}
-            <div className="space-y-3">
-              <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                包含字符类型
+            {/* 安全提示 */}
+            <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+              <h3 className="text-sm font-medium text-blue-800 dark:text-blue-200 mb-2">
+                安全提示
               </h3>
-              
-              <label className="flex items-center space-x-3">
-                <input
-                  type="checkbox"
-                  checked={includeUppercase}
-                  onChange={(e) => setIncludeUppercase(e.target.checked)}
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                />
-                <span className="text-sm text-gray-700 dark:text-gray-300">
-                  大写字母 (A-Z)
-                </span>
-              </label>
-
-              <label className="flex items-center space-x-3">
-                <input
-                  type="checkbox"
-                  checked={includeLowercase}
-                  onChange={(e) => setIncludeLowercase(e.target.checked)}
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                />
-                <span className="text-sm text-gray-700 dark:text-gray-300">
-                  小写字母 (a-z)
-                </span>
-              </label>
-
-              <label className="flex items-center space-x-3">
-                <input
-                  type="checkbox"
-                  checked={includeNumbers}
-                  onChange={(e) => setIncludeNumbers(e.target.checked)}
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                />
-                <span className="text-sm text-gray-700 dark:text-gray-300">
-                  数字 (0-9)
-                </span>
-              </label>
-
-              <label className="flex items-center space-x-3">
-                <input
-                  type="checkbox"
-                  checked={includeSymbols}
-                  onChange={(e) => setIncludeSymbols(e.target.checked)}
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                />
-                <span className="text-sm text-gray-700 dark:text-gray-300">
-                  特殊符号 (!@#$%^&*)
-                </span>
-              </label>
-
-              <label className="flex items-center space-x-3">
-                <input
-                  type="checkbox"
-                  checked={excludeSimilar}
-                  onChange={(e) => setExcludeSimilar(e.target.checked)}
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                />
-                <span className="text-sm text-gray-700 dark:text-gray-300">
-                  排除相似字符 (il1Lo0O)
-                </span>
-              </label>
+              <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
+                <li>• 使用至少12位长度的密码</li>
+                <li>• 包含大小写字母、数字和特殊字符</li>
+                <li>• 避免使用个人信息作为密码</li>
+                <li>• 定期更换密码</li>
+                <li>• 不同账户使用不同密码</li>
+              </ul>
             </div>
-          </div>
-
-          {/* 安全提示 */}
-          <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
-            <h3 className="text-sm font-medium text-blue-800 dark:text-blue-200 mb-2">
-              安全提示
-            </h3>
-            <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-              <li>• 使用至少12位长度的密码</li>
-              <li>• 包含大小写字母、数字和符号</li>
-              <li>• 避免使用个人信息</li>
-              <li>• 定期更换密码</li>
-            </ul>
           </div>
         </div>
       </div>
-    </div>
+    </ToolLayout>
   );
 } 

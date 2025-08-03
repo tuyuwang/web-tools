@@ -1,6 +1,4 @@
 ---
-description:
-globs:
 alwaysApply: true
 ---
 Always respond in 中文
@@ -26,7 +24,9 @@ Always respond in 中文
 依赖注入：使用依赖注入，而不是直接创建依赖对象。
 
 ## 规范
-遵循web开发官方文档获取详细的实施指导
+- 遵循web开发官方文档获取详细的实施指导
+- 分小块编辑文件
+
 
 ## 最终包大小
 不能超过25MB, 且保证功能可用, 样式正常

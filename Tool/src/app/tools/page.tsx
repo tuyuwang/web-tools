@@ -1,192 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { Search, TextCursorInput, Code, Image, QrCode, FileText, Palette, Send, Clock, Calculator, BookOpen } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { ToolCard } from '@/components/tool-card';
-
-interface Tool {
-  id: string;
-  name: string;
-  description: string;
-  href: string;
-  icon: React.ElementType;
-  category: string;
-  popular?: boolean;
-}
-
-const tools: Tool[] = [
-  {
-    id: 'text-case',
-    name: '文本格式转换',
-    description: '快速转换文本大小写、驼峰命名等格式，支持9种常用格式。',
-    href: '/tools/text/case',
-    icon: TextCursorInput,
-    category: 'text',
-    popular: true,
-  },
-  {
-    id: 'text-encode',
-    name: '编码解码工具',
-    description: 'Base64、URL、HTML等编码解码工具，支持多种格式转换。',
-    href: '/tools/text/encode',
-    icon: Code,
-    category: 'text',
-    popular: false,
-  },
-  {
-    id: 'text-regex',
-    name: '正则表达式测试',
-    description: '在线测试和调试正则表达式，实时查看匹配结果。',
-    href: '/tools/text/regex',
-    icon: FileText,
-    category: 'text',
-    popular: true,
-  },
-  {
-    id: 'text-analyze',
-    name: '文本分析工具',
-    description: '分析文本的字符数、词数、行数等统计信息。',
-    href: '/tools/text/analyze',
-    icon: FileText,
-    category: 'text',
-    popular: false,
-  },
-  {
-    id: 'text-compare',
-    name: '文本比较工具',
-    description: '比较两段文本的差异，支持忽略大小写和空白字符。',
-    href: '/tools/text/compare',
-    icon: FileText,
-    category: 'text',
-    popular: false,
-  },
-  {
-    id: 'image-compress',
-    name: '图片压缩工具',
-    description: '在线压缩图片，优化图片大小，支持质量调节。',
-    href: '/tools/image/compress',
-    icon: Image,
-    category: 'image',
-    popular: true,
-  },
-  {
-    id: 'image-convert',
-    name: '图片格式转换',
-    description: '将图片转换为不同格式，支持JPEG、PNG、WebP等。',
-    href: '/tools/image/convert',
-    icon: Image,
-    category: 'image',
-    popular: false,
-  },
-  {
-    id: 'image-watermark',
-    name: '水印添加工具',
-    description: '为图片添加文字水印，支持自定义位置、颜色、透明度等。',
-    href: '/tools/image/watermark',
-    icon: Image,
-    category: 'image',
-    popular: false,
-  },
-  {
-    id: 'image-resize',
-    name: '图片尺寸调整',
-    description: '调整图片尺寸，支持保持比例、批量处理等功能。',
-    href: '/tools/image/resize',
-    icon: Image,
-    category: 'image',
-    popular: false,
-  },
-  {
-    id: 'dev-format',
-    name: '代码格式化',
-    description: '格式化JavaScript、JSON、CSS等代码，使其更易读。',
-    href: '/tools/dev/format',
-    icon: Code,
-    category: 'dev',
-    popular: true,
-  },
-  {
-    id: 'dev-json',
-    name: 'JSON工具',
-    description: '格式化、验证、压缩JSON数据，支持自定义缩进。',
-    href: '/tools/dev/json',
-    icon: Code,
-    category: 'dev',
-    popular: false,
-  },
-  {
-    id: 'dev-color',
-    name: '颜色选择器',
-    description: '选择颜色并获取多种格式的颜色值，支持RGB、HSL、HEX等格式。',
-    href: '/tools/dev/color',
-    icon: Palette,
-    category: 'dev',
-    popular: true,
-  },
-  {
-    id: 'dev-api',
-    name: 'API测试工具',
-    description: '测试API接口，发送HTTP请求并查看响应结果。',
-    href: '/tools/dev/api',
-    icon: Send,
-    category: 'dev',
-    popular: true,
-  },
-  {
-    id: 'dev-timestamp',
-    name: '时间戳转换',
-    description: '时间戳与日期时间相互转换，支持多种格式。',
-    href: '/tools/dev/timestamp',
-    icon: Clock,
-    category: 'dev',
-    popular: false,
-  },
-  {
-    id: 'utility-qr',
-    name: '二维码生成器',
-    description: '生成自定义二维码，支持文本和URL，可下载使用。',
-    href: '/tools/utility/qr',
-    icon: QrCode,
-    category: 'utility',
-    popular: true,
-  },
-  {
-    id: 'utility-password',
-    name: '密码生成器',
-    description: '生成安全、随机的密码，支持自定义长度和字符类型。',
-    href: '/tools/utility/password',
-    icon: Palette,
-    category: 'utility',
-    popular: false,
-  },
-  {
-    id: 'learn-calculator',
-    name: '数学公式计算器',
-    description: '支持复杂数学计算、科学计算、三角函数等。',
-    href: '/tools/learn/calculator',
-    icon: Calculator,
-    category: 'learn',
-    popular: true,
-  },
-  {
-    id: 'learn-cheatsheet',
-    name: '速查表工具',
-    description: '提供CSS、正则表达式、常用命令等速查功能。',
-    href: '/tools/learn/cheatsheet',
-    icon: BookOpen,
-    category: 'learn',
-    popular: false,
-  },
-];
-
-const categories = [
-  { id: 'all', name: '全部' },
-  { id: 'text', name: '文本工具' },
-  { id: 'image', name: '图片工具' },
-  { id: 'dev', name: '开发工具' },
-  { id: 'utility', name: '实用工具' },
-  { id: 'learn', name: '学习工具' },
-];
+import { ToolLayout } from '@/components/tool-layout';
+import { tools, categories } from '@/lib/tools-data';
 
 export default function ToolsPage() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -200,7 +18,7 @@ export default function ToolsPage() {
   });
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8">
+    <ToolLayout>
       <div className="text-center">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
           工具集合
@@ -273,6 +91,6 @@ export default function ToolsPage() {
           </p>
         </div>
       )}
-    </div>
+    </ToolLayout>
   );
 }

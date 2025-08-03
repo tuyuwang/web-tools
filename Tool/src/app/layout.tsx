@@ -5,6 +5,7 @@ import { Navigation } from '@/components/navigation';
 import { ThemeProvider } from '@/components/theme-provider';
 import { SWRegister } from '@/components/sw-register';
 import { PWAInstaller } from '@/components/pwa-installer';
+import { Analytics } from '@/components/analytics';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -93,6 +94,7 @@ export default function RootLayout({
           </div>
           <SWRegister />
           <PWAInstaller />
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>

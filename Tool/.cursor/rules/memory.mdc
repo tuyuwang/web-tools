@@ -1,9 +1,6 @@
 ---
-description: 记忆规则
-globs:
 alwaysApply: true
 ---
-
 # 记忆
 
 ## Document/memory 文件夹

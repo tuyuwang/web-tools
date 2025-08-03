@@ -27,6 +27,11 @@ const nextConfig = {
   // 禁用服务器端功能
   trailingSlash: true,
   
+  // 构建时排除API路由
+  async rewrites() {
+    return [];
+  },
+  
   // 优化webpack配置
   webpack: (config, { dev, isServer }) => {
     if (!dev && !isServer) {
