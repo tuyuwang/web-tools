@@ -37,6 +37,10 @@ export default function ToolsPage() {
       media: t.tools.categories.media,
       office: t.tools.categories.office,
       security: t.tools.categories.security,
+      finance: t.tools.categories.finance || '金融工具',
+      productivity: t.tools.categories.productivity || '生产力工具',
+      web: t.tools.categories.web || '网络工具',
+      design: t.tools.categories.design || '设计工具',
     };
     return categoryMap[categoryId] || categoryId;
   };
