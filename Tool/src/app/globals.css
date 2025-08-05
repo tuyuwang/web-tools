@@ -29,6 +29,10 @@
     @apply inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-all duration-200 touch-manipulation;
   }
   
+  .btn-sm {
+    @apply inline-flex items-center justify-center px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-200 touch-manipulation;
+  }
+  
   .btn-primary {
     @apply bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 shadow-md hover:shadow-lg;
   }
@@ -40,6 +44,10 @@
   /* 输入框样式 */
   .input {
     @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-white transition-colors;
+  }
+  
+  .textarea {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-white transition-colors resize-none;
   }
   
   /* 卡片样式 */
