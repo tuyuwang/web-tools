@@ -25,6 +25,19 @@ const iconComponents: Record<string, React.LazyExoticComponent<React.ComponentTy
   Copy: lazy(() => import('lucide-react').then(mod => ({ default: mod.Copy }))),
   RotateCcw: lazy(() => import('lucide-react').then(mod => ({ default: mod.RotateCcw }))),
   Check: lazy(() => import('lucide-react').then(mod => ({ default: mod.Check }))),
+  // AI工具图标
+  MessageSquare: lazy(() => import('lucide-react').then(mod => ({ default: mod.MessageSquare }))),
+  Brain: lazy(() => import('lucide-react').then(mod => ({ default: mod.Brain }))),
+  Hash: lazy(() => import('lucide-react').then(mod => ({ default: mod.Hash }))),
+  Sparkles: lazy(() => import('lucide-react').then(mod => ({ default: mod.Sparkles }))),
+  TrendingUp: lazy(() => import('lucide-react').then(mod => ({ default: mod.TrendingUp }))),
+  // 情感分析相关图标
+  Heart: lazy(() => import('lucide-react').then(mod => ({ default: mod.Heart }))),
+  Frown: lazy(() => import('lucide-react').then(mod => ({ default: mod.Frown }))),
+  Meh: lazy(() => import('lucide-react').then(mod => ({ default: mod.Meh }))),
+  // 其他常用图标
+  Download: lazy(() => import('lucide-react').then(mod => ({ default: mod.Download }))),
+  RefreshCw: lazy(() => import('lucide-react').then(mod => ({ default: mod.RefreshCw }))),
 };
 
 interface DynamicIconProps extends Omit<LucideProps, 'ref'> {
