@@ -1,0 +1,55 @@
+{
+  "timestamp": "2025-08-05T12:44:43.616Z",
+  "totalBundleSize": 1746.0900000000006,
+  "largestBundle": {
+    "name": "lucide-d286dd68-8786b7f03e75b65c.js",
+    "size": 227.14,
+    "path": "/workspace/Tool/.next/static/chunks/lucide-d286dd68-8786b7f03e75b65c.js"
+  },
+  "topDependencies": [
+    {
+      "name": "next",
+      "size": 105472,
+      "unit": "M"
+    },
+    {
+      "name": "lucide-react",
+      "size": 44032,
+      "unit": "M"
+    },
+    {
+      "name": "typescript",
+      "size": 23552,
+      "unit": "M"
+    },
+    {
+      "name": "@testing-library/react",
+      "size": 9216,
+      "unit": "M"
+    },
+    {
+      "name": "prettier",
+      "size": 8499.2,
+      "unit": "M"
+    }
+  ],
+  "suggestions": [
+    {
+      "type": "dependency-optimization",
+      "message": "发现11个大型依赖项",
+      "action": "考虑替换或优化: next, lucide-react, typescript"
+    },
+    {
+      "type": "duplicate-dependencies",
+      "message": "发现1个可能的重复依赖",
+      "action": "检查并合并相似功能的包"
+    }
+  ],
+  "recommendations": [
+    "考虑使用动态导入减少初始加载大小",
+    "实现组件级别的懒加载",
+    "优化图片和静态资源",
+    "使用Tree Shaking移除未使用的代码",
+    "考虑使用更轻量的替代库"
+  ]
+}
