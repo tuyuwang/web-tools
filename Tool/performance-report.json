@@ -1,0 +1,622 @@
+{
+  "buildSize": 4903731,
+  "bundleAnalysis": {
+    "javascript": {
+      "count": 89,
+      "size": 2148017
+    },
+    "css": {
+      "count": 2,
+      "size": 47411
+    },
+    "html": {
+      "count": 50,
+      "size": 1828773
+    },
+    "images": {
+      "count": 11,
+      "size": 3405
+    },
+    "fonts": {
+      "count": 7,
+      "size": 219004
+    },
+    "other": {
+      "count": 51,
+      "size": 657121
+    }
+  },
+  "pageMetrics": {
+    "404/index.html": {
+      "size": 29303,
+      "scriptTags": 41,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 32
+    },
+    "404.html": {
+      "size": 29303,
+      "scriptTags": 41,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 32
+    },
+    "index.html": {
+      "size": 31355,
+      "scriptTags": 42,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "test-feedback/index.html": {
+      "size": 32210,
+      "scriptTags": 44,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "test-i18n/index.html": {
+      "size": 36632,
+      "scriptTags": 42,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/ai/index.html": {
+      "size": 47083,
+      "scriptTags": 41,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "AI工具 - 智能与自动化工具集合",
+      "metaTags": 31
+    },
+    "tools/ai/keyword-extract/index.html": {
+      "size": 35203,
+      "scriptTags": 44,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/ai/language-detect/index.html": {
+      "size": 34882,
+      "scriptTags": 44,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/ai/sentiment-analysis/index.html": {
+      "size": 34699,
+      "scriptTags": 44,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/ai/text-generator/index.html": {
+      "size": 36705,
+      "scriptTags": 44,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/ai/text-summary/index.html": {
+      "size": 35344,
+      "scriptTags": 44,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/data/index.html": {
+      "size": 34758,
+      "scriptTags": 44,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/dev/api/index.html": {
+      "size": 33530,
+      "scriptTags": 42,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/dev/color/index.html": {
+      "size": 34370,
+      "scriptTags": 42,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/dev/format/index.html": {
+      "size": 33627,
+      "scriptTags": 42,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/dev/json/index.html": {
+      "size": 33839,
+      "scriptTags": 42,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/dev/timestamp/index.html": {
+      "size": 36105,
+      "scriptTags": 42,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/health/bmi/index.html": {
+      "size": 35033,
+      "scriptTags": 44,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/health/calorie/index.html": {
+      "size": 37188,
+      "scriptTags": 44,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/image/compress/index.html": {
+      "size": 35403,
+      "scriptTags": 44,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/image/convert/index.html": {
+      "size": 31719,
+      "scriptTags": 42,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/image/filter/index.html": {
+      "size": 33056,
+      "scriptTags": 44,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/image/resize/index.html": {
+      "size": 37600,
+      "scriptTags": 42,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/image/watermark/index.html": {
+      "size": 35221,
+      "scriptTags": 42,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/index.html": {
+      "size": 97446,
+      "scriptTags": 44,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/learn/calculator/index.html": {
+      "size": 40351,
+      "scriptTags": 42,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/learn/cheatsheet/index.html": {
+      "size": 40858,
+      "scriptTags": 42,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/learn/notes/index.html": {
+      "size": 33984,
+      "scriptTags": 44,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/learn/progress/index.html": {
+      "size": 34769,
+      "scriptTags": 42,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/media/index.html": {
+      "size": 35176,
+      "scriptTags": 44,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/office/index.html": {
+      "size": 38042,
+      "scriptTags": 44,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/security/index.html": {
+      "size": 35820,
+      "scriptTags": 44,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/text/analyze/index.html": {
+      "size": 31275,
+      "scriptTags": 42,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/text/case/index.html": {
+      "size": 37412,
+      "scriptTags": 44,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/text/compare/index.html": {
+      "size": 33209,
+      "scriptTags": 42,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/text/deduplicate/index.html": {
+      "size": 33348,
+      "scriptTags": 44,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/text/encode/index.html": {
+      "size": 33270,
+      "scriptTags": 42,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/text/regex/index.html": {
+      "size": 36107,
+      "scriptTags": 42,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/text/stats/index.html": {
+      "size": 37494,
+      "scriptTags": 44,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/utility/calculator/index.html": {
+      "size": 34494,
+      "scriptTags": 44,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/utility/color-picker/index.html": {
+      "size": 42910,
+      "scriptTags": 44,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/utility/converter/index.html": {
+      "size": 33758,
+      "scriptTags": 42,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/utility/data-generator/index.html": {
+      "size": 34995,
+      "scriptTags": 44,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/utility/file-converter/index.html": {
+      "size": 36436,
+      "scriptTags": 44,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/utility/network-tools/index.html": {
+      "size": 35570,
+      "scriptTags": 44,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/utility/password/index.html": {
+      "size": 36135,
+      "scriptTags": 44,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/utility/qr/index.html": {
+      "size": 35817,
+      "scriptTags": 44,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/utility/random/index.html": {
+      "size": 35116,
+      "scriptTags": 44,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/utility/time-calculator/index.html": {
+      "size": 34128,
+      "scriptTags": 44,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/utility/unit-converter/index.html": {
+      "size": 36685,
+      "scriptTags": 44,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    }
+  },
+  "resourceOptimization": {
+    "gzipCompression": false,
+    "brotliCompression": false,
+    "imageOptimization": {
+      "total": 11,
+      "webpCount": 0,
+      "avgSize": 309.54545454545456,
+      "largeImages": []
+    },
+    "assetOptimization": {
+      "minifiedJS": 86,
+      "minifiedCSS": 2,
+      "totalJS": 89,
+      "totalCSS": 2
+    }
+  },
+  "cacheability": {
+    "hashedFiles": 88,
+    "totalStaticFiles": 102,
+    "serviceWorker": true,
+    "manifest": true
+  },
+  "accessibility": {},
+  "seo": {},
+  "timestamp": "2025-08-05T12:44:35.219Z",
+  "summary": {
+    "buildSizeMB": 4.68,
+    "pageCount": 50,
+    "hasServiceWorker": true,
+    "hasManifest": true,
+    "imageOptimizationRatio": 0
+  },
+  "recommendations": [
+    {
+      "type": "image-optimization",
+      "priority": "medium",
+      "message": "建议使用更多WebP格式图片",
+      "action": "转换PNG/JPEG图片为WebP格式以减少大小"
+    }
+  ],
+  "score": 73
+}
