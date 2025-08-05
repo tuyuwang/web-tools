@@ -9,6 +9,52 @@ export interface Tool {
 }
 
 export const tools: Tool[] = [
+  // AI工具
+  {
+    id: 'ai-text-generator',
+    name: '文本生成器',
+    description: '生成Lorem ipsum、假数据、随机文本等，支持多种生成类型。',
+    href: '/tools/ai/text-generator',
+    icon: 'MessageSquare',
+    category: 'ai',
+    popular: true,
+  },
+  {
+    id: 'ai-language-detect',
+    name: '语言检测',
+    description: '自动识别文本的语言类型，支持中英日韩法德西俄阿等多种语言。',
+    href: '/tools/ai/language-detect',
+    icon: 'Brain',
+    category: 'ai',
+    popular: true,
+  },
+  {
+    id: 'ai-keyword-extract',
+    name: '关键词提取',
+    description: '从文本中智能提取关键词和短语，提供频率统计和重要性评分。',
+    href: '/tools/ai/keyword-extract',
+    icon: 'Hash',
+    category: 'ai',
+    popular: true,
+  },
+  {
+    id: 'ai-text-summary',
+    name: '智能摘要',
+    description: '提取文本关键信息，生成简洁摘要（即将推出）。',
+    href: '/tools/ai/text-summary',
+    icon: 'Sparkles',
+    category: 'ai',
+    popular: false,
+  },
+  {
+    id: 'ai-sentiment-analysis',
+    name: '情感分析',
+    description: '分析文本的情感倾向和语调（即将推出）。',
+    href: '/tools/ai/sentiment-analysis',
+    icon: 'TrendingUp',
+    category: 'ai',
+    popular: false,
+  },
   {
     id: 'text-case',
     name: '文本格式转换',
@@ -346,6 +392,7 @@ export const tools: Tool[] = [
 
 export const categories = [
   { id: 'all', name: '全部' },
+  { id: 'ai', name: 'AI工具' },
   { id: 'text', name: '文本工具' },
   { id: 'image', name: '图片工具' },
   { id: 'dev', name: '开发工具' },
