@@ -250,6 +250,17 @@ export default function MediaToolsPage() {
     }
   };
 
+  // 从转换器中移除特定文件
+  const removeFileFromConverter = (file: MediaFile, type: 'audio' | 'video') => {
+    if (type === 'audio') {
+      const newFiles = audioFiles.filter(f => f.url !== file.url);
+      setAudioFiles(newFiles);
+    } else {
+      const newFiles = videoFiles.filter(f => f.url !== file.url);
+      setVideoFiles(newFiles);
+    }
+  };
+
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
@@ -280,6 +291,7 @@ export default function MediaToolsPage() {
         const audio = new Audio();
         audio.src = file.url;
         audio.crossOrigin = 'anonymous';
+        audio.muted = true; // 静音播放，避免转换时出声音
         
         audio.onloadedmetadata = () => {
           try {
@@ -361,6 +373,7 @@ export default function MediaToolsPage() {
         const video = document.createElement('video');
         video.src = file.url;
         video.crossOrigin = 'anonymous';
+        video.muted = true; // 静音播放，避免转换时出声音
         
         video.onloadedmetadata = () => {
           try {
@@ -386,8 +399,20 @@ export default function MediaToolsPage() {
             canvas.width = width;
             canvas.height = height;
             
-            // 创建媒体流
-            const stream = canvas.captureStream(30); // 30 FPS
+            // 创建视频流（画布）
+            const videoStream = canvas.captureStream(30); // 30 FPS
+            
+            // 创建音频上下文来获取音频流
+            const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+            const source = audioContext.createMediaElementSource(video);
+            const destination = audioContext.createMediaStreamDestination();
+            source.connect(destination);
+            
+            // 合并视频和音频流
+            const stream = new MediaStream([
+              ...videoStream.getVideoTracks(),
+              ...destination.stream.getAudioTracks()
+            ]);
             
             // 使用MediaRecorder录制
             const mediaRecorder = new MediaRecorder(stream, {
@@ -408,10 +433,12 @@ export default function MediaToolsPage() {
                 file.name.replace(/\.[^/.]+$/, `.${targetFormat}`), 
                 { type: blob.type }
               );
+              audioContext.close(); // 清理音频上下文
               resolve(convertedFile);
             };
             
             mediaRecorder.onerror = (error) => {
+              audioContext.close(); // 清理音频上下文
               reject(new Error('录制过程中出现错误'));
             };
             
@@ -1272,14 +1299,20 @@ export default function MediaToolsPage() {
                         <p className="text-sm text-blue-700 dark:text-blue-300 mb-2">
                           音频文件 ({audioFiles.length})
                         </p>
-                        <ul className="text-xs text-blue-600 dark:text-blue-400 space-y-1">
-                          {audioFiles.slice(0, 3).map((file, index) => (
-                            <li key={index}>• {file.name}</li>
+                        <div className="space-y-1">
+                          {audioFiles.map((file, index) => (
+                            <div key={index} className="flex items-center justify-between text-xs text-blue-600 dark:text-blue-400 py-1">
+                              <span className="truncate flex-1">• {file.name}</span>
+                              <button
+                                onClick={() => removeFileFromConverter(file, 'audio')}
+                                className="ml-2 p-1 text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                                title="移除文件"
+                              >
+                                <X className="w-3 h-3" />
+                              </button>
+                            </div>
                           ))}
-                          {audioFiles.length > 3 && (
-                            <li>• ... 还有 {audioFiles.length - 3} 个文件</li>
-                          )}
-                        </ul>
+                        </div>
                       </div>
                     )}
                     
@@ -1288,14 +1321,20 @@ export default function MediaToolsPage() {
                         <p className="text-sm text-blue-700 dark:text-blue-300 mb-2">
                           视频文件 ({videoFiles.length})
                         </p>
-                        <ul className="text-xs text-blue-600 dark:text-blue-400 space-y-1">
-                          {videoFiles.slice(0, 3).map((file, index) => (
-                            <li key={index}>• {file.name}</li>
+                        <div className="space-y-1">
+                          {videoFiles.map((file, index) => (
+                            <div key={index} className="flex items-center justify-between text-xs text-blue-600 dark:text-blue-400 py-1">
+                              <span className="truncate flex-1">• {file.name}</span>
+                              <button
+                                onClick={() => removeFileFromConverter(file, 'video')}
+                                className="ml-2 p-1 text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                                title="移除文件"
+                              >
+                                <X className="w-3 h-3" />
+                              </button>
+                            </div>
                           ))}
-                          {videoFiles.length > 3 && (
-                            <li>• ... 还有 {videoFiles.length - 3} 个文件</li>
-                          )}
-                        </ul>
+                        </div>
                       </div>
                     )}
                   </div>
