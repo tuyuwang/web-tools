@@ -397,7 +397,7 @@ export default function MediaToolsPage() {
     });
   };
 
-  // 视频转换功能（改进版本，解决多音轨问题）
+  // 视频转换功能（改进版本，解决多音轨问题和WebKit blob错误）
   const convertVideoFile = async (file: MediaFile, targetFormat: string, resolution: string): Promise<File> => {
     return new Promise((resolve, reject) => {
       try {
@@ -419,9 +419,12 @@ export default function MediaToolsPage() {
         }
         
         const video = document.createElement('video');
-        video.src = file.url;
+        // 使用原始文件而不是blob URL来避免WebKit错误
+        const objectURL = URL.createObjectURL(file.file);
+        video.src = objectURL;
         video.crossOrigin = 'anonymous';
         video.muted = true;
+        video.preload = 'metadata';
         
         video.onloadedmetadata = () => {
           try {
@@ -505,7 +508,8 @@ export default function MediaToolsPage() {
                 
                 // 验证输出文件是否包含音频
                 const testVideo = document.createElement('video');
-                testVideo.src = URL.createObjectURL(blob);
+                const testURL = URL.createObjectURL(blob);
+                testVideo.src = testURL;
                 testVideo.onloadedmetadata = () => {
                   console.log('转换后的视频信息:', {
                     duration: testVideo.duration,
@@ -513,16 +517,19 @@ export default function MediaToolsPage() {
                     videoHeight: testVideo.videoHeight,
                     hasAudio: (testVideo as any).mozHasAudio || (testVideo as any).webkitAudioDecodedByteCount > 0 || Boolean((testVideo as any).audioTracks?.length)
                   });
-                  URL.revokeObjectURL(testVideo.src);
+                  URL.revokeObjectURL(testURL);
                 };
                 
+                // 清理资源
                 audioContext.close();
+                URL.revokeObjectURL(objectURL);
                 resolve(convertedFile);
               };
               
               mediaRecorder.onerror = (error) => {
                 console.error('MediaRecorder错误:', error);
                 audioContext.close();
+                URL.revokeObjectURL(objectURL);
                 reject(new Error('录制过程中出现错误'));
               };
               
@@ -568,10 +575,13 @@ export default function MediaToolsPage() {
                   file.name.replace(/\.[^/.]+$/, `.webm`), 
                   { type: blob.type }
                 );
+                URL.revokeObjectURL(objectURL);
                 resolve(convertedFile);
               };
               
               mediaRecorder.onerror = (error) => {
+                console.error('备用MediaRecorder错误:', error);
+                URL.revokeObjectURL(objectURL);
                 reject(new Error('备用转换方法失败'));
               };
               
@@ -597,19 +607,26 @@ export default function MediaToolsPage() {
           }
         };
         
-        video.onerror = () => {
+        video.onerror = (error) => {
+          console.error('视频加载错误:', error);
+          URL.revokeObjectURL(objectURL);
           reject(new Error('视频文件加载失败'));
         };
         
       } catch (error) {
         console.error('转换功能初始化失败:', error);
+        if (objectURL) {
+          URL.revokeObjectURL(objectURL);
+        }
         reject(new Error('转换功能初始化失败'));
       }
     });
   };
 
   // 简单的文件格式转换（仅改变扩展名和MIME类型）
+  // 注意：这不是真正的格式转换，只是改变文件元数据
   const simpleFormatConversion = (file: MediaFile, targetFormat: string): File => {
+    console.warn('使用简单格式转换（仅更改文件扩展名，未进行实际转换）');
     const newFileName = file.name.replace(/\.[^/.]+$/, `.${targetFormat}`);
     const mimeTypes = {
       'webm': 'video/webm',
@@ -626,8 +643,10 @@ export default function MediaToolsPage() {
   const advancedFallbackConversion = async (file: MediaFile, targetFormat: string): Promise<File> => {
     return new Promise((resolve, reject) => {
       const video = document.createElement('video');
-      video.src = file.url;
+      const objectURL = URL.createObjectURL(file.file);
+      video.src = objectURL;
       video.muted = true;
+      video.preload = 'metadata';
       
       video.onloadedmetadata = () => {
         try {
@@ -702,10 +721,13 @@ export default function MediaToolsPage() {
               file.name.replace(/\.[^/.]+$/, `.${extension}`), 
               { type: blob.type }
             );
+            URL.revokeObjectURL(objectURL);
             resolve(convertedFile);
           };
           
           mediaRecorder.onerror = (error) => {
+            console.error('备用录制错误:', error);
+            URL.revokeObjectURL(objectURL);
             reject(new Error('备用录制失败'));
           };
           
@@ -725,11 +747,15 @@ export default function MediaToolsPage() {
           };
           
         } catch (error) {
+          console.error('备用转换方法初始化失败:', error);
+          URL.revokeObjectURL(objectURL);
           reject(error);
         }
       };
       
-      video.onerror = () => {
+      video.onerror = (error) => {
+        console.error('备用方法视频加载错误:', error);
+        URL.revokeObjectURL(objectURL);
         reject(new Error('视频加载失败'));
       };
     });
@@ -800,6 +826,7 @@ export default function MediaToolsPage() {
           convertedFile = type === 'audio' 
             ? await convertAudioFile(task.file, targetFormat, quality!)
             : await convertVideoFile(task.file, targetFormat, resolution!);
+          console.log('高级转换成功');
         } catch (advancedError) {
           console.warn('高级转换失败，尝试备用方法:', advancedError);
           
@@ -811,15 +838,25 @@ export default function MediaToolsPage() {
             } else {
               // 对于音频，使用简单转换
               convertedFile = simpleFormatConversion(task.file, targetFormat);
+              console.warn('音频使用简单转换方法');
             }
           } catch (fallbackError) {
-            console.warn('备用转换也失败，使用简单转换:', fallbackError);
-            // 最后使用简单转换
-            convertedFile = simpleFormatConversion(task.file, targetFormat);
+            console.error('备用转换也失败:', fallbackError);
+            // 抛出错误而不是使用简单转换，让用户知道转换失败
+            throw new Error(`视频转换失败: ${fallbackError.message}。请尝试其他格式或检查文件是否损坏。`);
           }
         }
         
         clearInterval(progressInterval);
+        
+        // 验证转换结果
+        const isActuallyConverted = convertedFile.type !== task.file.type || 
+                                   convertedFile.name !== task.file.name ||
+                                   convertedFile.size !== task.file.size;
+        
+        if (!isActuallyConverted && type === 'video') {
+          console.warn('转换结果与原文件相同，可能转换失败');
+        }
         
         // 更新状态为完成
         setConversionTasks(prev => 
@@ -837,11 +874,24 @@ export default function MediaToolsPage() {
         clearInterval(progressInterval);
         
         // 更新状态为失败
+        let userFriendlyError = '转换失败';
+        if (error instanceof Error) {
+          if (error.message.includes('WebKitBlobResource')) {
+            userFriendlyError = '浏览器资源加载错误，请尝试刷新页面或使用其他浏览器';
+          } else if (error.message.includes('不支持')) {
+            userFriendlyError = '当前浏览器不支持此格式转换，请尝试其他格式';
+          } else if (error.message.includes('加载失败')) {
+            userFriendlyError = '视频文件加载失败，请检查文件是否损坏';
+          } else {
+            userFriendlyError = error.message;
+          }
+        }
+        
         setConversionTasks(prev => 
           prev.map(t => t.id === task.id ? { 
             ...t, 
             status: 'failed', 
-            error: error instanceof Error ? error.message : '转换失败'
+            error: userFriendlyError
           } : t)
         );
       }
@@ -860,6 +910,17 @@ export default function MediaToolsPage() {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     }
+  };
+
+  // 重试转换任务
+  const retryConversion = (taskId: string) => {
+    setConversionTasks(prev => 
+      prev.map(task => 
+        task.id === taskId 
+          ? { ...task, status: 'pending', error: undefined, progress: 0 }
+          : task
+      )
+    );
   };
 
   // 清除转换任务
@@ -1684,8 +1745,16 @@ export default function MediaToolsPage() {
                         )}
                         
                         {task.status === 'failed' && task.error && (
-                          <div className="text-xs text-red-600 dark:text-red-400">
-                            错误: {task.error}
+                          <div className="flex items-center justify-between">
+                            <div className="text-xs text-red-600 dark:text-red-400">
+                              错误: {task.error}
+                            </div>
+                            <button
+                              onClick={() => retryConversion(task.id)}
+                              className="flex items-center space-x-1 px-2 py-1 bg-red-600 hover:bg-red-700 text-white text-xs rounded"
+                            >
+                              <span>重试</span>
+                            </button>
                           </div>
                         )}
                         
@@ -1721,6 +1790,8 @@ export default function MediaToolsPage() {
                   <li>• <strong>视频转换会智能保留音频轨道</strong>，包括多音轨视频</li>
                   <li>• 如遇音频丢失，系统会自动尝试备用转换方法</li>
                   <li>• 转换完成后可直接下载结果文件</li>
+                  <li>• <strong>如果转换失败，请尝试：</strong>刷新页面、使用Chrome浏览器、或选择其他格式</li>
+                  <li>• 某些特殊编码的视频文件可能无法转换，建议先用其他工具预处理</li>
                 </ul>
               </div>
             </div>
