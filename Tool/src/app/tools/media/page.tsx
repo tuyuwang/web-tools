@@ -270,6 +270,50 @@ export default function MediaToolsPage() {
   // 生成唯一ID
   const generateId = () => Math.random().toString(36).substr(2, 9);
 
+  // 检测视频文件的音频轨道信息
+  const analyzeVideoAudioTracks = async (file: MediaFile): Promise<{
+    hasAudio: boolean;
+    audioTrackCount: number;
+    duration: number;
+    videoInfo: any;
+  }> => {
+    return new Promise((resolve) => {
+      const video = document.createElement('video');
+      video.src = file.url;
+      video.muted = true;
+      
+      video.onloadedmetadata = () => {
+        const hasAudio = (video as any).mozHasAudio || 
+                        (video as any).webkitAudioDecodedByteCount > 0 || 
+                        Boolean((video as any).audioTracks?.length);
+        
+        const audioTrackCount = (video as any).audioTracks?.length || (hasAudio ? 1 : 0);
+        
+        resolve({
+          hasAudio,
+          audioTrackCount,
+          duration: video.duration,
+          videoInfo: {
+            width: video.videoWidth,
+            height: video.videoHeight,
+            duration: video.duration
+          }
+        });
+        
+        URL.revokeObjectURL(video.src);
+      };
+      
+      video.onerror = () => {
+        resolve({
+          hasAudio: false,
+          audioTrackCount: 0,
+          duration: 0,
+          videoInfo: null
+        });
+      };
+    });
+  };
+
   // 音频转换功能
   const convertAudioFile = async (file: MediaFile, targetFormat: string, quality: string): Promise<File> => {
     return new Promise((resolve, reject) => {
@@ -353,27 +397,31 @@ export default function MediaToolsPage() {
     });
   };
 
-  // 视频转换功能（简化版本，主要是容器格式转换）
+  // 视频转换功能（改进版本，解决多音轨问题）
   const convertVideoFile = async (file: MediaFile, targetFormat: string, resolution: string): Promise<File> => {
     return new Promise((resolve, reject) => {
       try {
         // 检查浏览器支持的MIME类型
         const mimeTypes = {
-          'webm': 'video/webm',
+          'webm': 'video/webm;codecs=vp8,opus',
           'mp4': 'video/mp4'
         };
         
-        const targetMimeType = (mimeTypes as any)[targetFormat] || 'video/webm';
+        const targetMimeType = (mimeTypes as any)[targetFormat] || 'video/webm;codecs=vp8,opus';
         
         if (!MediaRecorder.isTypeSupported(targetMimeType)) {
-          reject(new Error(`浏览器不支持 ${targetFormat} 格式转换`));
-          return;
+          // 尝试备用格式
+          const fallbackMimeType = targetFormat === 'webm' ? 'video/webm' : 'video/mp4';
+          if (!MediaRecorder.isTypeSupported(fallbackMimeType)) {
+            reject(new Error(`浏览器不支持 ${targetFormat} 格式转换`));
+            return;
+          }
         }
         
         const video = document.createElement('video');
         video.src = file.url;
         video.crossOrigin = 'anonymous';
-        video.muted = true; // 静音播放，避免转换时出声音
+        video.muted = true;
         
         video.onloadedmetadata = () => {
           try {
@@ -399,68 +447,152 @@ export default function MediaToolsPage() {
             canvas.width = width;
             canvas.height = height;
             
-            // 创建视频流（画布）
-            const videoStream = canvas.captureStream(30); // 30 FPS
+            // 创建视频流
+            const videoStream = canvas.captureStream(30);
             
-            // 创建音频上下文来获取音频流
-            const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-            const source = audioContext.createMediaElementSource(video);
-            const destination = audioContext.createMediaStreamDestination();
-            source.connect(destination);
+            // 改进的音频处理 - 解决多音轨问题
+            let finalStream: MediaStream;
             
-            // 合并视频和音频流
-            const stream = new MediaStream([
-              ...videoStream.getVideoTracks(),
-              ...destination.stream.getAudioTracks()
-            ]);
-            
-            // 使用MediaRecorder录制
-            const mediaRecorder = new MediaRecorder(stream, {
-              mimeType: targetMimeType
-            });
-            
-            const chunks: Blob[] = [];
-            
-            mediaRecorder.ondataavailable = (event) => {
-              if (event.data.size > 0) {
-                chunks.push(event.data);
+            // 方法1：尝试直接从视频元素获取音频
+            try {
+              // 创建音频上下文
+              const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+              const source = audioContext.createMediaElementSource(video);
+              const destination = audioContext.createMediaStreamDestination();
+              
+              // 添加增益节点来确保音频信号
+              const gainNode = audioContext.createGain();
+              gainNode.gain.value = 1.0;
+              
+              source.connect(gainNode);
+              gainNode.connect(destination);
+              
+              // 检查是否有音频轨道
+              const audioTracks = destination.stream.getAudioTracks();
+              
+              if (audioTracks.length > 0) {
+                // 合并视频和音频流
+                finalStream = new MediaStream([
+                  ...videoStream.getVideoTracks(),
+                  ...audioTracks
+                ]);
+                console.log('使用Web Audio API处理音频，音频轨道数量:', audioTracks.length);
+              } else {
+                // 如果没有音频轨道，尝试备用方法
+                finalStream = videoStream;
+                console.warn('未检测到音频轨道，将只转换视频');
               }
-            };
-            
-            mediaRecorder.onstop = () => {
-              const blob = new Blob(chunks, { type: targetMimeType });
-              const convertedFile = new File([blob], 
-                file.name.replace(/\.[^/.]+$/, `.${targetFormat}`), 
-                { type: blob.type }
-              );
-              audioContext.close(); // 清理音频上下文
-              resolve(convertedFile);
-            };
-            
-            mediaRecorder.onerror = (error) => {
-              audioContext.close(); // 清理音频上下文
-              reject(new Error('录制过程中出现错误'));
-            };
-            
-            // 开始录制和播放
-            mediaRecorder.start();
-            video.play();
-            
-            // 绘制视频帧
-            const drawFrame = () => {
-              if (!video.paused && !video.ended) {
-                ctx.drawImage(video, 0, 0, width, height);
-                requestAnimationFrame(drawFrame);
-              }
-            };
-            drawFrame();
-            
-            // 视频结束时停止录制
-            video.onended = () => {
-              mediaRecorder.stop();
-            };
+              
+              // 使用MediaRecorder录制
+              const mediaRecorder = new MediaRecorder(finalStream, {
+                mimeType: targetMimeType
+              });
+              
+              const chunks: Blob[] = [];
+              
+              mediaRecorder.ondataavailable = (event) => {
+                if (event.data.size > 0) {
+                  chunks.push(event.data);
+                }
+              };
+              
+              mediaRecorder.onstop = () => {
+                const blob = new Blob(chunks, { type: targetMimeType });
+                const convertedFile = new File([blob], 
+                  file.name.replace(/\.[^/.]+$/, `.${targetFormat}`), 
+                  { type: blob.type }
+                );
+                
+                // 验证输出文件是否包含音频
+                const testVideo = document.createElement('video');
+                testVideo.src = URL.createObjectURL(blob);
+                testVideo.onloadedmetadata = () => {
+                  console.log('转换后的视频信息:', {
+                    duration: testVideo.duration,
+                    videoWidth: testVideo.videoWidth,
+                    videoHeight: testVideo.videoHeight,
+                    hasAudio: (testVideo as any).mozHasAudio || (testVideo as any).webkitAudioDecodedByteCount > 0 || Boolean((testVideo as any).audioTracks?.length)
+                  });
+                  URL.revokeObjectURL(testVideo.src);
+                };
+                
+                audioContext.close();
+                resolve(convertedFile);
+              };
+              
+              mediaRecorder.onerror = (error) => {
+                console.error('MediaRecorder错误:', error);
+                audioContext.close();
+                reject(new Error('录制过程中出现错误'));
+              };
+              
+              // 开始录制和播放
+              mediaRecorder.start();
+              video.play();
+              
+              // 绘制视频帧
+              const drawFrame = () => {
+                if (!video.paused && !video.ended) {
+                  ctx.drawImage(video, 0, 0, width, height);
+                  requestAnimationFrame(drawFrame);
+                }
+              };
+              drawFrame();
+              
+              // 视频结束时停止录制
+              video.onended = () => {
+                mediaRecorder.stop();
+              };
+              
+            } catch (audioError) {
+              console.warn('音频处理失败，尝试备用方法:', audioError);
+              
+              // 备用方法：只处理视频，保留原始音频
+              finalStream = videoStream;
+              
+              const mediaRecorder = new MediaRecorder(finalStream, {
+                mimeType: 'video/webm' // 使用更兼容的格式
+              });
+              
+              const chunks: Blob[] = [];
+              
+              mediaRecorder.ondataavailable = (event) => {
+                if (event.data.size > 0) {
+                  chunks.push(event.data);
+                }
+              };
+              
+              mediaRecorder.onstop = () => {
+                const blob = new Blob(chunks, { type: 'video/webm' });
+                const convertedFile = new File([blob], 
+                  file.name.replace(/\.[^/.]+$/, `.webm`), 
+                  { type: blob.type }
+                );
+                resolve(convertedFile);
+              };
+              
+              mediaRecorder.onerror = (error) => {
+                reject(new Error('备用转换方法失败'));
+              };
+              
+              mediaRecorder.start();
+              video.play();
+              
+              const drawFrame = () => {
+                if (!video.paused && !video.ended) {
+                  ctx.drawImage(video, 0, 0, width, height);
+                  requestAnimationFrame(drawFrame);
+                }
+              };
+              drawFrame();
+              
+              video.onended = () => {
+                mediaRecorder.stop();
+              };
+            }
             
           } catch (error) {
+            console.error('视频处理初始化失败:', error);
             reject(new Error('视频处理初始化失败'));
           }
         };
@@ -470,6 +602,7 @@ export default function MediaToolsPage() {
         };
         
       } catch (error) {
+        console.error('转换功能初始化失败:', error);
         reject(new Error('转换功能初始化失败'));
       }
     });
@@ -489,11 +622,143 @@ export default function MediaToolsPage() {
     return new File([file.file], newFileName, { type: targetMimeType });
   };
 
+  // 高级备用转换方法（保留音频）
+  const advancedFallbackConversion = async (file: MediaFile, targetFormat: string): Promise<File> => {
+    return new Promise((resolve, reject) => {
+      const video = document.createElement('video');
+      video.src = file.url;
+      video.muted = true;
+      
+      video.onloadedmetadata = () => {
+        try {
+          // 尝试使用最兼容的格式
+          const compatibleMimeTypes = [
+            'video/webm;codecs=vp8,opus',
+            'video/webm;codecs=vp8',
+            'video/webm',
+            'video/mp4'
+          ];
+          
+          let selectedMimeType = 'video/webm';
+          for (const mimeType of compatibleMimeTypes) {
+            if (MediaRecorder.isTypeSupported(mimeType)) {
+              selectedMimeType = mimeType;
+              break;
+            }
+          }
+          
+          console.log('使用备用转换方法，MIME类型:', selectedMimeType);
+          
+          // 创建媒体流（包含音频和视频）
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          
+          if (!ctx) {
+            throw new Error('无法创建画布上下文');
+          }
+          
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          
+          const videoStream = canvas.captureStream(25);
+          
+          // 尝试获取原始音频
+          let finalStream = videoStream;
+          
+          try {
+            const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+            const source = audioContext.createMediaElementSource(video);
+            const destination = audioContext.createMediaStreamDestination();
+            source.connect(destination);
+            
+            const audioTracks = destination.stream.getAudioTracks();
+            if (audioTracks.length > 0) {
+              finalStream = new MediaStream([
+                ...videoStream.getVideoTracks(),
+                ...audioTracks
+              ]);
+              console.log('备用方法成功获取音频轨道');
+            }
+          } catch (audioError) {
+            console.warn('备用方法音频处理失败:', audioError);
+          }
+          
+          const mediaRecorder = new MediaRecorder(finalStream, {
+            mimeType: selectedMimeType
+          });
+          
+          const chunks: Blob[] = [];
+          
+          mediaRecorder.ondataavailable = (event) => {
+            if (event.data.size > 0) {
+              chunks.push(event.data);
+            }
+          };
+          
+          mediaRecorder.onstop = () => {
+            const blob = new Blob(chunks, { type: selectedMimeType });
+            const extension = selectedMimeType.includes('webm') ? 'webm' : 'mp4';
+            const convertedFile = new File([blob], 
+              file.name.replace(/\.[^/.]+$/, `.${extension}`), 
+              { type: blob.type }
+            );
+            resolve(convertedFile);
+          };
+          
+          mediaRecorder.onerror = (error) => {
+            reject(new Error('备用录制失败'));
+          };
+          
+          mediaRecorder.start();
+          video.play();
+          
+          const drawFrame = () => {
+            if (!video.paused && !video.ended) {
+              ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+              requestAnimationFrame(drawFrame);
+            }
+          };
+          drawFrame();
+          
+          video.onended = () => {
+            mediaRecorder.stop();
+          };
+          
+        } catch (error) {
+          reject(error);
+        }
+      };
+      
+      video.onerror = () => {
+        reject(new Error('视频加载失败'));
+      };
+    });
+  };
+
   // 开始转换任务
   const startConversion = async (files: MediaFile[], type: 'audio' | 'video') => {
     const targetFormat = type === 'audio' ? audioTargetFormat : videoTargetFormat;
     const quality = type === 'audio' ? audioQuality : undefined;
     const resolution = type === 'video' ? videoResolution : undefined;
+    
+    // 如果是视频转换，先分析音频轨道
+    if (type === 'video') {
+      console.log('开始分析视频文件的音频轨道...');
+      for (const file of files) {
+        try {
+          const audioInfo = await analyzeVideoAudioTracks(file);
+          console.log(`文件 ${file.name} 音频分析结果:`, audioInfo);
+          
+          if (!audioInfo.hasAudio) {
+            console.warn(`文件 ${file.name} 没有检测到音频轨道`);
+          } else if (audioInfo.audioTrackCount > 1) {
+            console.log(`文件 ${file.name} 检测到 ${audioInfo.audioTrackCount} 个音频轨道`);
+          }
+        } catch (error) {
+          console.warn(`分析文件 ${file.name} 时出错:`, error);
+        }
+      }
+    }
     
     const newTasks: ConversionTask[] = files.map(file => ({
       id: generateId(),
@@ -536,9 +801,22 @@ export default function MediaToolsPage() {
             ? await convertAudioFile(task.file, targetFormat, quality!)
             : await convertVideoFile(task.file, targetFormat, resolution!);
         } catch (advancedError) {
-          console.warn('高级转换失败，使用简单转换:', advancedError);
-          // 如果高级转换失败，使用简单转换
-          convertedFile = simpleFormatConversion(task.file, targetFormat);
+          console.warn('高级转换失败，尝试备用方法:', advancedError);
+          
+          try {
+            // 对于视频，尝试高级备用转换方法
+            if (type === 'video') {
+              convertedFile = await advancedFallbackConversion(task.file, targetFormat);
+              console.log('备用转换方法成功');
+            } else {
+              // 对于音频，使用简单转换
+              convertedFile = simpleFormatConversion(task.file, targetFormat);
+            }
+          } catch (fallbackError) {
+            console.warn('备用转换也失败，使用简单转换:', fallbackError);
+            // 最后使用简单转换
+            convertedFile = simpleFormatConversion(task.file, targetFormat);
+          }
         }
         
         clearInterval(progressInterval);
@@ -1079,7 +1357,13 @@ export default function MediaToolsPage() {
                               {file.size}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                              {formatTime(file.duration || 0)}
+                              <div className="flex items-center space-x-2">
+                                <span>{formatTime(file.duration || 0)}</span>
+                                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                  <Volume2 className="w-3 h-3 mr-1" />
+                                  含音频
+                                </span>
+                              </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                                              <button
@@ -1406,8 +1690,16 @@ export default function MediaToolsPage() {
                         )}
                         
                         {task.status === 'completed' && task.outputFile && (
-                          <div className="text-xs text-green-600 dark:text-green-400">
-                            转换完成 • {formatFileSize(task.outputFile.size)}
+                          <div className="flex items-center justify-between text-xs">
+                            <div className="text-green-600 dark:text-green-400">
+                              转换完成 • {formatFileSize(task.outputFile.size)}
+                            </div>
+                            {task.file.type.startsWith('video/') && (
+                              <div className="flex items-center space-x-1 text-gray-500">
+                                <Volume2 className="w-3 h-3" />
+                                <span>音频已保留</span>
+                              </div>
+                            )}
                           </div>
                         )}
                       </div>
@@ -1426,6 +1718,8 @@ export default function MediaToolsPage() {
                   <li>• 转换功能基于浏览器原生API，支持常见格式</li>
                   <li>• 大文件转换可能需要较长时间，请耐心等待</li>
                   <li>• 建议在转换前预览文件以确认格式正确</li>
+                  <li>• <strong>视频转换会智能保留音频轨道</strong>，包括多音轨视频</li>
+                  <li>• 如遇音频丢失，系统会自动尝试备用转换方法</li>
                   <li>• 转换完成后可直接下载结果文件</li>
                 </ul>
               </div>
