@@ -137,22 +137,16 @@ export default function ToolsPage() {
         </div>
 
         {/* 工具网格 */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredTools.map((tool) => (
             <div key={tool.id} className="relative">
-              {tool.popular && (
-                <div className="absolute top-2 right-2 z-10">
-                  <span className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full shadow-sm">
-                    {t.tools.popular}
-                  </span>
-                </div>
-              )}
               <ToolCard
                 id={tool.id}
                 name={tool.name}
                 description={tool.description}
                 href={tool.href}
                 icon={tool.icon}
+                popular={tool.popular}
               />
             </div>
           ))}
