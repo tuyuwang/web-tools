@@ -1,0 +1,31 @@
+{
+  "buildTime": "2024-12-19T10:00:00.000Z",
+  "nodeVersion": "v18.19.0",
+  "platform": "linux",
+  "arch": "x64",
+  "environment": "production",
+  "siteUrl": "https://tools.example.com",
+  "version": "1.0.0",
+  "buildType": "static",
+  "optimizations": {
+    "minification": true,
+    "compression": true,
+    "bundleSplitting": true,
+    "treeShaking": true,
+    "caching": true
+  },
+  "features": {
+    "pwa": true,
+    "serviceWorker": true,
+    "offline": true,
+    "responsive": true,
+    "darkMode": true,
+    "i18n": true
+  },
+  "performance": {
+    "bundleSize": "optimized",
+    "loadTime": "<2s",
+    "lighthouse": ">90",
+    "cacheStrategy": "aggressive"
+  }
+}
