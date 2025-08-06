@@ -50,19 +50,25 @@ export interface Translations {
     subtitle: string;
     search: {
       placeholder: string;
+      filter?: string;
+      clearFilter?: string;
+      found?: string;
+      toolsCount?: string;
+      clearAllFilters?: string;
     };
-    categories: {
-      all: string;
-      text: string;
-      image: string;
-      dev: string;
-      utility: string;
-      learn: string;
-      health: string;
-      media: string;
-      office: string;
-      security: string;
-    };
+          categories: {
+        all: string;
+        ai: string;
+        text: string;
+        image: string;
+        dev: string;
+        utility: string;
+        learn: string;
+        health: string;
+        media: string;
+        office: string;
+        security: string;
+      };
     popular: string;
     noResults: {
       title: string;
@@ -72,6 +78,12 @@ export interface Translations {
   
   // 工具名称和描述翻译
   toolNames: {
+    // AI工具
+    'ai-text-generator': string;
+    'ai-language-detect': string;
+    'ai-keyword-extract': string;
+    'ai-text-summary': string;
+    'ai-sentiment-analysis': string;
     // 文本工具
     'text-case': string;
     'text-encode': string;
@@ -119,6 +131,12 @@ export interface Translations {
   };
   
   toolDescriptions: {
+    // AI工具
+    'ai-text-generator': string;
+    'ai-language-detect': string;
+    'ai-keyword-extract': string;
+    'ai-text-summary': string;
+    'ai-sentiment-analysis': string;
     // 文本工具
     'text-case': string;
     'text-encode': string;
@@ -617,9 +635,15 @@ export const translations: Record<Locale, Translations> = {
       subtitle: '发现并使用各种实用工具',
       search: {
         placeholder: '搜索工具...',
+        filter: '筛选',
+        clearFilter: '清除筛选',
+        found: '找到',
+        toolsCount: '个工具',
+        clearAllFilters: '清除所有筛选',
       },
       categories: {
         all: '全部',
+        ai: 'AI工具',
         text: '文本工具',
         image: '图片工具',
         dev: '开发工具',
@@ -637,6 +661,12 @@ export const translations: Record<Locale, Translations> = {
       },
     },
     toolNames: {
+      // AI工具
+      'ai-text-generator': '文本生成器',
+      'ai-language-detect': '语言检测',
+      'ai-keyword-extract': '关键词提取',
+      'ai-text-summary': '智能摘要',
+      'ai-sentiment-analysis': '情感分析',
       // 文本工具
       'text-case': '文本格式转换',
       'text-encode': '编码解码工具',
@@ -683,6 +713,12 @@ export const translations: Record<Locale, Translations> = {
       'security': '安全工具',
     },
     toolDescriptions: {
+      // AI工具
+      'ai-text-generator': '生成Lorem ipsum、假数据、随机文本等，支持多种生成类型。',
+      'ai-language-detect': '自动识别文本的语言类型，支持中英日韩法德西俄阿等多种语言。',
+      'ai-keyword-extract': '从文本中智能提取关键词和短语，提供频率统计和重要性评分。',
+      'ai-text-summary': '提取文本关键信息，生成简洁摘要（即将推出）。',
+      'ai-sentiment-analysis': '分析文本的情感倾向和语调（即将推出）。',
       // 文本工具
       'text-case': '快速转换文本大小写、驼峰命名等格式，支持9种常用格式。',
       'text-encode': 'Base64、URL、HTML等编码解码工具，支持多种格式转换。',
@@ -1204,9 +1240,15 @@ export const translations: Record<Locale, Translations> = {
       subtitle: 'Discover and use various practical tools',
       search: {
         placeholder: 'Search tools...',
+        filter: 'Filter',
+        clearFilter: 'Clear Filter',
+        found: 'Found',
+        toolsCount: 'tools',
+        clearAllFilters: 'Clear All Filters',
       },
       categories: {
         all: 'All',
+        ai: 'AI Tools',
         text: 'Text Tools',
         image: 'Image Tools',
         dev: 'Development Tools',
@@ -1224,6 +1266,12 @@ export const translations: Record<Locale, Translations> = {
       },
     },
     toolNames: {
+      // AI工具
+      'ai-text-generator': 'Text Generator',
+      'ai-language-detect': 'Language Detection',
+      'ai-keyword-extract': 'Keyword Extraction',
+      'ai-text-summary': 'Smart Summary',
+      'ai-sentiment-analysis': 'Sentiment Analysis',
       // 文本工具
       'text-case': 'Text Format Converter',
       'text-encode': 'Encode/Decode Tool',
@@ -1270,6 +1318,12 @@ export const translations: Record<Locale, Translations> = {
       'security': 'Security Tools',
     },
     toolDescriptions: {
+      // AI工具
+      'ai-text-generator': 'Generate Lorem ipsum, fake data, random text, etc., supporting multiple generation types.',
+      'ai-language-detect': 'Automatically identify text language types, supporting Chinese, English, Japanese, Korean, French, German, Spanish, Russian, Arabic and other languages.',
+      'ai-keyword-extract': 'Intelligently extract keywords and phrases from text, providing frequency statistics and importance scores.',
+      'ai-text-summary': 'Extract key information from text and generate concise summaries (coming soon).',
+      'ai-sentiment-analysis': 'Analyze the emotional tendency and tone of text (coming soon).',
       // 文本工具
       'text-case': 'Quickly convert text case, camelCase naming and other formats, supporting 9 common formats.',
       'text-encode': 'Base64, URL, HTML encoding and decoding tools, supporting multiple format conversions.',

@@ -28,6 +28,7 @@ export default function ToolsPage() {
   const getCategoryName = (categoryId: string) => {
     const categoryMap: Record<string, string> = {
       all: t.tools.categories.all,
+      ai: t.tools.categories.ai,
       text: t.tools.categories.text,
       image: t.tools.categories.image,
       dev: t.tools.categories.dev,
@@ -89,7 +90,7 @@ export default function ToolsPage() {
               className="flex items-center space-x-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg text-gray-700 dark:text-gray-300"
             >
               <Filter className="h-4 w-4" />
-              <span>筛选</span>
+              <span>{t.tools.search.filter || '筛选'}</span>
               {selectedCategory !== 'all' && (
                 <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
                   1
@@ -102,7 +103,7 @@ export default function ToolsPage() {
                 onClick={clearFilters}
                 className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
               >
-                清除筛选
+{t.tools.search.clearFilter || '清除筛选'}
               </button>
             )}
           </div>
@@ -132,7 +133,7 @@ export default function ToolsPage() {
 
         {/* 结果统计 */}
         <div className="text-center text-sm text-gray-600 dark:text-gray-400">
-          找到 {filteredTools.length} 个工具
+{t.tools.search.found || '找到'} {filteredTools.length} {t.tools.search.toolsCount || '个工具'}
           {selectedCategory !== 'all' && ` · ${getCategoryName(selectedCategory)}`}
         </div>
 
@@ -173,7 +174,7 @@ export default function ToolsPage() {
                 onClick={clearFilters}
                 className="btn btn-primary"
               >
-                清除所有筛选
+{t.tools.search.clearAllFilters || '清除所有筛选'}
               </button>
             )}
           </div>
