@@ -127,11 +127,11 @@ export const tools: Tool[] = [
     category: 'image',
     popular: true,
   },
-  {
-    id: 'image-convert',
-    name: '图片格式转换',
-    description: '将图片转换为不同格式，支持JPEG、PNG、WebP等。',
-    href: '/tools/image/convert',
+      {
+      id: 'image-convert',
+      name: '图片格式转换',
+      description: '基于Canvas API的真实图片格式转换，支持主流格式间的高质量转换。',
+      href: '/tools/image/convert',
     icon: 'Image',
     category: 'image',
     popular: false,
