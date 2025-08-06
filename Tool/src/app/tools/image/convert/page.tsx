@@ -19,9 +19,10 @@ export default function ImageConvertPage() {
 
   // 支持的格式 - 只包含浏览器真正支持的格式
   const formats = [
-    { value: 'image/jpeg', label: 'JPEG', extension: 'jpg', description: '通用压缩格式，适合照片' },
-    { value: 'image/png', label: 'PNG', extension: 'png', description: '无损压缩，支持透明度' },
-    { value: 'image/webp', label: 'WebP', extension: 'webp', description: '现代高效格式，体积小' },
+    { value: 'image/jpeg', label: 'JPEG', extension: 'jpg', description: '有损压缩，适合照片，小体积', compatibility: '全浏览器支持' },
+    { value: 'image/png', label: 'PNG', extension: 'png', description: '无损压缩，支持透明度，适合图标', compatibility: '全浏览器支持' },
+    { value: 'image/webp', label: 'WebP', extension: 'webp', description: '现代格式，压缩率高，适合网页', compatibility: '现代浏览器支持' },
+    { value: 'image/bmp', label: 'BMP', extension: 'bmp', description: '位图格式，无压缩，文件较大', compatibility: '部分浏览器支持' },
   ];
 
   // 检查格式兼容性
@@ -37,13 +38,13 @@ export default function ImageConvertPage() {
       
       // 验证文件类型
       if (!file.type.startsWith('image/')) {
-        setError('请选择有效的图片文件');
+        setError('请选择有效的图片文件（支持JPEG、PNG、WebP、GIF、BMP、SVG等格式）');
         return;
       }
 
       // 验证文件大小 (限制20MB)
       if (file.size > 20 * 1024 * 1024) {
-        setError('文件大小不能超过20MB');
+        setError(`文件大小不能超过20MB，当前文件大小：${formatFileSize(file.size)}`);
         return;
       }
 
@@ -63,7 +64,8 @@ export default function ImageConvertPage() {
     try {
       // 检查目标格式支持
       if (!checkFormatSupport(format)) {
-        throw new Error(`当前浏览器不支持${format}格式的导出`);
+        const formatName = formats.find(f => f.value === format)?.label || format;
+        throw new Error(`当前浏览器不支持${formatName}格式的导出，请尝试JPEG或PNG格式`);
       }
 
       const canvas = document.createElement('canvas');
@@ -116,7 +118,7 @@ export default function ImageConvertPage() {
           setIsConverting(false);
         },
         format,
-        format === 'image/jpeg' || format === 'image/webp' ? quality : undefined
+        (format === 'image/jpeg' || format === 'image/webp') ? quality : undefined
       );
 
     } catch (err) {
@@ -167,7 +169,7 @@ export default function ImageConvertPage() {
           图片格式转换工具
         </h1>
         <p className="text-gray-600 dark:text-gray-400 mb-4">
-          支持JPEG、PNG、WebP格式之间的真实转换
+          基于Canvas API的真实格式转换，支持主流图片格式间的高质量转换
         </p>
         
         {/* 功能说明 */}
@@ -178,9 +180,10 @@ export default function ImageConvertPage() {
               <p className="font-medium mb-1">真实转换功能说明：</p>
               <ul className="space-y-1 text-xs">
                 <li>• 使用浏览器原生Canvas API进行真实格式转换</li>
-                <li>• 支持质量调节（JPEG/WebP格式）</li>
-                <li>• 所有处理在本地完成，不上传到服务器</li>
-                <li>• 仅支持浏览器原生支持的格式</li>
+                <li>• 支持质量调节（JPEG/WebP格式）和透明度处理</li>
+                <li>• 所有处理在本地完成，保护隐私，不上传到服务器</li>
+                <li>• 自动检测格式兼容性，确保转换成功</li>
+                <li>• 支持JPEG、PNG、WebP、BMP等主流格式</li>
               </ul>
             </div>
           </div>
@@ -231,7 +234,8 @@ export default function ImageConvertPage() {
                   选择图片文件
                 </button>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  支持 JPEG、PNG、WebP、GIF、BMP 等格式<br/>
+                  支持输入：JPEG、PNG、WebP、GIF、BMP、SVG等格式<br/>
+                  转换输出：JPEG、PNG、WebP、BMP格式<br/>
                   最大文件大小：20MB
                 </p>
               </div>
@@ -330,6 +334,9 @@ export default function ImageConvertPage() {
                   </option>
                 ))}
               </select>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                {formats.find(f => f.value === format)?.compatibility}
+              </p>
             </div>
 
             <div>
@@ -337,6 +344,9 @@ export default function ImageConvertPage() {
                 图片质量: {Math.round(quality * 100)}%
                 {format === 'image/png' && (
                   <span className="text-xs text-gray-500 ml-2">(PNG为无损格式，质量设置无效)</span>
+                )}
+                {format === 'image/bmp' && (
+                  <span className="text-xs text-gray-500 ml-2">(BMP为未压缩格式，质量设置无效)</span>
                 )}
               </label>
               <input
@@ -346,9 +356,44 @@ export default function ImageConvertPage() {
                 step="0.1"
                 value={quality}
                 onChange={(e) => setQuality(parseFloat(e.target.value))}
-                disabled={format === 'image/png'}
+                disabled={format === 'image/png' || format === 'image/bmp'}
                 className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer slider disabled:opacity-50"
               />
+              <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                <span>最小</span>
+                <span>最佳</span>
+              </div>
+            </div>
+          </div>
+
+          {/* 格式转换提示 */}
+          <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 mb-4">
+            <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">转换提示</h4>
+            <div className="text-xs text-gray-600 dark:text-gray-400 space-y-1">
+              {format === 'image/jpeg' && (
+                <>
+                  <p>• JPEG格式会移除透明度，透明区域将变为白色</p>
+                  <p>• 适合照片类图片，可有效减小文件大小</p>
+                </>
+              )}
+              {format === 'image/png' && (
+                <>
+                  <p>• PNG格式保持原始质量，支持透明度</p>
+                  <p>• 适合图标、截图等需要保持清晰度的图片</p>
+                </>
+              )}
+              {format === 'image/webp' && (
+                <>
+                  <p>• WebP格式压缩率高，兼容性较好</p>
+                  <p>• 适合网页使用，可显著减小加载时间</p>
+                </>
+              )}
+              {format === 'image/bmp' && (
+                <>
+                  <p>• BMP格式未压缩，文件体积较大</p>
+                  <p>• 适合需要无损质量的特殊场景</p>
+                </>
+              )}
             </div>
           </div>
 

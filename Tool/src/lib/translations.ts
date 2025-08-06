@@ -693,7 +693,7 @@ export const translations: Record<Locale, Translations> = {
       'text-stats': '统计文本的字符、单词、行数等详细信息。',
       // 图片工具
       'image-compress': '在线压缩图片，优化图片大小，支持质量调节。',
-      'image-convert': '将图片转换为不同格式，支持JPEG、PNG、WebP等。',
+              'image-convert': '基于Canvas API的真实图片格式转换，支持JPEG、PNG、WebP等。',
       'image-watermark': '为图片添加文字水印，支持自定义位置、颜色、透明度等。',
       'image-resize': '调整图片尺寸，支持保持比例、批量处理等功能。',
       'image-filter': '为图片添加各种滤镜效果，支持亮度、对比度、饱和度调节。',
@@ -787,12 +787,12 @@ export const translations: Record<Locale, Translations> = {
       },
       imageConvert: {
         title: '图片格式转换',
-        description: '将图片转换为不同格式，支持JPEG、PNG、WebP等。',
+        description: '基于浏览器Canvas API的真实格式转换，支持JPEG、PNG、WebP等常用格式。',
         features: [
-          '支持多种图片格式转换',
-          '批量转换功能',
-          '保持图片质量',
-          '快速转换处理'
+          '真实的浏览器原生转换',
+          '支持质量调节(JPEG/WebP)',
+          '本地处理保护隐私',
+          '无损/有损格式互转'
         ]
       },
       imageWatermark: {
