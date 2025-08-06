@@ -19,7 +19,6 @@ import {
   X,
   RotateCcw,
   Maximize2,
-  Minimize2,
   Loader2,
   Eye
 } from 'lucide-react';
@@ -33,6 +32,7 @@ interface MediaFile {
   size: string;
   type: string;
   name: string;
+  lastModified: string;
   metadata?: {
     width?: number;
     height?: number;
@@ -43,6 +43,9 @@ interface MediaFile {
     audioCodec?: string;
     bitrate?: number;
     frameRate?: number;
+    sampleRate?: number;
+    channels?: number;
+    aspectRatio?: string;
   };
 }
 
@@ -66,10 +69,11 @@ export default function MediaToolsPage() {
   const [playbackRate, setPlaybackRate] = useState(1);
   const [showFileInfo, setShowFileInfo] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
+
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
   const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
   const [showVisualization, setShowVisualization] = useState(false);
+  const [uploadError, setUploadError] = useState<string>('');
   
   const audioRef = useRef<HTMLAudioElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -107,6 +111,7 @@ export default function MediaToolsPage() {
         size: formatFileSize(file.size),
         type: file.type,
         name: file.name,
+        lastModified: new Date(file.lastModified).toLocaleString('zh-CN'),
         metadata: {}
       };
 
@@ -115,10 +120,15 @@ export default function MediaToolsPage() {
         video.src = url;
         video.onloadedmetadata = () => {
           mediaFile.duration = video.duration;
+          const aspectRatio = video.videoWidth && video.videoHeight 
+            ? `${(video.videoWidth / video.videoHeight).toFixed(2)}:1`
+            : '';
+          
           mediaFile.metadata = {
             width: video.videoWidth,
             height: video.videoHeight,
             duration: video.duration,
+            aspectRatio,
             hasAudio: !!(video as any).mozHasAudio || 
                      !!(video as any).webkitAudioDecodedByteCount ||
                      !!((video as any).audioTracks && (video as any).audioTracks.length > 0)
@@ -129,14 +139,32 @@ export default function MediaToolsPage() {
       } else if (file.type.startsWith('audio/')) {
         const audio = new Audio();
         audio.src = url;
-        audio.onloadedmetadata = () => {
-          mediaFile.duration = audio.duration;
-          mediaFile.metadata = {
-            duration: audio.duration,
-            hasAudio: true
-          };
+        
+        // 尝试获取音频上下文信息
+        const tryGetAudioInfo = () => {
+          try {
+            const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+            const source = ctx.createMediaElementSource(audio);
+            const analyser = ctx.createAnalyser();
+            source.connect(analyser);
+            analyser.connect(ctx.destination);
+            
+            mediaFile.metadata = {
+              duration: audio.duration,
+              hasAudio: true,
+              sampleRate: ctx.sampleRate,
+              channels: 2 // 默认立体声，实际检测较复杂
+            };
+          } catch (error) {
+            mediaFile.metadata = {
+              duration: audio.duration,
+              hasAudio: true
+            };
+          }
           resolve(mediaFile);
         };
+        
+        audio.onloadedmetadata = tryGetAudioInfo;
         audio.onerror = () => resolve(mediaFile);
       } else {
         resolve(mediaFile);
@@ -145,25 +173,51 @@ export default function MediaToolsPage() {
   }, []);
 
   const handleFileUpload = useCallback(async (files: FileList, type: 'audio' | 'video') => {
+    setUploadError('');
     const newFiles: MediaFile[] = [];
+    const invalidFiles: string[] = [];
     
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      const url = URL.createObjectURL(file);
       
-      if (type === 'audio' && file.type.startsWith('audio/')) {
+      // 检查文件类型
+      if (type === 'audio' && !file.type.startsWith('audio/')) {
+        invalidFiles.push(file.name + ' (不是音频文件)');
+        continue;
+      }
+      if (type === 'video' && !file.type.startsWith('video/')) {
+        invalidFiles.push(file.name + ' (不是视频文件)');
+        continue;
+      }
+      
+      // 检查文件大小 (限制为100MB)
+      if (file.size > 100 * 1024 * 1024) {
+        invalidFiles.push(file.name + ' (文件过大，超过100MB)');
+        continue;
+      }
+      
+      try {
+        const url = URL.createObjectURL(file);
         const mediaFile = await getMediaMetadata(file, url);
         newFiles.push(mediaFile);
-      } else if (type === 'video' && file.type.startsWith('video/')) {
-        const mediaFile = await getMediaMetadata(file, url);
-        newFiles.push(mediaFile);
+      } catch (error) {
+        invalidFiles.push(file.name + ' (处理失败)');
+        console.error('文件处理错误:', error);
       }
     }
     
-    if (type === 'audio') {
-      setAudioFiles(prev => [...prev, ...newFiles]);
-    } else {
-      setVideoFiles(prev => [...prev, ...newFiles]);
+    // 显示错误信息
+    if (invalidFiles.length > 0) {
+      setUploadError(`以下文件无法处理: ${invalidFiles.join(', ')}`);
+    }
+    
+    // 添加有效文件
+    if (newFiles.length > 0) {
+      if (type === 'audio') {
+        setAudioFiles(prev => [...prev, ...newFiles]);
+      } else {
+        setVideoFiles(prev => [...prev, ...newFiles]);
+      }
     }
   }, [getMediaMetadata]);
 
@@ -234,10 +288,17 @@ export default function MediaToolsPage() {
 
     try {
       const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      
+      // 检查AudioContext状态
+      if (ctx.state === 'suspended') {
+        ctx.resume();
+      }
+      
       const source = ctx.createMediaElementSource(audioRef.current);
       const analyzerNode = ctx.createAnalyser();
       
-      analyzerNode.fftSize = 256;
+      analyzerNode.fftSize = 128; // 减小FFT大小以提高性能
+      analyzerNode.smoothingTimeConstant = 0.8;
       source.connect(analyzerNode);
       analyzerNode.connect(ctx.destination);
       
@@ -245,6 +306,7 @@ export default function MediaToolsPage() {
       setAnalyser(analyzerNode);
     } catch (error) {
       console.warn('音频可视化初始化失败:', error);
+      setShowVisualization(false); // 失败时自动关闭可视化
     }
   };
 
@@ -255,25 +317,31 @@ export default function MediaToolsPage() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const bufferLength = analyser.frequencyBinCount;
-    const dataArray = new Uint8Array(bufferLength);
-    
-    analyser.getByteFrequencyData(dataArray);
-    
-    ctx.fillStyle = 'rgb(0, 0, 0)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
-    const barWidth = (canvas.width / bufferLength) * 2.5;
-    let barHeight;
-    let x = 0;
-    
-    for (let i = 0; i < bufferLength; i++) {
-      barHeight = dataArray[i] / 255 * canvas.height;
+    try {
+      const bufferLength = analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
       
-      ctx.fillStyle = `hsl(${i / bufferLength * 360}, 100%, 50%)`;
-      ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+      analyser.getByteFrequencyData(dataArray);
       
-      x += barWidth + 1;
+      // 清除画布
+      ctx.fillStyle = '#000000';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // 简化的频谱显示，只显示部分频段
+      const displayBars = 32;
+      const barWidth = canvas.width / displayBars;
+      
+      for (let i = 0; i < displayBars; i++) {
+        const dataIndex = Math.floor(i * bufferLength / displayBars);
+        const barHeight = (dataArray[dataIndex] / 255) * canvas.height * 0.8;
+        
+        // 使用渐变色
+        const hue = (i / displayBars) * 240; // 蓝色到紫色
+        ctx.fillStyle = `hsl(${hue}, 70%, 50%)`;
+        ctx.fillRect(i * barWidth, canvas.height - barHeight, barWidth - 1, barHeight);
+      }
+    } catch (error) {
+      console.warn('可视化渲染错误:', error);
     }
   }, [analyser]);
 
@@ -319,40 +387,24 @@ export default function MediaToolsPage() {
   const currentAudioFile = audioFiles[currentAudioIndex];
   const currentVideoFile = videoFiles[currentVideoIndex];
 
-  // 键盘快捷键支持
+  // 简化的键盘快捷键支持
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // 只在非输入元素时响应
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
         return;
       }
 
-      switch (e.code) {
-        case 'Space':
-          e.preventDefault();
-          handlePlayPause();
-          break;
-        case 'ArrowLeft':
-          e.preventDefault();
-          handleSkip(-10);
-          break;
-        case 'ArrowRight':
-          e.preventDefault();
-          handleSkip(10);
-          break;
-        case 'ArrowUp':
-          e.preventDefault();
-          handleVolumeChange(Math.min(100, volume + 10));
-          break;
-        case 'ArrowDown':
-          e.preventDefault();
-          handleVolumeChange(Math.max(0, volume - 10));
-          break;
+      // 只支持空格键播放/暂停
+      if (e.code === 'Space') {
+        e.preventDefault();
+        handlePlayPause();
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [volume, handlePlayPause, handleSkip, handleVolumeChange]);
+  }, [handlePlayPause]);
 
   const removeFile = (index: number, type: 'audio' | 'video') => {
     if (type === 'audio') {
@@ -440,6 +492,22 @@ export default function MediaToolsPage() {
                 onChange={(e) => e.target.files && handleFileUpload(e.target.files, 'audio')}
               />
             </div>
+
+            {/* 错误信息显示 */}
+            {uploadError && (
+              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg p-4">
+                <div className="flex items-center">
+                  <X className="text-red-500 mr-2" size={16} />
+                  <span className="text-red-700 dark:text-red-300 text-sm">{uploadError}</span>
+                  <button
+                    onClick={() => setUploadError('')}
+                    className="ml-auto text-red-500 hover:text-red-700"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+              </div>
+            )}
 
             {/* 音频播放控制 */}
             {currentAudioFile && (
@@ -642,26 +710,36 @@ export default function MediaToolsPage() {
               />
             </div>
 
+            {/* 错误信息显示 */}
+            {uploadError && (
+              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg p-4">
+                <div className="flex items-center">
+                  <X className="text-red-500 mr-2" size={16} />
+                  <span className="text-red-700 dark:text-red-300 text-sm">{uploadError}</span>
+                  <button
+                    onClick={() => setUploadError('')}
+                    className="ml-auto text-red-500 hover:text-red-700"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+              </div>
+            )}
+
             {/* 视频播放器 */}
             {currentVideoFile && (
               <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-                <div className="flex items-center justify-between mb-4">
+                <div className="mb-4">
                   <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
                     {currentVideoFile.name}
                   </h3>
-                  <button
-                    onClick={() => setIsFullscreen(!isFullscreen)}
-                    className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
-                  >
-                    {isFullscreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
-                  </button>
                 </div>
 
                 <video
                   ref={videoRef}
                   src={currentVideoFile.url}
                   controls
-                  className={`w-full rounded ${isFullscreen ? 'fixed inset-0 z-50 bg-black' : 'max-h-96'}`}
+                  className="w-full max-h-96 rounded"
                   onTimeUpdate={handleTimeUpdate}
                   onLoadedMetadata={() => {
                     if (videoRef.current) {
@@ -769,7 +847,7 @@ export default function MediaToolsPage() {
                       <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-3">
                         音频文件信息
                       </h4>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
                         <div>
                           <span className="text-gray-500">文件名:</span>
                           <p className="font-medium break-all">{currentAudioFile.name}</p>
@@ -788,6 +866,22 @@ export default function MediaToolsPage() {
                             {currentAudioFile.duration ? formatTime(currentAudioFile.duration) : '未知'}
                           </p>
                         </div>
+                        <div>
+                          <span className="text-gray-500">修改时间:</span>
+                          <p className="font-medium">{currentAudioFile.lastModified}</p>
+                        </div>
+                        {currentAudioFile.metadata?.sampleRate && (
+                          <div>
+                            <span className="text-gray-500">采样率:</span>
+                            <p className="font-medium">{currentAudioFile.metadata.sampleRate} Hz</p>
+                          </div>
+                        )}
+                        {currentAudioFile.metadata?.channels && (
+                          <div>
+                            <span className="text-gray-500">声道数:</span>
+                            <p className="font-medium">{currentAudioFile.metadata.channels}</p>
+                          </div>
+                        )}
                       </div>
                     </div>
                   )}
@@ -797,7 +891,7 @@ export default function MediaToolsPage() {
                       <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-3">
                         视频文件信息
                       </h4>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
                         <div>
                           <span className="text-gray-500">文件名:</span>
                           <p className="font-medium break-all">{currentVideoFile.name}</p>
@@ -816,12 +910,22 @@ export default function MediaToolsPage() {
                             {currentVideoFile.duration ? formatTime(currentVideoFile.duration) : '未知'}
                           </p>
                         </div>
+                        <div>
+                          <span className="text-gray-500">修改时间:</span>
+                          <p className="font-medium">{currentVideoFile.lastModified}</p>
+                        </div>
                         {currentVideoFile.metadata && (
                           <>
                             <div>
                               <span className="text-gray-500">分辨率:</span>
                               <p className="font-medium">
                                 {currentVideoFile.metadata.width}x{currentVideoFile.metadata.height}
+                              </p>
+                            </div>
+                            <div>
+                              <span className="text-gray-500">宽高比:</span>
+                              <p className="font-medium">
+                                {currentVideoFile.metadata.aspectRatio || '未知'}
                               </p>
                             </div>
                             <div>
@@ -878,11 +982,13 @@ export default function MediaToolsPage() {
             使用说明
           </h3>
           <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
-            <li>• 支持拖拽上传多个媒体文件</li>
-            <li>• 音频播放器包含可视化效果和播放控制</li>
-            <li>• 视频播放器支持全屏播放和基本信息显示</li>
-            <li>• 所有操作均在本地进行，不会上传文件到服务器</li>
-            <li>• 键盘快捷键：空格键播放/暂停，方向键控制进度和音量</li>
+            <li>• 支持拖拽上传多个媒体文件（单个文件不超过100MB）</li>
+            <li>• 音频播放器包含可视化效果和完整播放控制</li>
+            <li>• 视频播放器使用浏览器原生控件，功能稳定可靠</li>
+            <li>• 媒体信息标签页显示详细的文件元数据</li>
+            <li>• 所有操作均在本地进行，保护您的隐私</li>
+            <li>• 键盘快捷键：空格键播放/暂停</li>
+            <li>• 自动检测并提示不支持的文件格式</li>
           </ul>
         </div>
       </div>
