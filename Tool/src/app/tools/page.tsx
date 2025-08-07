@@ -29,6 +29,7 @@ export default function ToolsPage() {
     const categoryMap: Record<string, string> = {
       all: t.tools.categories.all,
       ai: t.tools.categories.ai,
+      pdf: t.tools.categories.pdf || 'PDF工具',
       text: t.tools.categories.text,
       image: t.tools.categories.image,
       dev: t.tools.categories.dev,
