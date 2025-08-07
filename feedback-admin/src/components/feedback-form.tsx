@@ -105,12 +105,11 @@ export default function FeedbackForm() {
         body: JSON.stringify(feedbackData)
       });
 
-      console.log('API响应状态:', response.status);
-      console.log('API响应头:', Object.fromEntries(response.headers.entries()));
+      const result = await response.json();
+      console.log('API响应:', result);
 
-      if (response.ok) {
-        const result = await response.json();
-        console.log('提交成功:', result);
+      if (result.success) {
+        console.log('提交成功:', result.data);
         
         // 重置表单
         setFeedback({
@@ -132,9 +131,8 @@ export default function FeedbackForm() {
           setIsOpen(false);
         }, 3000);
       } else {
-        const errorData = await response.json().catch(() => ({ error: '未知错误' }));
-        console.error('API错误响应:', errorData);
-        throw new Error(errorData.error || `提交失败 (${response.status})`);
+        console.error('API错误响应:', result);
+        throw new Error(result.error || '提交失败');
       }
     } catch (error) {
       console.error('提交反馈失败:', error);

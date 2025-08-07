@@ -19,8 +19,7 @@ import {
   Clock,
   Star,
   BarChart3,
-  Settings,
-  ChartBar
+  Settings
 } from 'lucide-react';
 import FeedbackAnalytics from '@/components/feedback-analytics';
 import FeedbackNotification from '@/components/feedback-notification';
@@ -61,7 +60,7 @@ export default function FeedbackAdminPage() {
 
   const updateFeedbackStatus = async (id: string, status: Feedback['status']) => {
     try {
-      const response = await fetch(`/api/${id}`, {
+      const response = await fetch(`/api/feedback/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -69,18 +68,20 @@ export default function FeedbackAdminPage() {
         body: JSON.stringify({ status })
       });
 
-      if (response.ok) {
+      const result = await response.json();
+
+      if (result.success) {
         const updatedFeedbacks = feedbacks.map(feedback => 
           feedback.id === id ? { ...feedback, status } : feedback
         );
         setFeedbacks(updatedFeedbacks);
         setNotification({ type: 'success', message: '状态更新成功！' });
       } else {
-        throw new Error('更新失败');
+        throw new Error(result.error || '更新失败');
       }
     } catch (error) {
       console.error('更新状态失败:', error);
-      setNotification({ type: 'error', message: '更新失败，请稍后重试。' });
+      setNotification({ type: 'error', message: error instanceof Error ? error.message : '更新失败，请稍后重试。' });
     }
   };
 
@@ -90,70 +91,87 @@ export default function FeedbackAdminPage() {
     }
 
     try {
-      const response = await fetch(`/api/${id}`, {
+      const response = await fetch(`/api/feedback/${id}`, {
         method: 'DELETE',
       });
 
-      if (response.ok) {
+      const result = await response.json();
+
+      if (result.success) {
         const updatedFeedbacks = feedbacks.filter(feedback => feedback.id !== id);
         setFeedbacks(updatedFeedbacks);
         setNotification({ type: 'success', message: '反馈删除成功！' });
       } else {
-        throw new Error('删除失败');
+        throw new Error(result.error || '删除失败');
       }
     } catch (error) {
       console.error('删除反馈失败:', error);
-      setNotification({ type: 'error', message: '删除失败，请稍后重试。' });
+      setNotification({ type: 'error', message: error instanceof Error ? error.message : '删除失败，请稍后重试。' });
     }
   };
 
   const batchUpdateFeedbacks = async (ids: string[], status: Feedback['status']) => {
     try {
-      const promises = ids.map(id => 
-        fetch(`/api/${id}`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ status })
+      const response = await fetch('/api/feedback/batch', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ids,
+          action: 'update_status',
+          data: { status }
         })
-      );
+      });
 
-      await Promise.all(promises);
+      const result = await response.json();
       
-      const updatedFeedbacks = feedbacks.map(feedback => 
-        ids.includes(feedback.id) ? { ...feedback, status } : feedback
-      );
-      setFeedbacks(updatedFeedbacks);
-      setNotification({ type: 'success', message: `成功更新 ${ids.length} 条反馈状态！` });
+      if (result.success) {
+        const updatedFeedbacks = feedbacks.map(feedback => 
+          ids.includes(feedback.id) ? { ...feedback, status } : feedback
+        );
+        setFeedbacks(updatedFeedbacks);
+        setNotification({ type: 'success', message: `成功更新 ${ids.length} 条反馈状态！` });
+      } else {
+        throw new Error(result.error || '批量更新失败');
+      }
     } catch (error) {
       console.error('批量更新失败:', error);
-      setNotification({ type: 'error', message: '批量更新失败，请稍后重试。' });
+      setNotification({ type: 'error', message: error instanceof Error ? error.message : '批量更新失败，请稍后重试。' });
     }
   };
 
   const batchDeleteFeedbacks = async (ids: string[]) => {
     try {
-      const promises = ids.map(id => 
-        fetch(`/api/${id}`, {
-          method: 'DELETE',
+      const response = await fetch('/api/feedback/batch', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ids,
+          action: 'delete'
         })
-      );
+      });
 
-      await Promise.all(promises);
+      const result = await response.json();
       
-      const updatedFeedbacks = feedbacks.filter(feedback => !ids.includes(feedback.id));
-      setFeedbacks(updatedFeedbacks);
-      setNotification({ type: 'success', message: `成功删除 ${ids.length} 条反馈！` });
+      if (result.success) {
+        const updatedFeedbacks = feedbacks.filter(feedback => !ids.includes(feedback.id));
+        setFeedbacks(updatedFeedbacks);
+        setNotification({ type: 'success', message: `成功删除 ${ids.length} 条反馈！` });
+      } else {
+        throw new Error(result.error || '批量删除失败');
+      }
     } catch (error) {
       console.error('批量删除失败:', error);
-      setNotification({ type: 'error', message: '批量删除失败，请稍后重试。' });
+      setNotification({ type: 'error', message: error instanceof Error ? error.message : '批量删除失败，请稍后重试。' });
     }
   };
 
   const handleFeedbackUpdate = async (id: string, data: Partial<Feedback>) => {
     try {
-      const response = await fetch(`/api/${id}`, {
+      const response = await fetch(`/api/feedback/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -205,10 +223,11 @@ export default function FeedbackAdminPage() {
   const fetchFeedbacks = async (showLoading = true) => {
     if (showLoading) setLoading(true);
     try {
-      const response = await fetch('/api');
-      if (response.ok) {
-        const data = await response.json();
-        setFeedbacks(data);
+      const response = await fetch('/api/feedback');
+      const result = await response.json();
+      
+      if (result.success) {
+        setFeedbacks(result.data.data || []);
       } else {
         console.error('获取反馈失败');
       }
@@ -331,7 +350,7 @@ export default function FeedbackAdminPage() {
               onClick={() => setShowAnalytics(!showAnalytics)}
               className="flex items-center gap-2 px-4 py-2 bg-blue-100 hover:bg-blue-200 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-md transition-colors"
             >
-              <ChartBar className="w-4 h-4" />
+              <BarChart3 className="w-4 h-4" />
               {showAnalytics ? '隐藏分析' : '显示分析'}
             </button>
             <button
