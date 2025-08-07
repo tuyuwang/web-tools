@@ -140,6 +140,48 @@ export interface Translations {
     'office-document-processor': string;
     'security-tools': string;
     'security-password-strength': string;
+    
+    // 金融工具
+    'finance-currency-converter': string;
+    'finance-investment-calculator': string;
+    'finance-loan-calculator': string;
+    'finance-mortgage-calculator': string;
+    'finance-compound-interest': string;
+    'finance-tip-calculator': string;
+    
+    // 设计工具
+    'design-color-palette': string;
+    'design-gradient-generator': string;
+    'design-css-generator': string;
+    'design-svg-editor': string;
+    'design-favicon-generator': string;
+    'design-placeholder-generator': string;
+    
+    // 社交媒体工具
+    'social-hashtag-generator': string;
+    'social-caption-generator': string;
+    'social-url-shortener': string;
+    'social-qr-generator': string;
+    'social-content-analyzer': string;
+    
+    // 生产力工具
+    'productivity-pomodoro': string;
+    'productivity-todo-list': string;
+    'productivity-notes': string;
+    'productivity-habit-tracker': string;
+    'productivity-calendar': string;
+    
+    // 转换工具
+    'converter-unit': string;
+    'converter-timestamp': string;
+    'converter-pdf': string;
+    'converter-markdown': string;
+    
+    // 游戏工具
+    'game-2048': string;
+    'game-sudoku': string;
+    'game-memory': string;
+    'game-random-picker': string;
   };
   
   toolDescriptions: {
@@ -205,6 +247,48 @@ export interface Translations {
     'office-document-processor': string;
     'security-tools': string;
     'security-password-strength': string;
+    
+    // 金融工具
+    'finance-currency-converter': string;
+    'finance-investment-calculator': string;
+    'finance-loan-calculator': string;
+    'finance-mortgage-calculator': string;
+    'finance-compound-interest': string;
+    'finance-tip-calculator': string;
+    
+    // 设计工具
+    'design-color-palette': string;
+    'design-gradient-generator': string;
+    'design-css-generator': string;
+    'design-svg-editor': string;
+    'design-favicon-generator': string;
+    'design-placeholder-generator': string;
+    
+    // 社交媒体工具
+    'social-hashtag-generator': string;
+    'social-caption-generator': string;
+    'social-url-shortener': string;
+    'social-qr-generator': string;
+    'social-content-analyzer': string;
+    
+    // 生产力工具
+    'productivity-pomodoro': string;
+    'productivity-todo-list': string;
+    'productivity-notes': string;
+    'productivity-habit-tracker': string;
+    'productivity-calendar': string;
+    
+    // 转换工具
+    'converter-unit': string;
+    'converter-timestamp': string;
+    'converter-pdf': string;
+    'converter-markdown': string;
+    
+    // 游戏工具
+    'game-2048': string;
+    'game-sudoku': string;
+    'game-memory': string;
+    'game-random-picker': string;
   };
   
   // 工具详情页面
@@ -677,6 +761,12 @@ export const translations: Record<Locale, Translations> = {
         media: '媒体工具',
         office: '办公工具',
         security: '安全工具',
+        finance: '金融工具',
+        design: '设计工具',
+        social: '社交媒体',
+        productivity: '生产力',
+        converter: '转换',
+        game: '游戏',
       },
       popular: '热门',
       noResults: {
@@ -747,6 +837,48 @@ export const translations: Record<Locale, Translations> = {
       'office-document-processor': '文档处理器',
       'security-tools': '安全工具集',
       'security-password-strength': '密码强度检测',
+      
+      // 金融工具
+      'finance-currency-converter': '汇率转换器',
+      'finance-investment-calculator': '投资收益计算器',
+      'finance-loan-calculator': '贷款计算器',
+      'finance-mortgage-calculator': '房贷计算器',
+      'finance-compound-interest': '复利计算器',
+      'finance-tip-calculator': '小费计算器',
+      
+      // 设计工具
+      'design-color-palette': '调色板生成器',
+      'design-gradient-generator': '渐变生成器',
+      'design-css-generator': 'CSS样式生成器',
+      'design-svg-editor': 'SVG编辑器',
+      'design-favicon-generator': 'Favicon生成器',
+      'design-placeholder-generator': '占位图生成器',
+      
+      // 社交媒体工具
+      'social-hashtag-generator': '标签生成器',
+      'social-caption-generator': '文案生成器',
+      'social-url-shortener': '链接缩短器',
+      'social-qr-generator': '二维码生成器',
+      'social-content-analyzer': '内容分析器',
+      
+      // 生产力工具
+      'productivity-pomodoro': '番茄时钟',
+      'productivity-todo-list': '待办事项',
+      'productivity-notes': '在线笔记',
+      'productivity-habit-tracker': '习惯追踪器',
+      'productivity-calendar': '日历工具',
+      
+      // 转换工具
+      'converter-unit': '单位转换器',
+      'converter-timestamp': '时间戳转换',
+      'converter-pdf': 'PDF转换器',
+      'converter-markdown': 'Markdown转换器',
+      
+      // 游戏工具
+      'game-2048': '2048游戏',
+      'game-sudoku': '数独游戏',
+      'game-memory': '记忆游戏',
+      'game-random-picker': '随机选择器',
     },
     toolDescriptions: {
       // AI工具
