@@ -9,558 +9,554 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-console.log('🔍 开始增强版性能测试...\n');
-
-// 性能指标收集器
-class PerformanceCollector {
+// 增强的性能测试脚本
+class PerformanceTester {
   constructor() {
-    this.metrics = {
-      buildSize: 0,
+    this.buildDir = path.join(process.cwd(), '.next');
+    this.staticDir = path.join(process.cwd(), 'out');
+    this.report = {
+      timestamp: new Date().toISOString(),
+      buildMetrics: {},
       bundleAnalysis: {},
       pageMetrics: {},
-      resourceOptimization: {},
-      cacheability: {},
-      accessibility: {},
-      seo: {},
-      timestamp: new Date().toISOString()
+      recommendations: [],
+      optimization: {
+        suggestions: [],
+        priorities: [],
+        estimatedSavings: {}
+      }
     };
   }
 
-  // 收集构建大小指标
-  collectBuildMetrics() {
-    console.log('📊 收集构建指标...');
+  // 分析构建结果
+  analyzeBuild() {
+    console.log('🔍 分析构建结果...');
     
-    const outDir = path.join(process.cwd(), 'out');
-    if (!fs.existsSync(outDir)) {
-      console.error('❌ 构建输出目录不存在！');
-      return false;
-    }
-
-    // 计算总构建大小
-    const totalSize = this.calculateDirectorySize(outDir);
-    this.metrics.buildSize = totalSize;
-
-    // 分析各类文件大小
-    const fileTypes = this.analyzeFileTypes(outDir);
-    this.metrics.bundleAnalysis = fileTypes;
-
-    console.log(`✅ 总构建大小: ${(totalSize / 1024 / 1024).toFixed(2)}MB`);
+    const outputDir = fs.existsSync(this.staticDir) ? this.staticDir : this.buildDir;
+    const buildStats = this.getDirectoryStats(outputDir);
     
-    return true;
+    this.report.buildMetrics = {
+      totalSize: buildStats.totalSize,
+      fileCount: buildStats.fileCount,
+      ...this.analyzeBundleFiles(outputDir)
+    };
+
+    console.log(`📊 总构建大小: ${this.formatBytes(buildStats.totalSize)}`);
+    console.log(`📁 文件总数: ${buildStats.fileCount}`);
   }
 
-  // 计算目录大小
-  calculateDirectorySize(dirPath) {
-    let totalSize = 0;
-    const items = fs.readdirSync(dirPath);
+  // 分析Bundle文件
+  analyzeBundleFiles(dir) {
+    const analysis = {
+      javascript: { count: 0, size: 0, files: [] },
+      css: { count: 0, size: 0, files: [] },
+      html: { count: 0, size: 0, files: [] },
+      images: { count: 0, size: 0, files: [] },
+      fonts: { count: 0, size: 0, files: [] },
+      other: { count: 0, size: 0, files: [] }
+    };
 
-    items.forEach(item => {
-      const itemPath = path.join(dirPath, item);
-      const stats = fs.statSync(itemPath);
+    this.walkDirectory(dir, (filePath, stats) => {
+      const ext = path.extname(filePath).toLowerCase();
+      const size = stats.size;
+      const fileName = path.basename(filePath);
+      
+      const fileInfo = { name: fileName, size, path: filePath };
 
-      if (stats.isDirectory()) {
-        totalSize += this.calculateDirectorySize(itemPath);
-      } else {
-        totalSize += stats.size;
+      switch (ext) {
+        case '.js':
+        case '.mjs':
+          analysis.javascript.count++;
+          analysis.javascript.size += size;
+          analysis.javascript.files.push(fileInfo);
+          break;
+        case '.css':
+          analysis.css.count++;
+          analysis.css.size += size;
+          analysis.css.files.push(fileInfo);
+          break;
+        case '.html':
+          analysis.html.count++;
+          analysis.html.size += size;
+          analysis.html.files.push(fileInfo);
+          break;
+        case '.png':
+        case '.jpg':
+        case '.jpeg':
+        case '.gif':
+        case '.svg':
+        case '.webp':
+          analysis.images.count++;
+          analysis.images.size += size;
+          analysis.images.files.push(fileInfo);
+          break;
+        case '.woff':
+        case '.woff2':
+        case '.ttf':
+        case '.eot':
+          analysis.fonts.count++;
+          analysis.fonts.size += size;
+          analysis.fonts.files.push(fileInfo);
+          break;
+        default:
+          analysis.other.count++;
+          analysis.other.size += size;
+          analysis.other.files.push(fileInfo);
       }
     });
 
-    return totalSize;
-  }
-
-  // 分析文件类型分布
-  analyzeFileTypes(dirPath) {
-    const fileTypes = {
-      javascript: { count: 0, size: 0 },
-      css: { count: 0, size: 0 },
-      html: { count: 0, size: 0 },
-      images: { count: 0, size: 0 },
-      fonts: { count: 0, size: 0 },
-      other: { count: 0, size: 0 }
-    };
-
-    const analyzeDir = (dir) => {
-      const items = fs.readdirSync(dir);
-      
-      items.forEach(item => {
-        const itemPath = path.join(dir, item);
-        const stats = fs.statSync(itemPath);
-
-        if (stats.isDirectory()) {
-          analyzeDir(itemPath);
-        } else {
-          const ext = path.extname(item).toLowerCase();
-          const size = stats.size;
-
-          switch (ext) {
-            case '.js':
-            case '.mjs':
-              fileTypes.javascript.count++;
-              fileTypes.javascript.size += size;
-              break;
-            case '.css':
-              fileTypes.css.count++;
-              fileTypes.css.size += size;
-              break;
-            case '.html':
-              fileTypes.html.count++;
-              fileTypes.html.size += size;
-              break;
-            case '.png':
-            case '.jpg':
-            case '.jpeg':
-            case '.gif':
-            case '.svg':
-            case '.webp':
-              fileTypes.images.count++;
-              fileTypes.images.size += size;
-              break;
-            case '.woff':
-            case '.woff2':
-            case '.ttf':
-            case '.eot':
-              fileTypes.fonts.count++;
-              fileTypes.fonts.size += size;
-              break;
-            default:
-              fileTypes.other.count++;
-              fileTypes.other.size += size;
-          }
-        }
-      });
-    };
-
-    analyzeDir(dirPath);
-    return fileTypes;
-  }
-
-  // 检查页面性能指标
-  collectPageMetrics() {
-    console.log('\n🚀 分析页面性能指标...');
-    
-    const outDir = path.join(process.cwd(), 'out');
-    const htmlFiles = this.findHtmlFiles(outDir);
-    
-    htmlFiles.forEach(htmlFile => {
-      const relativePath = path.relative(outDir, htmlFile);
-      const content = fs.readFileSync(htmlFile, 'utf8');
-      
-      this.metrics.pageMetrics[relativePath] = {
-        size: fs.statSync(htmlFile).size,
-        scriptTags: (content.match(/<script/g) || []).length,
-        styleTags: (content.match(/<style/g) || []).length,
-        linkTags: (content.match(/<link/g) || []).length,
-        imageTags: (content.match(/<img/g) || []).length,
-        hasServiceWorker: content.includes('sw.js'),
-        hasManifest: content.includes('manifest.json'),
-        title: this.extractTitle(content),
-        metaTags: (content.match(/<meta/g) || []).length
-      };
+    // 排序文件（按大小降序）
+    Object.keys(analysis).forEach(key => {
+      if (analysis[key].files) {
+        analysis[key].files.sort((a, b) => b.size - a.size);
+      }
     });
 
-    console.log(`✅ 分析了 ${htmlFiles.length} 个HTML文件`);
+    return analysis;
   }
 
-  // 查找HTML文件
-  findHtmlFiles(dir) {
-    const htmlFiles = [];
+  // 深度Bundle分析
+  performBundleAnalysis() {
+    console.log('📦 执行Bundle分析...');
     
-    const searchDir = (searchPath) => {
-      const items = fs.readdirSync(searchPath);
-      
-      items.forEach(item => {
-        const itemPath = path.join(searchPath, item);
-        const stats = fs.statSync(itemPath);
+    const chunksDir = path.join(this.buildDir, 'static', 'chunks');
+    if (!fs.existsSync(chunksDir)) {
+      console.log('⚠️  未找到chunks目录，跳过Bundle分析');
+      return;
+    }
+
+    const chunks = [];
+    let totalBundleSize = 0;
+    let largestBundle = { name: '', size: 0, path: '' };
+
+    // 分析所有chunk文件
+    fs.readdirSync(chunksDir).forEach(file => {
+      if (file.endsWith('.js')) {
+        const filePath = path.join(chunksDir, file);
+        const stats = fs.statSync(filePath);
+        const sizeKB = Math.round(stats.size / 1024 * 100) / 100;
         
-        if (stats.isDirectory()) {
-          searchDir(itemPath);
-        } else if (path.extname(item).toLowerCase() === '.html') {
-          htmlFiles.push(itemPath);
+        chunks.push({ name: file, size: sizeKB, path: filePath });
+        totalBundleSize += sizeKB;
+        
+        if (sizeKB > largestBundle.size) {
+          largestBundle = { name: file, size: sizeKB, path: filePath };
+        }
+      }
+    });
+
+    // 分析依赖大小
+    const dependencies = this.analyzeDependencies();
+    
+    this.report.bundleAnalysis = {
+      timestamp: new Date().toISOString(),
+      totalBundleSize,
+      largestBundle,
+      topDependencies: dependencies.slice(0, 5),
+      suggestions: this.generateBundleOptimizationSuggestions(chunks, dependencies),
+      recommendations: this.generateBundleRecommendations(totalBundleSize, largestBundle)
+    };
+
+    console.log(`📦 Bundle总大小: ${totalBundleSize.toFixed(2)}KB`);
+    console.log(`🔍 最大Bundle: ${largestBundle.name} (${largestBundle.size.toFixed(2)}KB)`);
+  }
+
+  // 分析依赖大小
+  analyzeDependencies() {
+    console.log('📚 分析依赖项...');
+    
+    try {
+      const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+      const dependencies = { ...packageJson.dependencies, ...packageJson.devDependencies };
+      
+      const depSizes = [];
+      
+      Object.keys(dependencies).forEach(dep => {
+        try {
+          const depPath = path.join('node_modules', dep);
+          if (fs.existsSync(depPath)) {
+            const size = this.getDirectoryStats(depPath).totalSize;
+            depSizes.push({
+              name: dep,
+              size: Math.round(size / 1024), // KB
+              unit: 'K'
+            });
+          }
+        } catch (error) {
+          // 忽略无法访问的依赖
         }
       });
-    };
+      
+      return depSizes.sort((a, b) => b.size - a.size);
+    } catch (error) {
+      console.log('⚠️  无法分析依赖项:', error.message);
+      return [];
+    }
+  }
+
+  // 生成Bundle优化建议
+  generateBundleOptimizationSuggestions(chunks, dependencies) {
+    const suggestions = [];
     
-    searchDir(dir);
-    return htmlFiles;
+    // 检查大型依赖
+    const largeDeps = dependencies.filter(dep => dep.size > 1000);
+    if (largeDeps.length > 0) {
+      suggestions.push({
+        type: 'dependency-optimization',
+        message: `发现${largeDeps.length}个大型依赖项`,
+        action: `考虑替换或优化: ${largeDeps.slice(0, 3).map(d => d.name).join(', ')}`
+      });
+    }
+
+    // 检查重复功能的依赖
+    const duplicates = this.findDuplicateDependencies(dependencies);
+    if (duplicates.length > 0) {
+      suggestions.push({
+        type: 'duplicate-dependencies',
+        message: `发现${duplicates.length}个可能的重复依赖`,
+        action: '检查并合并相似功能的包'
+      });
+    }
+
+    // 检查chunk大小
+    const largeChunks = chunks.filter(chunk => chunk.size > 500);
+    if (largeChunks.length > 0) {
+      suggestions.push({
+        type: 'code-splitting',
+        message: `发现${largeChunks.length}个大型chunk`,
+        action: '考虑进一步代码分割'
+      });
+    }
+
+    return suggestions;
+  }
+
+  // 查找重复依赖
+  findDuplicateDependencies(dependencies) {
+    const duplicates = [];
+    const patterns = [
+      ['moment', 'date-fns', 'dayjs'], // 日期库
+      ['lodash', 'ramda', 'underscore'], // 工具库
+      ['axios', 'fetch', 'superagent'], // HTTP客户端
+      ['react-router', 'next-router', '@reach/router'], // 路由
+    ];
+
+    patterns.forEach(pattern => {
+      const found = dependencies.filter(dep => 
+        pattern.some(p => dep.name.includes(p))
+      );
+      if (found.length > 1) {
+        duplicates.push(...found);
+      }
+    });
+
+    return duplicates;
+  }
+
+  // 生成Bundle优化建议
+  generateBundleRecommendations(totalSize, largestBundle) {
+    const recommendations = [];
+    
+    if (totalSize > 2000) {
+      recommendations.push('考虑使用动态导入减少初始加载大小');
+    }
+    
+    if (largestBundle.size > 500) {
+      recommendations.push('实现组件级别的懒加载');
+    }
+    
+    recommendations.push('优化图片和静态资源');
+    recommendations.push('使用Tree Shaking移除未使用的代码');
+    recommendations.push('考虑使用更轻量的替代库');
+    
+    return recommendations;
+  }
+
+  // 分析页面性能
+  analyzePageMetrics() {
+    console.log('📄 分析页面性能...');
+    
+    const htmlDir = fs.existsSync(this.staticDir) ? this.staticDir : this.buildDir;
+    const htmlFiles = this.findFiles(htmlDir, '.html');
+    
+    const pageMetrics = {};
+    
+    htmlFiles.forEach(filePath => {
+      const content = fs.readFileSync(filePath, 'utf8');
+      const relativePath = path.relative(htmlDir, filePath);
+      
+      pageMetrics[relativePath] = {
+        size: Buffer.byteLength(content, 'utf8'),
+        scriptTags: (content.match(/<script[^>]*>/g) || []).length,
+        styleTags: (content.match(/<style[^>]*>/g) || []).length,
+        linkTags: (content.match(/<link[^>]*>/g) || []).length,
+        imageTags: (content.match(/<img[^>]*>/g) || []).length,
+        hasServiceWorker: content.includes('serviceWorker'),
+        hasManifest: content.includes('manifest'),
+        title: this.extractTitle(content),
+        metaTags: (content.match(/<meta[^>]*>/g) || []).length
+      };
+    });
+    
+    this.report.pageMetrics = pageMetrics;
+    console.log(`📄 分析了 ${Object.keys(pageMetrics).length} 个页面`);
   }
 
   // 提取页面标题
-  extractTitle(content) {
-    const titleMatch = content.match(/<title>(.*?)<\/title>/i);
+  extractTitle(html) {
+    const titleMatch = html.match(/<title[^>]*>([^<]*)<\/title>/i);
     return titleMatch ? titleMatch[1] : 'No title';
   }
 
-  // 检查资源优化
-  checkResourceOptimization() {
-    console.log('\n⚡ 检查资源优化...');
+  // 生成优化建议
+  generateOptimizationRecommendations() {
+    console.log('💡 生成优化建议...');
     
-    const outDir = path.join(process.cwd(), 'out');
-    
-    // 检查压缩文件
-    const hasGzipFiles = this.checkForFiles(outDir, '.gz');
-    const hasBrotliFiles = this.checkForFiles(outDir, '.br');
-    
-    // 检查图片优化
-    const imageOptimization = this.checkImageOptimization(outDir);
-    
-    // 检查CSS和JS压缩
-    const assetOptimization = this.checkAssetOptimization(outDir);
-    
-    this.metrics.resourceOptimization = {
-      gzipCompression: hasGzipFiles,
-      brotliCompression: hasBrotliFiles,
-      imageOptimization,
-      assetOptimization
-    };
+    const suggestions = [];
+    const priorities = [];
+    const estimatedSavings = {};
 
-    console.log(`✅ 资源优化检查完成`);
-  }
-
-  // 检查特定扩展名的文件
-  checkForFiles(dir, extension) {
-    const checkDir = (searchPath) => {
-      const items = fs.readdirSync(searchPath);
-      
-      for (const item of items) {
-        const itemPath = path.join(searchPath, item);
-        const stats = fs.statSync(itemPath);
-        
-        if (stats.isDirectory()) {
-          if (checkDir(itemPath)) return true;
-        } else if (item.endsWith(extension)) {
-          return true;
-        }
-      }
-      return false;
-    };
-    
-    return checkDir(dir);
-  }
-
-  // 检查图片优化
-  checkImageOptimization(dir) {
-    const imageStats = {
-      total: 0,
-      webpCount: 0,
-      avgSize: 0,
-      largeImages: []
-    };
-
-    const checkImages = (searchPath) => {
-      const items = fs.readdirSync(searchPath);
-      
-      items.forEach(item => {
-        const itemPath = path.join(searchPath, item);
-        const stats = fs.statSync(itemPath);
-        
-        if (stats.isDirectory()) {
-          checkImages(itemPath);
-        } else {
-          const ext = path.extname(item).toLowerCase();
-          if (['.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp'].includes(ext)) {
-            imageStats.total++;
-            imageStats.avgSize += stats.size;
-            
-            if (ext === '.webp') {
-              imageStats.webpCount++;
-            }
-            
-            if (stats.size > 100 * 1024) { // 大于100KB
-              imageStats.largeImages.push({
-                path: path.relative(dir, itemPath),
-                size: stats.size
-              });
-            }
-          }
-        }
+    // 基于Bundle分析的建议
+    if (this.report.bundleAnalysis.totalBundleSize > 2000) {
+      suggestions.push({
+        type: 'code-splitting',
+        title: '代码分割优化',
+        description: '当前Bundle过大，建议实施更细粒度的代码分割',
+        impact: 'high',
+        effort: 'medium',
+        steps: [
+          '使用动态导入(import())分割大型组件',
+          '按路由分割代码',
+          '分离第三方库到单独的chunk'
+        ]
       });
-    };
-
-    checkImages(dir);
-    
-    if (imageStats.total > 0) {
-      imageStats.avgSize = imageStats.avgSize / imageStats.total;
+      priorities.push('code-splitting');
+      estimatedSavings['code-splitting'] = '30-50%';
     }
 
-    return imageStats;
-  }
-
-  // 检查资源压缩
-  checkAssetOptimization(dir) {
-    const optimization = {
-      minifiedJS: 0,
-      minifiedCSS: 0,
-      totalJS: 0,
-      totalCSS: 0
-    };
-
-    const checkAssets = (searchPath) => {
-      const items = fs.readdirSync(searchPath);
-      
-      items.forEach(item => {
-        const itemPath = path.join(searchPath, item);
-        const stats = fs.statSync(itemPath);
-        
-        if (stats.isDirectory()) {
-          checkAssets(itemPath);
-        } else {
-          const ext = path.extname(item).toLowerCase();
-          
-          if (ext === '.js') {
-            optimization.totalJS++;
-            if (item.includes('.min.') || this.isMinified(itemPath)) {
-              optimization.minifiedJS++;
-            }
-          } else if (ext === '.css') {
-            optimization.totalCSS++;
-            if (item.includes('.min.') || this.isMinified(itemPath)) {
-              optimization.minifiedCSS++;
-            }
-          }
-        }
+    // 图标优化建议
+    const lucideUsage = this.analyzeLucideUsage();
+    if (lucideUsage.totalIcons > 20) {
+      suggestions.push({
+        type: 'icon-optimization',
+        title: '图标库优化',
+        description: '优化Lucide图标的使用方式',
+        impact: 'medium',
+        effort: 'low',
+        steps: [
+          '使用选择性图标导入',
+          '实现图标缓存机制',
+          '按需加载图标'
+        ]
       });
-    };
+      estimatedSavings['icon-optimization'] = '15-25%';
+    }
 
-    checkAssets(dir);
-    return optimization;
+    // 图片优化建议
+    const imageAnalysis = this.report.buildMetrics.images;
+    if (imageAnalysis && imageAnalysis.size > 500000) {
+      suggestions.push({
+        type: 'image-optimization',
+        title: '图片资源优化',
+        description: '图片资源占用较大空间',
+        impact: 'medium',
+        effort: 'low',
+        steps: [
+          '使用WebP格式',
+          '实施图片压缩',
+          '添加响应式图片'
+        ]
+      });
+      estimatedSavings['image-optimization'] = '20-40%';
+    }
+
+    // 缓存策略建议
+    suggestions.push({
+      type: 'caching-strategy',
+      title: '缓存策略优化',
+      description: '改进资源缓存机制',
+      impact: 'high',
+      effort: 'medium',
+      steps: [
+        '实施Service Worker缓存',
+        '优化HTTP缓存头',
+        '使用浏览器缓存API'
+      ]
+    });
+
+    this.report.optimization = {
+      suggestions,
+      priorities,
+      estimatedSavings
+    };
   }
 
-  // 简单检查文件是否被压缩
-  isMinified(filePath) {
+  // 分析Lucide图标使用情况
+  analyzeLucideUsage() {
+    const srcDir = path.join(process.cwd(), 'src');
+    let totalIcons = 0;
+    const iconUsage = new Set();
+
     try {
-      const content = fs.readFileSync(filePath, 'utf8');
-      const lines = content.split('\n');
-      
-      // 如果平均行长度很长且换行很少，可能是压缩的
-      const avgLineLength = content.length / lines.length;
-      return avgLineLength > 200 && lines.length < 10;
-    } catch {
-      return false;
-    }
-  }
-
-  // 检查缓存策略
-  checkCacheability() {
-    console.log('\n💾 检查缓存策略...');
-    
-    const outDir = path.join(process.cwd(), 'out');
-    const cacheAnalysis = {
-      hashedFiles: 0,
-      totalStaticFiles: 0,
-      serviceWorker: false,
-      manifest: false
-    };
-
-    const checkCache = (searchPath) => {
-      const items = fs.readdirSync(searchPath);
-      
-      items.forEach(item => {
-        const itemPath = path.join(searchPath, item);
-        const stats = fs.statSync(itemPath);
-        
-        if (stats.isDirectory()) {
-          checkCache(itemPath);
-        } else {
-          const ext = path.extname(item).toLowerCase();
+      this.walkDirectory(srcDir, (filePath) => {
+        if (filePath.endsWith('.tsx') || filePath.endsWith('.ts')) {
+          const content = fs.readFileSync(filePath, 'utf8');
           
-          if (['.js', '.css', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp'].includes(ext)) {
-            cacheAnalysis.totalStaticFiles++;
-            
-            // 检查是否有hash（通常包含8+字符的随机字符串）
-            if (/[a-f0-9]{8,}/.test(item)) {
-              cacheAnalysis.hashedFiles++;
-            }
-          }
-          
-          if (item === 'sw.js') {
-            cacheAnalysis.serviceWorker = true;
-          }
-          
-          if (item === 'manifest.json') {
-            cacheAnalysis.manifest = true;
+          // 查找从lucide-react导入的图标
+          const imports = content.match(/import\s+{([^}]+)}\s+from\s+['"]lucide-react['"]/g);
+          if (imports) {
+            imports.forEach(imp => {
+              const icons = imp.match(/{([^}]+)}/)[1]
+                .split(',')
+                .map(i => i.trim())
+                .filter(i => i && !i.includes('Props'));
+              
+              icons.forEach(icon => iconUsage.add(icon));
+              totalIcons += icons.length;
+            });
           }
         }
       });
+    } catch (error) {
+      console.log('⚠️  无法分析图标使用情况:', error.message);
+    }
+
+    return {
+      totalIcons,
+      uniqueIcons: iconUsage.size,
+      iconList: Array.from(iconUsage)
     };
-
-    checkCache(outDir);
-    this.metrics.cacheability = cacheAnalysis;
-
-    console.log(`✅ 缓存策略检查完成`);
   }
 
-  // 生成性能报告
+  // 生成报告
   generateReport() {
-    console.log('\n📄 生成性能报告...');
+    console.log('📋 生成性能报告...');
     
-    const report = {
-      ...this.metrics,
-      summary: this.generateSummary(),
-      recommendations: this.generateRecommendations(),
-      score: this.calculatePerformanceScore()
-    };
-
-    const reportPath = 'performance-report.json';
-    fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
+    const reportPath = path.join(process.cwd(), 'performance-report.json');
+    fs.writeFileSync(reportPath, JSON.stringify(this.report, null, 2));
     
-    console.log(`✅ 详细报告已保存到: ${reportPath}`);
-    return report;
+    console.log(`✅ 报告已生成: ${reportPath}`);
+    
+    // 生成人类可读的摘要
+    this.generateSummary();
   }
 
   // 生成摘要
   generateSummary() {
-    const buildSizeMB = (this.metrics.buildSize / 1024 / 1024).toFixed(2);
-    const pageCount = Object.keys(this.metrics.pageMetrics).length;
+    console.log('\n📊 性能分析摘要');
+    console.log('='.repeat(50));
     
-    return {
-      buildSizeMB: parseFloat(buildSizeMB),
-      pageCount,
-      hasServiceWorker: this.metrics.cacheability.serviceWorker,
-      hasManifest: this.metrics.cacheability.manifest,
-      imageOptimizationRatio: this.metrics.resourceOptimization.imageOptimization.webpCount / 
-        Math.max(this.metrics.resourceOptimization.imageOptimization.total, 1)
-    };
+    // 构建大小摘要
+    if (this.report.buildMetrics.totalSize) {
+      console.log(`📦 总构建大小: ${this.formatBytes(this.report.buildMetrics.totalSize)}`);
+    }
+    
+    // Bundle分析摘要
+    if (this.report.bundleAnalysis.totalBundleSize) {
+      console.log(`🗜️  Bundle大小: ${this.report.bundleAnalysis.totalBundleSize.toFixed(2)}KB`);
+      console.log(`🔍 最大Bundle: ${this.report.bundleAnalysis.largestBundle.name} (${this.report.bundleAnalysis.largestBundle.size.toFixed(2)}KB)`);
+    }
+    
+    // 页面数量
+    const pageCount = Object.keys(this.report.pageMetrics).length;
+    if (pageCount > 0) {
+      console.log(`📄 分析页面数: ${pageCount}`);
+    }
+    
+    // 优化建议
+    const suggestionCount = this.report.optimization.suggestions.length;
+    if (suggestionCount > 0) {
+      console.log(`💡 优化建议: ${suggestionCount}项`);
+      
+      // 显示高优先级建议
+      const highPriority = this.report.optimization.suggestions.filter(s => s.impact === 'high');
+      if (highPriority.length > 0) {
+        console.log('\n🔥 高优先级优化:');
+        highPriority.forEach((suggestion, index) => {
+          console.log(`  ${index + 1}. ${suggestion.title}`);
+        });
+      }
+    }
+    
+    console.log('\n✨ 详细报告请查看 performance-report.json');
   }
 
-  // 生成建议
-  generateRecommendations() {
-    const recommendations = [];
+  // 工具方法
+  getDirectoryStats(dir) {
+    let totalSize = 0;
+    let fileCount = 0;
     
-    // 构建大小建议
-    if (this.metrics.buildSize > 25 * 1024 * 1024) {
-      recommendations.push({
-        type: 'build-size',
-        priority: 'high',
-        message: '构建包大小超过25MB限制',
-        action: '考虑代码分割、移除未使用依赖、压缩资源'
-      });
-    }
-
-    // 图片优化建议
-    const imageOpt = this.metrics.resourceOptimization.imageOptimization;
-    if (imageOpt.total > 0 && imageOpt.webpCount / imageOpt.total < 0.5) {
-      recommendations.push({
-        type: 'image-optimization',
-        priority: 'medium',
-        message: '建议使用更多WebP格式图片',
-        action: '转换PNG/JPEG图片为WebP格式以减少大小'
-      });
-    }
-
-    // 缓存策略建议
-    const cache = this.metrics.cacheability;
-    if (cache.hashedFiles / Math.max(cache.totalStaticFiles, 1) < 0.8) {
-      recommendations.push({
-        type: 'caching',
-        priority: 'medium',
-        message: '静态资源缺少文件名哈希',
-        action: '为静态资源添加内容哈希以改善缓存策略'
-      });
-    }
-
-    // PWA建议
-    if (!cache.serviceWorker || !cache.manifest) {
-      recommendations.push({
-        type: 'pwa',
-        priority: 'low',
-        message: 'PWA功能不完整',
-        action: '添加Service Worker和Web App Manifest'
-      });
-    }
-
-    return recommendations;
+    this.walkDirectory(dir, (filePath, stats) => {
+      totalSize += stats.size;
+      fileCount++;
+    });
+    
+    return { totalSize, fileCount };
   }
 
-  // 计算性能分数
-  calculatePerformanceScore() {
-    let score = 100;
+  walkDirectory(dir, callback) {
+    if (!fs.existsSync(dir)) return;
     
-    // 构建大小评分 (30分)
-    const buildSizeMB = this.metrics.buildSize / 1024 / 1024;
-    if (buildSizeMB > 25) score -= 30;
-    else if (buildSizeMB > 15) score -= 20;
-    else if (buildSizeMB > 10) score -= 10;
-    else if (buildSizeMB > 5) score -= 5;
-
-    // 资源优化评分 (25分)
-    const imageOpt = this.metrics.resourceOptimization.imageOptimization;
-    const webpRatio = imageOpt.total > 0 ? imageOpt.webpCount / imageOpt.total : 1;
-    score -= (1 - webpRatio) * 15;
-
-    const assetOpt = this.metrics.resourceOptimization.assetOptimization;
-    const jsMinRatio = assetOpt.totalJS > 0 ? assetOpt.minifiedJS / assetOpt.totalJS : 1;
-    const cssMinRatio = assetOpt.totalCSS > 0 ? assetOpt.minifiedCSS / assetOpt.totalCSS : 1;
-    score -= (2 - jsMinRatio - cssMinRatio) * 5;
-
-    // 缓存策略评分 (25分)
-    const cache = this.metrics.cacheability;
-    const hashRatio = cache.totalStaticFiles > 0 ? cache.hashedFiles / cache.totalStaticFiles : 1;
-    score -= (1 - hashRatio) * 15;
+    const items = fs.readdirSync(dir);
     
-    if (!cache.serviceWorker) score -= 5;
-    if (!cache.manifest) score -= 5;
-
-    // 页面质量评分 (20分)
-    const pages = Object.values(this.metrics.pageMetrics);
-    if (pages.length > 0) {
-      const avgScriptTags = pages.reduce((sum, page) => sum + page.scriptTags, 0) / pages.length;
-      if (avgScriptTags > 10) score -= 10;
-      else if (avgScriptTags > 5) score -= 5;
-    }
-
-    return Math.max(0, Math.round(score));
+    items.forEach(item => {
+      const itemPath = path.join(dir, item);
+      const stats = fs.statSync(itemPath);
+      
+      if (stats.isDirectory()) {
+        this.walkDirectory(itemPath, callback);
+      } else {
+        callback(itemPath, stats);
+      }
+    });
   }
-}
 
-// 主函数
-async function main() {
-  try {
-    const collector = new PerformanceCollector();
+  findFiles(dir, extension) {
+    const files = [];
     
-    // 收集各项指标
-    if (!collector.collectBuildMetrics()) {
+    this.walkDirectory(dir, (filePath) => {
+      if (filePath.endsWith(extension)) {
+        files.push(filePath);
+      }
+    });
+    
+    return files;
+  }
+
+  formatBytes(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  }
+
+  // 主要执行方法
+  async run() {
+    console.log('🚀 开始性能分析...');
+    console.log('='.repeat(50));
+    
+    try {
+      this.analyzeBuild();
+      this.performBundleAnalysis();
+      this.analyzePageMetrics();
+      this.generateOptimizationRecommendations();
+      this.generateReport();
+      
+      console.log('\n✅ 性能分析完成！');
+    } catch (error) {
+      console.error('❌ 性能分析失败:', error.message);
       process.exit(1);
     }
-    
-    collector.collectPageMetrics();
-    collector.checkResourceOptimization();
-    collector.checkCacheability();
-    
-    // 生成报告
-    const report = collector.generateReport();
-    
-    // 输出总结
-    console.log('\n🎯 性能测试总结:');
-    console.log(`📦 构建大小: ${report.summary.buildSizeMB}MB`);
-    console.log(`📄 页面数量: ${report.summary.pageCount}`);
-    console.log(`⚡ 性能评分: ${report.score}/100`);
-    console.log(`💡 优化建议: ${report.recommendations.length}条`);
-    
-    // 输出建议
-    if (report.recommendations.length > 0) {
-      console.log('\n📋 优化建议:');
-      report.recommendations.forEach((rec, index) => {
-        const priority = rec.priority === 'high' ? '🔴' : rec.priority === 'medium' ? '🟡' : '🟢';
-        console.log(`${index + 1}. ${priority} ${rec.message}`);
-        console.log(`   ➡️  ${rec.action}`);
-      });
-    }
-    
-    // 根据评分给出总体评价
-    if (report.score >= 90) {
-      console.log('\n🎉 优秀！性能表现出色');
-    } else if (report.score >= 75) {
-      console.log('\n✅ 良好！性能表现不错');
-    } else if (report.score >= 60) {
-      console.log('\n⚠️  一般！建议进行优化');
-    } else {
-      console.log('\n🚨 需要改进！请立即优化');
-    }
-    
-  } catch (error) {
-    console.error('❌ 性能测试过程中发生错误:', error.message);
-    process.exit(1);
   }
 }
 
-main(); 
+// 执行性能测试
+if (require.main === module) {
+  const tester = new PerformanceTester();
+  tester.run();
+}
+
+module.exports = PerformanceTester; 

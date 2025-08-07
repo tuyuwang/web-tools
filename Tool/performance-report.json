@@ -1,35 +1,1282 @@
 {
-  "buildSize": 4903731,
-  "bundleAnalysis": {
+  "timestamp": "2025-08-07T02:06:36.643Z",
+  "buildMetrics": {
+    "totalSize": 4780087,
+    "fileCount": 237,
     "javascript": {
-      "count": 89,
-      "size": 2148017
+      "count": 102,
+      "size": 2401129,
+      "files": [
+        {
+          "name": "lucide-core.b30b9072e23e3d33.js",
+          "size": 232014,
+          "path": "/workspace/Tool/out/_next/static/chunks/lucide-core.b30b9072e23e3d33.js"
+        },
+        {
+          "name": "vendors-98a6762f-b97e89c95e478b48.js",
+          "size": 180159,
+          "path": "/workspace/Tool/out/_next/static/chunks/vendors-98a6762f-b97e89c95e478b48.js"
+        },
+        {
+          "name": "react-f51bf7cca7508ca6.js",
+          "size": 136150,
+          "path": "/workspace/Tool/out/_next/static/chunks/react-f51bf7cca7508ca6.js"
+        },
+        {
+          "name": "polyfills-42372ed130431b0a.js",
+          "size": 112594,
+          "path": "/workspace/Tool/out/_next/static/chunks/polyfills-42372ed130431b0a.js"
+        },
+        {
+          "name": "lucide-icons-65313677.538fe28ef0d7faa2.js",
+          "size": 95223,
+          "path": "/workspace/Tool/out/_next/static/chunks/lucide-icons-65313677.538fe28ef0d7faa2.js"
+        },
+        {
+          "name": "lucide-icons-a36bcda6.a81532f0e7c24e76.js",
+          "size": 69142,
+          "path": "/workspace/Tool/out/_next/static/chunks/lucide-icons-a36bcda6.a81532f0e7c24e76.js"
+        },
+        {
+          "name": "vendors-9a66d3c2-a80ee07e1bf63a5d.js",
+          "size": 66142,
+          "path": "/workspace/Tool/out/_next/static/chunks/vendors-9a66d3c2-a80ee07e1bf63a5d.js"
+        },
+        {
+          "name": "common-57ccefa47accf21c.js",
+          "size": 62948,
+          "path": "/workspace/Tool/out/_next/static/chunks/common-57ccefa47accf21c.js"
+        },
+        {
+          "name": "supabase-55776fae-d489ba7fd7c83ae0.js",
+          "size": 61906,
+          "path": "/workspace/Tool/out/_next/static/chunks/supabase-55776fae-d489ba7fd7c83ae0.js"
+        },
+        {
+          "name": "lucide-icons-b1fff649.94cf9d9d6c1a0d94.js",
+          "size": 61851,
+          "path": "/workspace/Tool/out/_next/static/chunks/lucide-icons-b1fff649.94cf9d9d6c1a0d94.js"
+        },
+        {
+          "name": "lucide-icons-d3beac57.d51debe190af79e1.js",
+          "size": 54155,
+          "path": "/workspace/Tool/out/_next/static/chunks/lucide-icons-d3beac57.d51debe190af79e1.js"
+        },
+        {
+          "name": "supabase-0d08456b-3267c10ec6d36a11.js",
+          "size": 53968,
+          "path": "/workspace/Tool/out/_next/static/chunks/supabase-0d08456b-3267c10ec6d36a11.js"
+        },
+        {
+          "name": "lucide-icons-84276d29.06de0c4673289afd.js",
+          "size": 52635,
+          "path": "/workspace/Tool/out/_next/static/chunks/lucide-icons-84276d29.06de0c4673289afd.js"
+        },
+        {
+          "name": "vendors-362d063c-69fc2304fff3b3c1.js",
+          "size": 49168,
+          "path": "/workspace/Tool/out/_next/static/chunks/vendors-362d063c-69fc2304fff3b3c1.js"
+        },
+        {
+          "name": "lucide-icons-ebfdb3fb.4f560f679b1b30f3.js",
+          "size": 45290,
+          "path": "/workspace/Tool/out/_next/static/chunks/lucide-icons-ebfdb3fb.4f560f679b1b30f3.js"
+        },
+        {
+          "name": "lucide-icons-96043337.8de7adcd179c9c24.js",
+          "size": 41986,
+          "path": "/workspace/Tool/out/_next/static/chunks/lucide-icons-96043337.8de7adcd179c9c24.js"
+        },
+        {
+          "name": "lucide-icons-7fb00439.71c4a5d95647e6a0.js",
+          "size": 35192,
+          "path": "/workspace/Tool/out/_next/static/chunks/lucide-icons-7fb00439.71c4a5d95647e6a0.js"
+        },
+        {
+          "name": "lucide-icons-b1cd2aba.f74b9d4163acff41.js",
+          "size": 34869,
+          "path": "/workspace/Tool/out/_next/static/chunks/lucide-icons-b1cd2aba.f74b9d4163acff41.js"
+        },
+        {
+          "name": "lucide-icons-9e792328.fe5078cf8ac454ea.js",
+          "size": 32821,
+          "path": "/workspace/Tool/out/_next/static/chunks/lucide-icons-9e792328.fe5078cf8ac454ea.js"
+        },
+        {
+          "name": "vendors-cfb98476-33c81b5db262312c.js",
+          "size": 30494,
+          "path": "/workspace/Tool/out/_next/static/chunks/vendors-cfb98476-33c81b5db262312c.js"
+        },
+        {
+          "name": "lucide-icons-6ae7ede4.a167b5ae9961e4eb.js",
+          "size": 30295,
+          "path": "/workspace/Tool/out/_next/static/chunks/lucide-icons-6ae7ede4.a167b5ae9961e4eb.js"
+        },
+        {
+          "name": "page-81a356bb8d862317.js",
+          "size": 26788,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/media/page-81a356bb8d862317.js"
+        },
+        {
+          "name": "vendors-d91c2bd6-1e60b34fc90aa014.js",
+          "size": 26417,
+          "path": "/workspace/Tool/out/_next/static/chunks/vendors-d91c2bd6-1e60b34fc90aa014.js"
+        },
+        {
+          "name": "vendors-6808aa01-da2a16674535b189.js",
+          "size": 26276,
+          "path": "/workspace/Tool/out/_next/static/chunks/vendors-6808aa01-da2a16674535b189.js"
+        },
+        {
+          "name": "page-51838c8a86d80b1f.js",
+          "size": 24811,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/dev/api/page-51838c8a86d80b1f.js"
+        },
+        {
+          "name": "lucide-icons-80088500.0850dcf675b725b0.js",
+          "size": 24533,
+          "path": "/workspace/Tool/out/_next/static/chunks/lucide-icons-80088500.0850dcf675b725b0.js"
+        },
+        {
+          "name": "vendors-351e52ed-219e9bd63430552e.js",
+          "size": 24290,
+          "path": "/workspace/Tool/out/_next/static/chunks/vendors-351e52ed-219e9bd63430552e.js"
+        },
+        {
+          "name": "utils-a6071f854ad9cbdf.js",
+          "size": 22846,
+          "path": "/workspace/Tool/out/_next/static/chunks/utils-a6071f854ad9cbdf.js"
+        },
+        {
+          "name": "page-b4ba44e6d9fd3953.js",
+          "size": 21649,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/utility/gps-coordinates/page-b4ba44e6d9fd3953.js"
+        },
+        {
+          "name": "page-c40b2ac3b6b03e25.js",
+          "size": 19253,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/utility/browser-info/page-c40b2ac3b6b03e25.js"
+        },
+        {
+          "name": "lucide-icons-ac3358b2.c0b460c6b388248e.js",
+          "size": 17711,
+          "path": "/workspace/Tool/out/_next/static/chunks/lucide-icons-ac3358b2.c0b460c6b388248e.js"
+        },
+        {
+          "name": "vendors-4a7382ad-4e898f28bfa26c13.js",
+          "size": 17454,
+          "path": "/workspace/Tool/out/_next/static/chunks/vendors-4a7382ad-4e898f28bfa26c13.js"
+        },
+        {
+          "name": "vendors-4e8e7ca0-48f9e23790ed5242.js",
+          "size": 17244,
+          "path": "/workspace/Tool/out/_next/static/chunks/vendors-4e8e7ca0-48f9e23790ed5242.js"
+        },
+        {
+          "name": "page-010384c8136dc86c.js",
+          "size": 16847,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/utility/pomodoro-timer/page-010384c8136dc86c.js"
+        },
+        {
+          "name": "page-234602846ff91795.js",
+          "size": 16748,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/data/page-234602846ff91795.js"
+        },
+        {
+          "name": "page-fa52df954b204f48.js",
+          "size": 16013,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/learn/progress/page-fa52df954b204f48.js"
+        },
+        {
+          "name": "page-5bad37ffe6639ed6.js",
+          "size": 15591,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/security/page-5bad37ffe6639ed6.js"
+        },
+        {
+          "name": "layout-72879108c487fd6a.js",
+          "size": 15268,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/layout-72879108c487fd6a.js"
+        },
+        {
+          "name": "page-ca7d30263cb49281.js",
+          "size": 15072,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/learn/page-ca7d30263cb49281.js"
+        },
+        {
+          "name": "page-f482ea6b6b713c64.js",
+          "size": 14764,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/utility/compound-calculator/page-f482ea6b6b713c64.js"
+        },
+        {
+          "name": "page-c867adb210b2b58a.js",
+          "size": 14439,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/utility/speed-test/page-c867adb210b2b58a.js"
+        },
+        {
+          "name": "page-98d7c8b3bab74742.js",
+          "size": 14416,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/ai/keyword-extract/page-98d7c8b3bab74742.js"
+        },
+        {
+          "name": "page-257e2dc661e8b9aa.js",
+          "size": 14100,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/learn/notes/page-257e2dc661e8b9aa.js"
+        },
+        {
+          "name": "sw.js",
+          "size": 13602,
+          "path": "/workspace/Tool/out/sw.js"
+        },
+        {
+          "name": "page-cf0f9bcf001aada1.js",
+          "size": 13521,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/image/convert/page-cf0f9bcf001aada1.js"
+        },
+        {
+          "name": "page-714e01d8e644bc2e.js",
+          "size": 13336,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/about/page-714e01d8e644bc2e.js"
+        },
+        {
+          "name": "vendors-bc050c32-9cf355c68ab2d2db.js",
+          "size": 12336,
+          "path": "/workspace/Tool/out/_next/static/chunks/vendors-bc050c32-9cf355c68ab2d2db.js"
+        },
+        {
+          "name": "page-ef3d49ea88156a6d.js",
+          "size": 12245,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/ai/sentiment-analysis/page-ef3d49ea88156a6d.js"
+        },
+        {
+          "name": "vendors-89d5c698-0e48a648e1452fcf.js",
+          "size": 12066,
+          "path": "/workspace/Tool/out/_next/static/chunks/vendors-89d5c698-0e48a648e1452fcf.js"
+        },
+        {
+          "name": "vendors-a6f90180-11e950f1594e0c66.js",
+          "size": 11980,
+          "path": "/workspace/Tool/out/_next/static/chunks/vendors-a6f90180-11e950f1594e0c66.js"
+        },
+        {
+          "name": "page-f17f5c3f1ae144c6.js",
+          "size": 11760,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/ai/text-generator/page-f17f5c3f1ae144c6.js"
+        },
+        {
+          "name": "page-7e4a0f3dc76a1475.js",
+          "size": 11384,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/office/page-7e4a0f3dc76a1475.js"
+        },
+        {
+          "name": "page-c9a3f16d3977e612.js",
+          "size": 11074,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/image/resize/page-c9a3f16d3977e612.js"
+        },
+        {
+          "name": "page-f252d85fdd5051ac.js",
+          "size": 10958,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/utility/data-generator/page-f252d85fdd5051ac.js"
+        },
+        {
+          "name": "page-9c539c1d66685674.js",
+          "size": 10895,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/text/stats/page-9c539c1d66685674.js"
+        },
+        {
+          "name": "page-5621eecc4b838393.js",
+          "size": 10879,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/utility/file-converter/page-5621eecc4b838393.js"
+        },
+        {
+          "name": "lucide-icons-2fa08c5b.715ffb3a373b6dc7.js",
+          "size": 10423,
+          "path": "/workspace/Tool/out/_next/static/chunks/lucide-icons-2fa08c5b.715ffb3a373b6dc7.js"
+        },
+        {
+          "name": "page-6bc902e9320b52d9.js",
+          "size": 10273,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/utility/unit-converter/page-6bc902e9320b52d9.js"
+        },
+        {
+          "name": "page-749ea01f10d7957b.js",
+          "size": 10098,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/utility/password/page-749ea01f10d7957b.js"
+        },
+        {
+          "name": "page-06cb309b4b9646ff.js",
+          "size": 9752,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/learn/calculator/page-06cb309b4b9646ff.js"
+        },
+        {
+          "name": "page-088a76d149b25140.js",
+          "size": 9671,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/image/compress/page-088a76d149b25140.js"
+        },
+        {
+          "name": "page-e56437a65318d176.js",
+          "size": 9640,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/image/watermark/page-e56437a65318d176.js"
+        },
+        {
+          "name": "lucide-icons-a3f1008c.c7e5a513f309971e.js",
+          "size": 9626,
+          "path": "/workspace/Tool/out/_next/static/chunks/lucide-icons-a3f1008c.c7e5a513f309971e.js"
+        },
+        {
+          "name": "page-5abba9c0537f7c8c.js",
+          "size": 9247,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/learn/cheatsheet/page-5abba9c0537f7c8c.js"
+        },
+        {
+          "name": "page-f3a3dac1dbf5689d.js",
+          "size": 9234,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/health/calorie/page-f3a3dac1dbf5689d.js"
+        },
+        {
+          "name": "page-84540ed3a547f298.js",
+          "size": 9220,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/dev/timestamp/page-84540ed3a547f298.js"
+        },
+        {
+          "name": "page-c11c011cdd7f5cb0.js",
+          "size": 9188,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/image/filter/page-c11c011cdd7f5cb0.js"
+        },
+        {
+          "name": "vendors-05e245ef-1be3c8a4d98b4891.js",
+          "size": 9105,
+          "path": "/workspace/Tool/out/_next/static/chunks/vendors-05e245ef-1be3c8a4d98b4891.js"
+        },
+        {
+          "name": "page-df0b15a26689a9c7.js",
+          "size": 9069,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/ai/text-summary/page-df0b15a26689a9c7.js"
+        },
+        {
+          "name": "page-1d88d5690db387f8.js",
+          "size": 9050,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/utility/color-picker/page-1d88d5690db387f8.js"
+        },
+        {
+          "name": "page-a5f195a535115df7.js",
+          "size": 8988,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/utility/network-tools/page-a5f195a535115df7.js"
+        },
+        {
+          "name": "page-348be931f5872e68.js",
+          "size": 8606,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/dev/color/page-348be931f5872e68.js"
+        },
+        {
+          "name": "page-3d511fb20579a26b.js",
+          "size": 8049,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/utility/qr/page-3d511fb20579a26b.js"
+        },
+        {
+          "name": "page-7b20e879d97d9efe.js",
+          "size": 7982,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/health/bmi/page-7b20e879d97d9efe.js"
+        },
+        {
+          "name": "page-fba70e507df10093.js",
+          "size": 7910,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/dev/json/page-fba70e507df10093.js"
+        },
+        {
+          "name": "page-880e74f5fdaa9760.js",
+          "size": 7809,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/ai/language-detect/page-880e74f5fdaa9760.js"
+        },
+        {
+          "name": "page-1d37d63ff5089e14.js",
+          "size": 7542,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/page-1d37d63ff5089e14.js"
+        },
+        {
+          "name": "page-341aac715392aed7.js",
+          "size": 7108,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/text/case/page-341aac715392aed7.js"
+        },
+        {
+          "name": "page-40ddaf09217b956d.js",
+          "size": 6880,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/text/regex/page-40ddaf09217b956d.js"
+        },
+        {
+          "name": "page-3bd7ff234517b516.js",
+          "size": 6868,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/utility/random/page-3bd7ff234517b516.js"
+        },
+        {
+          "name": "page-7c9729099b8d8c58.js",
+          "size": 6817,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/test-i18n/page-7c9729099b8d8c58.js"
+        },
+        {
+          "name": "page-da5bf661a112a8bd.js",
+          "size": 6809,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/utility/calculator/page-da5bf661a112a8bd.js"
+        },
+        {
+          "name": "page-5c3a49572b38c528.js",
+          "size": 6651,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/text/compare/page-5c3a49572b38c528.js"
+        },
+        {
+          "name": "page-8bfa301f8706a4bb.js",
+          "size": 6018,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/utility/time-calculator/page-8bfa301f8706a4bb.js"
+        },
+        {
+          "name": "page-b3c877bd6cc905b9.js",
+          "size": 5996,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/dev/format/page-b3c877bd6cc905b9.js"
+        },
+        {
+          "name": "page-4868b3ea6b41fdfb.js",
+          "size": 5377,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/text/encode/page-4868b3ea6b41fdfb.js"
+        },
+        {
+          "name": "page-33f13c480e1cc394.js",
+          "size": 5184,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/text/deduplicate/page-33f13c480e1cc394.js"
+        },
+        {
+          "name": "page-406e3c70a5f0e1fd.js",
+          "size": 5082,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/utility/converter/page-406e3c70a5f0e1fd.js"
+        },
+        {
+          "name": "page-0b4710a823885e2a.js",
+          "size": 5010,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/test-feedback/page-0b4710a823885e2a.js"
+        },
+        {
+          "name": "webpack-6d0935802c47e2e6.js",
+          "size": 4633,
+          "path": "/workspace/Tool/out/_next/static/chunks/webpack-6d0935802c47e2e6.js"
+        },
+        {
+          "name": "page-dddcbfaa7f9482fb.js",
+          "size": 4512,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/page-dddcbfaa7f9482fb.js"
+        },
+        {
+          "name": "vendors-d7c15829-3983cca27a1c9ab1.js",
+          "size": 3970,
+          "path": "/workspace/Tool/out/_next/static/chunks/vendors-d7c15829-3983cca27a1c9ab1.js"
+        },
+        {
+          "name": "page-110e67f4edd4fd0e.js",
+          "size": 3701,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/text/analyze/page-110e67f4edd4fd0e.js"
+        },
+        {
+          "name": "main-app-d30f4376e9494dd4.js",
+          "size": 534,
+          "path": "/workspace/Tool/out/_next/static/chunks/main-app-d30f4376e9494dd4.js"
+        },
+        {
+          "name": "_app-c87a022e40ec4ac1.js",
+          "size": 359,
+          "path": "/workspace/Tool/out/_next/static/chunks/pages/_app-c87a022e40ec4ac1.js"
+        },
+        {
+          "name": "_error-bf3d5f22a9b083b4.js",
+          "size": 326,
+          "path": "/workspace/Tool/out/_next/static/chunks/pages/_error-bf3d5f22a9b083b4.js"
+        },
+        {
+          "name": "_buildManifest.js",
+          "size": 293,
+          "path": "/workspace/Tool/out/_next/static/sIyNVcMeRzGKSQ-ZcvMvz/_buildManifest.js"
+        },
+        {
+          "name": "page-17497e368c41c5ff.js",
+          "size": 229,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/_not-found/page-17497e368c41c5ff.js"
+        },
+        {
+          "name": "not-found-82cad2b8f81d75cb.js",
+          "size": 216,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/not-found-82cad2b8f81d75cb.js"
+        },
+        {
+          "name": "page-7a5cdb6ab656e3bf.js",
+          "size": 216,
+          "path": "/workspace/Tool/out/_next/static/chunks/app/tools/ai/page-7a5cdb6ab656e3bf.js"
+        },
+        {
+          "name": "main-dbe7baaa249462a6.js",
+          "size": 210,
+          "path": "/workspace/Tool/out/_next/static/chunks/main-dbe7baaa249462a6.js"
+        },
+        {
+          "name": "_ssgManifest.js",
+          "size": 80,
+          "path": "/workspace/Tool/out/_next/static/sIyNVcMeRzGKSQ-ZcvMvz/_ssgManifest.js"
+        }
+      ]
     },
     "css": {
       "count": 2,
-      "size": 47411
+      "size": 55540,
+      "files": [
+        {
+          "name": "b12242afce0fce8c.css",
+          "size": 53387,
+          "path": "/workspace/Tool/out/_next/static/css/b12242afce0fce8c.css"
+        },
+        {
+          "name": "275ed64cc4367444.css",
+          "size": 2153,
+          "path": "/workspace/Tool/out/_next/static/css/275ed64cc4367444.css"
+        }
+      ]
     },
     "html": {
-      "count": 50,
-      "size": 1828773
+      "count": 57,
+      "size": 1683862,
+      "files": [
+        {
+          "name": "index.html",
+          "size": 89828,
+          "path": "/workspace/Tool/out/tools/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 45465,
+          "path": "/workspace/Tool/out/tools/learn/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 40248,
+          "path": "/workspace/Tool/out/tools/ai/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 39711,
+          "path": "/workspace/Tool/out/about/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 35257,
+          "path": "/workspace/Tool/out/tools/utility/color-picker/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 33622,
+          "path": "/workspace/Tool/out/tools/dev/api/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 33205,
+          "path": "/workspace/Tool/out/tools/learn/cheatsheet/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 32698,
+          "path": "/workspace/Tool/out/tools/learn/calculator/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 30389,
+          "path": "/workspace/Tool/out/tools/office/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 30353,
+          "path": "/workspace/Tool/out/tools/utility/pomodoro-timer/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 30144,
+          "path": "/workspace/Tool/out/test-i18n/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 29947,
+          "path": "/workspace/Tool/out/tools/image/resize/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 29841,
+          "path": "/workspace/Tool/out/tools/text/stats/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 29759,
+          "path": "/workspace/Tool/out/tools/text/case/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 29535,
+          "path": "/workspace/Tool/out/tools/health/calorie/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 29052,
+          "path": "/workspace/Tool/out/tools/ai/text-generator/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 29032,
+          "path": "/workspace/Tool/out/tools/utility/unit-converter/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 28961,
+          "path": "/workspace/Tool/out/tools/utility/gps-coordinates/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 28804,
+          "path": "/workspace/Tool/out/tools/utility/compound-calculator/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 28783,
+          "path": "/workspace/Tool/out/tools/utility/file-converter/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 28482,
+          "path": "/workspace/Tool/out/tools/utility/password/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 28454,
+          "path": "/workspace/Tool/out/tools/text/regex/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 28452,
+          "path": "/workspace/Tool/out/tools/dev/timestamp/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 28296,
+          "path": "/workspace/Tool/out/tools/utility/qr/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 28167,
+          "path": "/workspace/Tool/out/tools/security/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 27917,
+          "path": "/workspace/Tool/out/tools/utility/network-tools/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 27750,
+          "path": "/workspace/Tool/out/tools/image/compress/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 27691,
+          "path": "/workspace/Tool/out/tools/ai/text-summary/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 27568,
+          "path": "/workspace/Tool/out/tools/image/watermark/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 27550,
+          "path": "/workspace/Tool/out/tools/ai/keyword-extract/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 27463,
+          "path": "/workspace/Tool/out/tools/utility/random/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 27380,
+          "path": "/workspace/Tool/out/tools/health/bmi/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 27342,
+          "path": "/workspace/Tool/out/tools/utility/data-generator/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 27229,
+          "path": "/workspace/Tool/out/tools/ai/language-detect/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 27116,
+          "path": "/workspace/Tool/out/tools/learn/progress/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 27105,
+          "path": "/workspace/Tool/out/tools/data/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 27046,
+          "path": "/workspace/Tool/out/tools/ai/sentiment-analysis/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 26874,
+          "path": "/workspace/Tool/out/tools/media/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 26841,
+          "path": "/workspace/Tool/out/tools/utility/calculator/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 26717,
+          "path": "/workspace/Tool/out/tools/dev/color/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 26638,
+          "path": "/workspace/Tool/out/tools/learn/notes/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 26475,
+          "path": "/workspace/Tool/out/tools/utility/time-calculator/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 26186,
+          "path": "/workspace/Tool/out/tools/dev/json/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 26161,
+          "path": "/workspace/Tool/out/tools/utility/speed-test/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 26105,
+          "path": "/workspace/Tool/out/tools/utility/converter/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 25974,
+          "path": "/workspace/Tool/out/tools/dev/format/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 25695,
+          "path": "/workspace/Tool/out/tools/text/deduplicate/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 25617,
+          "path": "/workspace/Tool/out/tools/text/encode/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 25556,
+          "path": "/workspace/Tool/out/tools/text/compare/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 25403,
+          "path": "/workspace/Tool/out/tools/image/filter/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 25342,
+          "path": "/workspace/Tool/out/tools/image/convert/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 24557,
+          "path": "/workspace/Tool/out/test-feedback/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 24520,
+          "path": "/workspace/Tool/out/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 24440,
+          "path": "/workspace/Tool/out/tools/text/analyze/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 24183,
+          "path": "/workspace/Tool/out/tools/utility/browser-info/index.html"
+        },
+        {
+          "name": "index.html",
+          "size": 22468,
+          "path": "/workspace/Tool/out/404/index.html"
+        },
+        {
+          "name": "404.html",
+          "size": 22468,
+          "path": "/workspace/Tool/out/404.html"
+        }
+      ]
     },
     "images": {
       "count": 11,
-      "size": 3405
+      "size": 3405,
+      "files": [
+        {
+          "name": "icon-144x144.svg",
+          "size": 316,
+          "path": "/workspace/Tool/out/icons/icon-144x144.svg"
+        },
+        {
+          "name": "icon-192x192.svg",
+          "size": 316,
+          "path": "/workspace/Tool/out/icons/icon-192x192.svg"
+        },
+        {
+          "name": "icon-384x384.svg",
+          "size": 316,
+          "path": "/workspace/Tool/out/icons/icon-384x384.svg"
+        },
+        {
+          "name": "dev-96x96.svg",
+          "size": 310,
+          "path": "/workspace/Tool/out/icons/dev-96x96.svg"
+        },
+        {
+          "name": "icon-72x72.svg",
+          "size": 310,
+          "path": "/workspace/Tool/out/icons/icon-72x72.svg"
+        },
+        {
+          "name": "icon-96x96.svg",
+          "size": 310,
+          "path": "/workspace/Tool/out/icons/icon-96x96.svg"
+        },
+        {
+          "name": "image-96x96.svg",
+          "size": 310,
+          "path": "/workspace/Tool/out/icons/image-96x96.svg"
+        },
+        {
+          "name": "text-96x96.svg",
+          "size": 310,
+          "path": "/workspace/Tool/out/icons/text-96x96.svg"
+        },
+        {
+          "name": "icon-512x512.svg",
+          "size": 303,
+          "path": "/workspace/Tool/out/icons/icon-512x512.svg"
+        },
+        {
+          "name": "icon-128x128.svg",
+          "size": 302,
+          "path": "/workspace/Tool/out/icons/icon-128x128.svg"
+        },
+        {
+          "name": "icon-152x152.svg",
+          "size": 302,
+          "path": "/workspace/Tool/out/icons/icon-152x152.svg"
+        }
+      ]
     },
     "fonts": {
       "count": 7,
-      "size": 219004
+      "size": 219004,
+      "files": [
+        {
+          "name": "8e9860b6e62d6359-s.woff2",
+          "size": 85272,
+          "path": "/workspace/Tool/out/_next/static/media/8e9860b6e62d6359-s.woff2"
+        },
+        {
+          "name": "e4af272ccee01ff0-s.p.woff2",
+          "size": 48432,
+          "path": "/workspace/Tool/out/_next/static/media/e4af272ccee01ff0-s.p.woff2"
+        },
+        {
+          "name": "55c55f0601d81cf3-s.woff2",
+          "size": 25908,
+          "path": "/workspace/Tool/out/_next/static/media/55c55f0601d81cf3-s.woff2"
+        },
+        {
+          "name": "581909926a08bbc8-s.woff2",
+          "size": 19072,
+          "path": "/workspace/Tool/out/_next/static/media/581909926a08bbc8-s.woff2"
+        },
+        {
+          "name": "26a46d62cd723877-s.woff2",
+          "size": 18820,
+          "path": "/workspace/Tool/out/_next/static/media/26a46d62cd723877-s.woff2"
+        },
+        {
+          "name": "97e0cb1ae144a2a9-s.woff2",
+          "size": 11220,
+          "path": "/workspace/Tool/out/_next/static/media/97e0cb1ae144a2a9-s.woff2"
+        },
+        {
+          "name": "df0a9ae256c0569c-s.woff2",
+          "size": 10280,
+          "path": "/workspace/Tool/out/_next/static/media/df0a9ae256c0569c-s.woff2"
+        }
+      ]
     },
     "other": {
-      "count": 51,
-      "size": 657121
+      "count": 58,
+      "size": 417147,
+      "files": [
+        {
+          "name": "index.txt",
+          "size": 16483,
+          "path": "/workspace/Tool/out/tools/ai/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7560,
+          "path": "/workspace/Tool/out/tools/utility/compound-calculator/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7544,
+          "path": "/workspace/Tool/out/tools/utility/gps-coordinates/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7544,
+          "path": "/workspace/Tool/out/tools/utility/time-calculator/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7541,
+          "path": "/workspace/Tool/out/tools/utility/qr/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7540,
+          "path": "/workspace/Tool/out/tools/utility/file-converter/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7540,
+          "path": "/workspace/Tool/out/tools/utility/pomodoro-timer/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7540,
+          "path": "/workspace/Tool/out/tools/utility/unit-converter/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7539,
+          "path": "/workspace/Tool/out/tools/utility/data-generator/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7535,
+          "path": "/workspace/Tool/out/tools/ai/sentiment-analysis/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7535,
+          "path": "/workspace/Tool/out/tools/utility/network-tools/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7531,
+          "path": "/workspace/Tool/out/tools/utility/color-picker/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7530,
+          "path": "/workspace/Tool/out/tools/utility/browser-info/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7524,
+          "path": "/workspace/Tool/out/tools/utility/calculator/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7524,
+          "path": "/workspace/Tool/out/tools/utility/speed-test/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7523,
+          "path": "/workspace/Tool/out/tools/ai/language-detect/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7522,
+          "path": "/workspace/Tool/out/tools/ai/keyword-extract/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7519,
+          "path": "/workspace/Tool/out/tools/ai/text-generator/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7516,
+          "path": "/workspace/Tool/out/tools/utility/password/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7511,
+          "path": "/workspace/Tool/out/tools/ai/text-summary/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7511,
+          "path": "/workspace/Tool/out/tools/text/deduplicate/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7508,
+          "path": "/workspace/Tool/out/tools/utility/random/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7507,
+          "path": "/workspace/Tool/out/tools/health/calorie/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7506,
+          "path": "/workspace/Tool/out/tools/image/compress/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7498,
+          "path": "/workspace/Tool/out/tools/image/filter/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7490,
+          "path": "/workspace/Tool/out/tools/health/bmi/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7489,
+          "path": "/workspace/Tool/out/tools/text/stats/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7485,
+          "path": "/workspace/Tool/out/tools/text/case/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7380,
+          "path": "/workspace/Tool/out/tools/image/convert/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7374,
+          "path": "/workspace/Tool/out/tools/text/analyze/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7372,
+          "path": "/workspace/Tool/out/tools/learn/notes/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7371,
+          "path": "/workspace/Tool/out/tools/text/encode/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7362,
+          "path": "/workspace/Tool/out/tools/dev/color/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7356,
+          "path": "/workspace/Tool/out/tools/dev/json/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7354,
+          "path": "/workspace/Tool/out/tools/dev/api/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7348,
+          "path": "/workspace/Tool/out/tools/utility/converter/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7342,
+          "path": "/workspace/Tool/out/tools/learn/calculator/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7342,
+          "path": "/workspace/Tool/out/tools/learn/cheatsheet/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7338,
+          "path": "/workspace/Tool/out/tools/image/watermark/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7334,
+          "path": "/workspace/Tool/out/tools/learn/progress/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7328,
+          "path": "/workspace/Tool/out/tools/dev/timestamp/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7325,
+          "path": "/workspace/Tool/out/tools/image/resize/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7325,
+          "path": "/workspace/Tool/out/tools/text/compare/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7316,
+          "path": "/workspace/Tool/out/tools/dev/format/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7316,
+          "path": "/workspace/Tool/out/tools/text/regex/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7086,
+          "path": "/workspace/Tool/out/tools/security/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7078,
+          "path": "/workspace/Tool/out/tools/office/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7074,
+          "path": "/workspace/Tool/out/tools/learn/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7073,
+          "path": "/workspace/Tool/out/tools/media/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 7070,
+          "path": "/workspace/Tool/out/tools/data/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 6705,
+          "path": "/workspace/Tool/out/test-feedback/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 6673,
+          "path": "/workspace/Tool/out/tools/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 6566,
+          "path": "/workspace/Tool/out/test-i18n/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 6551,
+          "path": "/workspace/Tool/out/about/index.txt"
+        },
+        {
+          "name": "index.txt",
+          "size": 6169,
+          "path": "/workspace/Tool/out/index.txt"
+        },
+        {
+          "name": "manifest.json",
+          "size": 2400,
+          "path": "/workspace/Tool/out/manifest.json"
+        },
+        {
+          "name": "sitemap.xml",
+          "size": 2119,
+          "path": "/workspace/Tool/out/sitemap.xml"
+        },
+        {
+          "name": "robots.txt",
+          "size": 105,
+          "path": "/workspace/Tool/out/robots.txt"
+        }
+      ]
     }
+  },
+  "bundleAnalysis": {
+    "timestamp": "2025-08-07T02:06:36.716Z",
+    "totalBundleSize": 1748.6999999999998,
+    "largestBundle": {
+      "name": "lucide-core.b30b9072e23e3d33.js",
+      "size": 226.58,
+      "path": "/workspace/Tool/.next/static/chunks/lucide-core.b30b9072e23e3d33.js"
+    },
+    "topDependencies": [
+      {
+        "name": "next",
+        "size": 84660,
+        "unit": "K"
+      },
+      {
+        "name": "lucide-react",
+        "size": 33741,
+        "unit": "K"
+      },
+      {
+        "name": "typescript",
+        "size": 23069,
+        "unit": "K"
+      },
+      {
+        "name": "@testing-library/react",
+        "size": 8390,
+        "unit": "K"
+      },
+      {
+        "name": "prettier",
+        "size": 8260,
+        "unit": "K"
+      }
+    ],
+    "suggestions": [
+      {
+        "type": "dependency-optimization",
+        "message": "发现10个大型依赖项",
+        "action": "考虑替换或优化: next, lucide-react, typescript"
+      }
+    ],
+    "recommendations": [
+      "优化图片和静态资源",
+      "使用Tree Shaking移除未使用的代码",
+      "考虑使用更轻量的替代库"
+    ]
   },
   "pageMetrics": {
     "404/index.html": {
-      "size": 29303,
-      "scriptTags": 41,
+      "size": 22468,
+      "scriptTags": 27,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -39,8 +1286,8 @@
       "metaTags": 32
     },
     "404.html": {
-      "size": 29303,
-      "scriptTags": 41,
+      "size": 22468,
+      "scriptTags": 27,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -49,9 +1296,20 @@
       "title": "工具集 - 高效实用的在线工具",
       "metaTags": 32
     },
+    "about/index.html": {
+      "size": 39711,
+      "scriptTags": 28,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
     "index.html": {
-      "size": 31355,
-      "scriptTags": 42,
+      "size": 24520,
+      "scriptTags": 28,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -61,8 +1319,8 @@
       "metaTags": 31
     },
     "test-feedback/index.html": {
-      "size": 32210,
-      "scriptTags": 44,
+      "size": 24557,
+      "scriptTags": 30,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -72,8 +1330,8 @@
       "metaTags": 31
     },
     "test-i18n/index.html": {
-      "size": 36632,
-      "scriptTags": 42,
+      "size": 30144,
+      "scriptTags": 28,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -83,8 +1341,8 @@
       "metaTags": 31
     },
     "tools/ai/index.html": {
-      "size": 47083,
-      "scriptTags": 41,
+      "size": 40248,
+      "scriptTags": 27,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -94,8 +1352,8 @@
       "metaTags": 31
     },
     "tools/ai/keyword-extract/index.html": {
-      "size": 35203,
-      "scriptTags": 44,
+      "size": 27550,
+      "scriptTags": 30,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -105,8 +1363,8 @@
       "metaTags": 31
     },
     "tools/ai/language-detect/index.html": {
-      "size": 34882,
-      "scriptTags": 44,
+      "size": 27229,
+      "scriptTags": 30,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -116,8 +1374,8 @@
       "metaTags": 31
     },
     "tools/ai/sentiment-analysis/index.html": {
-      "size": 34699,
-      "scriptTags": 44,
+      "size": 27046,
+      "scriptTags": 30,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -127,8 +1385,8 @@
       "metaTags": 31
     },
     "tools/ai/text-generator/index.html": {
-      "size": 36705,
-      "scriptTags": 44,
+      "size": 29052,
+      "scriptTags": 30,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -138,8 +1396,8 @@
       "metaTags": 31
     },
     "tools/ai/text-summary/index.html": {
-      "size": 35344,
-      "scriptTags": 44,
+      "size": 27691,
+      "scriptTags": 30,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -149,8 +1407,8 @@
       "metaTags": 31
     },
     "tools/data/index.html": {
-      "size": 34758,
-      "scriptTags": 44,
+      "size": 27105,
+      "scriptTags": 30,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -160,8 +1418,8 @@
       "metaTags": 31
     },
     "tools/dev/api/index.html": {
-      "size": 33530,
-      "scriptTags": 42,
+      "size": 33622,
+      "scriptTags": 28,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -171,8 +1429,8 @@
       "metaTags": 31
     },
     "tools/dev/color/index.html": {
-      "size": 34370,
-      "scriptTags": 42,
+      "size": 26717,
+      "scriptTags": 28,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -182,8 +1440,8 @@
       "metaTags": 31
     },
     "tools/dev/format/index.html": {
-      "size": 33627,
-      "scriptTags": 42,
+      "size": 25974,
+      "scriptTags": 28,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -193,8 +1451,8 @@
       "metaTags": 31
     },
     "tools/dev/json/index.html": {
-      "size": 33839,
-      "scriptTags": 42,
+      "size": 26186,
+      "scriptTags": 28,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -204,8 +1462,8 @@
       "metaTags": 31
     },
     "tools/dev/timestamp/index.html": {
-      "size": 36105,
-      "scriptTags": 42,
+      "size": 28452,
+      "scriptTags": 28,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -215,8 +1473,8 @@
       "metaTags": 31
     },
     "tools/health/bmi/index.html": {
-      "size": 35033,
-      "scriptTags": 44,
+      "size": 27380,
+      "scriptTags": 30,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -226,8 +1484,8 @@
       "metaTags": 31
     },
     "tools/health/calorie/index.html": {
-      "size": 37188,
-      "scriptTags": 44,
+      "size": 29535,
+      "scriptTags": 30,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -237,8 +1495,8 @@
       "metaTags": 31
     },
     "tools/image/compress/index.html": {
-      "size": 35403,
-      "scriptTags": 44,
+      "size": 27750,
+      "scriptTags": 30,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -248,8 +1506,8 @@
       "metaTags": 31
     },
     "tools/image/convert/index.html": {
-      "size": 31719,
-      "scriptTags": 42,
+      "size": 25342,
+      "scriptTags": 28,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -259,8 +1517,8 @@
       "metaTags": 31
     },
     "tools/image/filter/index.html": {
-      "size": 33056,
-      "scriptTags": 44,
+      "size": 25403,
+      "scriptTags": 30,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -270,8 +1528,8 @@
       "metaTags": 31
     },
     "tools/image/resize/index.html": {
-      "size": 37600,
-      "scriptTags": 42,
+      "size": 29947,
+      "scriptTags": 28,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -281,8 +1539,8 @@
       "metaTags": 31
     },
     "tools/image/watermark/index.html": {
-      "size": 35221,
-      "scriptTags": 42,
+      "size": 27568,
+      "scriptTags": 28,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -292,8 +1550,8 @@
       "metaTags": 31
     },
     "tools/index.html": {
-      "size": 97446,
-      "scriptTags": 44,
+      "size": 89828,
+      "scriptTags": 30,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -303,8 +1561,8 @@
       "metaTags": 31
     },
     "tools/learn/calculator/index.html": {
-      "size": 40351,
-      "scriptTags": 42,
+      "size": 32698,
+      "scriptTags": 28,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -314,8 +1572,19 @@
       "metaTags": 31
     },
     "tools/learn/cheatsheet/index.html": {
-      "size": 40858,
-      "scriptTags": 42,
+      "size": 33205,
+      "scriptTags": 28,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/learn/index.html": {
+      "size": 45465,
+      "scriptTags": 30,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -325,8 +1594,8 @@
       "metaTags": 31
     },
     "tools/learn/notes/index.html": {
-      "size": 33984,
-      "scriptTags": 44,
+      "size": 26638,
+      "scriptTags": 28,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -336,8 +1605,8 @@
       "metaTags": 31
     },
     "tools/learn/progress/index.html": {
-      "size": 34769,
-      "scriptTags": 42,
+      "size": 27116,
+      "scriptTags": 28,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -347,8 +1616,8 @@
       "metaTags": 31
     },
     "tools/media/index.html": {
-      "size": 35176,
-      "scriptTags": 44,
+      "size": 26874,
+      "scriptTags": 30,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -358,8 +1627,8 @@
       "metaTags": 31
     },
     "tools/office/index.html": {
-      "size": 38042,
-      "scriptTags": 44,
+      "size": 30389,
+      "scriptTags": 30,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -369,8 +1638,8 @@
       "metaTags": 31
     },
     "tools/security/index.html": {
-      "size": 35820,
-      "scriptTags": 44,
+      "size": 28167,
+      "scriptTags": 30,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -380,8 +1649,8 @@
       "metaTags": 31
     },
     "tools/text/analyze/index.html": {
-      "size": 31275,
-      "scriptTags": 42,
+      "size": 24440,
+      "scriptTags": 28,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -391,8 +1660,8 @@
       "metaTags": 31
     },
     "tools/text/case/index.html": {
-      "size": 37412,
-      "scriptTags": 44,
+      "size": 29759,
+      "scriptTags": 30,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -402,8 +1671,8 @@
       "metaTags": 31
     },
     "tools/text/compare/index.html": {
-      "size": 33209,
-      "scriptTags": 42,
+      "size": 25556,
+      "scriptTags": 28,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -413,8 +1682,8 @@
       "metaTags": 31
     },
     "tools/text/deduplicate/index.html": {
-      "size": 33348,
-      "scriptTags": 44,
+      "size": 25695,
+      "scriptTags": 30,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -424,8 +1693,8 @@
       "metaTags": 31
     },
     "tools/text/encode/index.html": {
-      "size": 33270,
-      "scriptTags": 42,
+      "size": 25617,
+      "scriptTags": 28,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -435,8 +1704,8 @@
       "metaTags": 31
     },
     "tools/text/regex/index.html": {
-      "size": 36107,
-      "scriptTags": 42,
+      "size": 28454,
+      "scriptTags": 28,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -446,8 +1715,19 @@
       "metaTags": 31
     },
     "tools/text/stats/index.html": {
-      "size": 37494,
-      "scriptTags": 44,
+      "size": 29841,
+      "scriptTags": 30,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/utility/browser-info/index.html": {
+      "size": 24183,
+      "scriptTags": 30,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -457,8 +1737,8 @@
       "metaTags": 31
     },
     "tools/utility/calculator/index.html": {
-      "size": 34494,
-      "scriptTags": 44,
+      "size": 26841,
+      "scriptTags": 30,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -468,8 +1748,19 @@
       "metaTags": 31
     },
     "tools/utility/color-picker/index.html": {
-      "size": 42910,
-      "scriptTags": 44,
+      "size": 35257,
+      "scriptTags": 30,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/utility/compound-calculator/index.html": {
+      "size": 28804,
+      "scriptTags": 30,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -479,8 +1770,8 @@
       "metaTags": 31
     },
     "tools/utility/converter/index.html": {
-      "size": 33758,
-      "scriptTags": 42,
+      "size": 26105,
+      "scriptTags": 28,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -490,8 +1781,8 @@
       "metaTags": 31
     },
     "tools/utility/data-generator/index.html": {
-      "size": 34995,
-      "scriptTags": 44,
+      "size": 27342,
+      "scriptTags": 30,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -501,8 +1792,19 @@
       "metaTags": 31
     },
     "tools/utility/file-converter/index.html": {
-      "size": 36436,
-      "scriptTags": 44,
+      "size": 28783,
+      "scriptTags": 30,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/utility/gps-coordinates/index.html": {
+      "size": 28961,
+      "scriptTags": 30,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -512,8 +1814,8 @@
       "metaTags": 31
     },
     "tools/utility/network-tools/index.html": {
-      "size": 35570,
-      "scriptTags": 44,
+      "size": 27917,
+      "scriptTags": 30,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -523,8 +1825,19 @@
       "metaTags": 31
     },
     "tools/utility/password/index.html": {
-      "size": 36135,
-      "scriptTags": 44,
+      "size": 28482,
+      "scriptTags": 30,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/utility/pomodoro-timer/index.html": {
+      "size": 30353,
+      "scriptTags": 30,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -534,8 +1847,8 @@
       "metaTags": 31
     },
     "tools/utility/qr/index.html": {
-      "size": 35817,
-      "scriptTags": 44,
+      "size": 28296,
+      "scriptTags": 31,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -545,8 +1858,19 @@
       "metaTags": 31
     },
     "tools/utility/random/index.html": {
-      "size": 35116,
-      "scriptTags": 44,
+      "size": 27463,
+      "scriptTags": 30,
+      "styleTags": 0,
+      "linkTags": 6,
+      "imageTags": 0,
+      "hasServiceWorker": false,
+      "hasManifest": true,
+      "title": "工具集 - 高效实用的在线工具",
+      "metaTags": 31
+    },
+    "tools/utility/speed-test/index.html": {
+      "size": 26161,
+      "scriptTags": 30,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -556,8 +1880,8 @@
       "metaTags": 31
     },
     "tools/utility/time-calculator/index.html": {
-      "size": 34128,
-      "scriptTags": 44,
+      "size": 26475,
+      "scriptTags": 30,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -567,8 +1891,8 @@
       "metaTags": 31
     },
     "tools/utility/unit-converter/index.html": {
-      "size": 36685,
-      "scriptTags": 44,
+      "size": 29032,
+      "scriptTags": 30,
       "styleTags": 0,
       "linkTags": 6,
       "imageTags": 0,
@@ -578,45 +1902,37 @@
       "metaTags": 31
     }
   },
-  "resourceOptimization": {
-    "gzipCompression": false,
-    "brotliCompression": false,
-    "imageOptimization": {
-      "total": 11,
-      "webpCount": 0,
-      "avgSize": 309.54545454545456,
-      "largeImages": []
-    },
-    "assetOptimization": {
-      "minifiedJS": 86,
-      "minifiedCSS": 2,
-      "totalJS": 89,
-      "totalCSS": 2
+  "recommendations": [],
+  "optimization": {
+    "suggestions": [
+      {
+        "type": "icon-optimization",
+        "title": "图标库优化",
+        "description": "优化Lucide图标的使用方式",
+        "impact": "medium",
+        "effort": "low",
+        "steps": [
+          "使用选择性图标导入",
+          "实现图标缓存机制",
+          "按需加载图标"
+        ]
+      },
+      {
+        "type": "caching-strategy",
+        "title": "缓存策略优化",
+        "description": "改进资源缓存机制",
+        "impact": "high",
+        "effort": "medium",
+        "steps": [
+          "实施Service Worker缓存",
+          "优化HTTP缓存头",
+          "使用浏览器缓存API"
+        ]
+      }
+    ],
+    "priorities": [],
+    "estimatedSavings": {
+      "icon-optimization": "15-25%"
     }
-  },
-  "cacheability": {
-    "hashedFiles": 88,
-    "totalStaticFiles": 102,
-    "serviceWorker": true,
-    "manifest": true
-  },
-  "accessibility": {},
-  "seo": {},
-  "timestamp": "2025-08-05T12:44:35.219Z",
-  "summary": {
-    "buildSizeMB": 4.68,
-    "pageCount": 50,
-    "hasServiceWorker": true,
-    "hasManifest": true,
-    "imageOptimizationRatio": 0
-  },
-  "recommendations": [
-    {
-      "type": "image-optimization",
-      "priority": "medium",
-      "message": "建议使用更多WebP格式图片",
-      "action": "转换PNG/JPEG图片为WebP格式以减少大小"
-    }
-  ],
-  "score": 73
+  }
 }

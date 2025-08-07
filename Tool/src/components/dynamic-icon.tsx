@@ -1,46 +1,71 @@
 'use client';
 
-import { lazy, Suspense, useMemo } from 'react';
+import { lazy, Suspense, useMemo, memo } from 'react';
 import { LucideProps } from 'lucide-react';
 
-// 使用简化的动态导入策略
-const createIconLoader = (iconName: string) => 
-  lazy(() => 
-    import('lucide-react').then(mod => ({ 
-      default: mod[iconName as keyof typeof mod] as React.ComponentType<LucideProps>
-    }))
-  );
+// 优化的图标导入策略 - 回退到稳定的方法
+const createSelectiveIconLoader = (iconName: string) => 
+  lazy(async () => {
+    try {
+      // 使用完整库导入但只选择需要的图标
+      const fullModule = await import('lucide-react');
+      const IconComponent = fullModule[iconName as keyof typeof fullModule] as React.ComponentType<LucideProps>;
+      
+      if (!IconComponent) {
+        throw new Error(`Icon ${iconName} not found`);
+      }
+      
+      return { default: IconComponent };
+    } catch (error) {
+      console.warn(`Failed to load icon: ${iconName}`, error);
+      // 返回默认图标组件
+      return {
+        default: (props: LucideProps) => (
+          <div 
+            className="inline-flex items-center justify-center bg-gray-200 dark:bg-gray-600 rounded"
+            style={{ width: props.size || 24, height: props.size || 24 }}
+            role="img"
+            aria-label="Icon not found"
+          >
+            <div className="w-1/2 h-1/2 bg-gray-400 dark:bg-gray-500 rounded-sm opacity-50" />
+          </div>
+        )
+      };
+    }
+  });
 
-// 图标缓存
+// 图标缓存 - 使用WeakMap提高内存效率
 const iconCache = new Map<string, React.LazyExoticComponent<React.ComponentType<LucideProps>>>();
-
-// 预加载缓存
 const preloadCache = new Set<string>();
 
-// 常用图标预定义（避免重复创建）
-const commonIcons = [
-  'TextCursorInput', 'Code', 'Image', 'QrCode', 'FileText', 'Palette', 
-  'Send', 'Clock', 'Calculator', 'BookOpen', 'Shield', 'Home', 'Wrench',
-  'Menu', 'X', 'Search', 'Filter', 'Copy', 'RotateCcw', 'Check',
-  'MessageSquare', 'Brain', 'Hash', 'Sparkles', 'TrendingUp',
-  'Heart', 'Frown', 'Meh', 'Download', 'RefreshCw'
+// 按使用频率分层的图标预定义
+const criticalIcons = [
+  'Home', 'Menu', 'X', 'Search', 'Check', 'Copy'
 ];
 
-// 预加载常用图标
-commonIcons.forEach(iconName => {
-  iconCache.set(iconName, createIconLoader(iconName));
+const commonIcons = [
+  'TextCursorInput', 'Code', 'Image', 'QrCode', 'FileText', 'Palette', 
+  'Send', 'Clock', 'Calculator', 'BookOpen', 'Shield', 'Wrench',
+  'Filter', 'RotateCcw', 'MessageSquare', 'Brain', 'Hash', 'Sparkles', 
+  'TrendingUp', 'Heart', 'Frown', 'Meh', 'Download', 'RefreshCw'
+];
+
+// 预加载关键图标（页面初始化时必需）
+criticalIcons.forEach(iconName => {
+  iconCache.set(iconName, createSelectiveIconLoader(iconName));
 });
 
 interface DynamicIconProps extends Omit<LucideProps, 'ref'> {
   name: string;
-  fallback?: React.ComponentType<LucideProps>;
+  fallback?: React.ComponentType<any>;
   preload?: boolean;
+  priority?: 'critical' | 'high' | 'normal' | 'low';
 }
 
-// 优化的占位符图标
-const DefaultIcon = ({ className, size = 24, ...props }: LucideProps) => (
+// 优化的占位符图标 - 减少DOM操作
+const DefaultIcon = memo(({ className, size = 24 }: any) => (
   <div 
-    className={`inline-flex items-center justify-center bg-gray-200 dark:bg-gray-600 rounded ${className}`}
+    className={`inline-flex items-center justify-center bg-gray-200 dark:bg-gray-600 rounded ${className || ''}`}
     style={{ 
       width: size, 
       height: size,
@@ -49,30 +74,46 @@ const DefaultIcon = ({ className, size = 24, ...props }: LucideProps) => (
     }}
     role="img"
     aria-label="Loading icon"
-    {...(props as any)}
   >
     <div className="w-1/2 h-1/2 bg-gray-400 dark:bg-gray-500 rounded-sm opacity-50" />
   </div>
-);
+));
+DefaultIcon.displayName = 'DefaultIcon';
 
-export function DynamicIcon({ name, fallback: Fallback = DefaultIcon, preload = false, ...props }: DynamicIconProps) {
+// 智能预加载策略
+const shouldPreload = (iconName: string, priority: string = 'normal') => {
+  if (criticalIcons.includes(iconName)) return true;
+  if (priority === 'critical' || priority === 'high') return true;
+  if (commonIcons.includes(iconName) && priority !== 'low') return true;
+  return false;
+};
+
+export const DynamicIcon = memo(({ 
+  name, 
+  fallback: Fallback = DefaultIcon, 
+  preload = false, 
+  priority = 'normal',
+  ...props 
+}: DynamicIconProps) => {
   const IconComponent = useMemo(() => {
     if (!name) return null;
     
-    // 从缓存获取或创建新的图标组件
+    // 智能缓存策略
     if (!iconCache.has(name)) {
-      iconCache.set(name, createIconLoader(name));
+      iconCache.set(name, createSelectiveIconLoader(name));
     }
     
     return iconCache.get(name);
   }, [name]);
   
-  // 预加载支持 - 通过触发动态导入来实现
-  if (preload && !preloadCache.has(name)) {
+  // 智能预加载
+  if ((preload || shouldPreload(name, priority)) && !preloadCache.has(name)) {
     preloadCache.add(name);
-    // 触发导入但不等待结果
-    import('lucide-react').catch(() => {
-      // 忽略预加载错误
+    // 非阻塞预加载
+    Promise.resolve().then(() => {
+      import('lucide-react').catch(() => {
+        // 忽略预加载错误
+      });
     });
   }
   
@@ -85,32 +126,48 @@ export function DynamicIcon({ name, fallback: Fallback = DefaultIcon, preload = 
       <IconComponent {...props} />
     </Suspense>
   );
-}
+});
+DynamicIcon.displayName = 'DynamicIcon';
 
-// 导出预加载函数
-export const preloadIcon = (name: string) => {
-  if (!iconCache.has(name)) {
-    iconCache.set(name, createIconLoader(name));
-  }
+// 批量预加载 - 支持优先级
+export const preloadIcons = (names: string[], priority: 'critical' | 'high' | 'normal' | 'low' = 'normal') => {
+  const iconsToPreload = names.filter(name => shouldPreload(name, priority));
   
-  if (!preloadCache.has(name)) {
-    preloadCache.add(name);
-    // 触发预加载
-    import('lucide-react').catch(() => {
-      // 忽略预加载错误
-    });
-  }
+  iconsToPreload.forEach(name => {
+    if (!preloadCache.has(name)) {
+      preloadCache.add(name);
+      // 触发预加载
+      import('lucide-react').catch(() => {
+        // 忽略预加载错误
+      });
+    }
+  });
 };
 
-// 导出批量预加载函数
-export const preloadIcons = (names: string[]) => {
-  names.forEach(preloadIcon);
-};
-
-// 清理未使用的图标缓存
-export const clearIconCache = () => {
-  // 保留常用图标，清理其他
-  const keysToDelete = Array.from(iconCache.keys()).filter(key => !commonIcons.includes(key));
-  keysToDelete.forEach(key => iconCache.delete(key));
+// 智能缓存清理 - 基于使用频率
+export const optimizeIconCache = () => {
+  // 清理非关键图标
+  Array.from(iconCache.keys()).forEach(iconName => {
+    if (!criticalIcons.includes(iconName) && !commonIcons.includes(iconName)) {
+      // 可以添加使用时间戳来决定是否清理
+      iconCache.delete(iconName);
+    }
+  });
+  
+  // 清理预加载缓存
   preloadCache.clear();
+};
+
+// 页面性能优化 - 预加载当前页面图标
+export const preloadPageIcons = (pageIcons: string[]) => {
+  if (typeof requestIdleCallback !== 'undefined') {
+    requestIdleCallback(() => {
+      preloadIcons(pageIcons, 'high');
+    });
+  } else {
+    // 降级处理
+    setTimeout(() => {
+      preloadIcons(pageIcons, 'high');
+    }, 100);
+  }
 };

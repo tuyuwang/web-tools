@@ -1,177 +1,340 @@
 'use client';
 
-import { lazy, Suspense, ComponentType } from 'react';
+import React, { lazy, Suspense, useState, useEffect, useMemo, memo, useCallback } from 'react';
 import { LucideProps } from 'lucide-react';
+import { preloadPageIcons } from './dynamic-icon';
 
-// 加载状态组件
-const ToolLoadingPlaceholder = ({ className = "" }: { className?: string }) => (
-  <div className={`animate-pulse ${className}`}>
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-6">
-      <div className="flex items-center space-x-4 mb-6">
-        <div className="w-8 h-8 bg-gray-300 dark:bg-gray-600 rounded"></div>
-        <div className="h-6 bg-gray-300 dark:bg-gray-600 rounded w-32"></div>
-      </div>
-      <div className="space-y-4">
-        <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-full"></div>
-        <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-3/4"></div>
-        <div className="h-32 bg-gray-300 dark:bg-gray-600 rounded w-full"></div>
-        <div className="flex space-x-2">
-          <div className="h-10 bg-gray-300 dark:bg-gray-600 rounded w-20"></div>
-          <div className="h-10 bg-gray-300 dark:bg-gray-600 rounded w-20"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-);
+// 工具加载器配置
+interface ToolLoaderConfig {
+  prefetchOnHover?: boolean;
+  prefetchDelay?: number;
+  cacheTimeout?: number;
+  maxCacheSize?: number;
+  enablePreloading?: boolean;
+}
 
-// 工具页面映射
-const toolPageMap = {
-  // 文本工具
-  'text/analyze': () => import('@/app/tools/text/analyze/page'),
-  'text/case': () => import('@/app/tools/text/case/page'),
-  'text/compare': () => import('@/app/tools/text/compare/page'),
-  'text/deduplicate': () => import('@/app/tools/text/deduplicate/page'),
-  'text/encode': () => import('@/app/tools/text/encode/page'),
-  'text/regex': () => import('@/app/tools/text/regex/page'),
-  'text/stats': () => import('@/app/tools/text/stats/page'),
-  
-  // 实用工具
-  'utility/calculator': () => import('@/app/tools/utility/calculator/page'),
-  'utility/color-picker': () => import('@/app/tools/utility/color-picker/page'),
-  'utility/converter': () => import('@/app/tools/utility/converter/page'),
-  'utility/data-generator': () => import('@/app/tools/utility/data-generator/page'),
-  'utility/file-converter': () => import('@/app/tools/utility/file-converter/page'),
-  'utility/network-tools': () => import('@/app/tools/utility/network-tools/page'),
-  'utility/password': () => import('@/app/tools/utility/password/page'),
-  'utility/qr': () => import('@/app/tools/utility/qr/page'),
-  'utility/random': () => import('@/app/tools/utility/random/page'),
-  'utility/time-calculator': () => import('@/app/tools/utility/time-calculator/page'),
-  'utility/unit-converter': () => import('@/app/tools/utility/unit-converter/page'),
-  
-  // 开发工具
-  'dev/api': () => import('@/app/tools/dev/api/page'),
-  'dev/color': () => import('@/app/tools/dev/color/page'),
-  'dev/format': () => import('@/app/tools/dev/format/page'),
-  'dev/json': () => import('@/app/tools/dev/json/page'),
-  'dev/timestamp': () => import('@/app/tools/dev/timestamp/page'),
-  
-  // 图片工具
-  'image/compress': () => import('@/app/tools/image/compress/page'),
-  'image/convert': () => import('@/app/tools/image/convert/page'),
-  'image/filter': () => import('@/app/tools/image/filter/page'),
-  'image/resize': () => import('@/app/tools/image/resize/page'),
-  'image/watermark': () => import('@/app/tools/image/watermark/page'),
-  
-  // AI工具
-  'ai/keyword-extract': () => import('@/app/tools/ai/keyword-extract/page'),
-  'ai/language-detect': () => import('@/app/tools/ai/language-detect/page'),
-  'ai/sentiment-analysis': () => import('@/app/tools/ai/sentiment-analysis/page'),
-  'ai/text-generator': () => import('@/app/tools/ai/text-generator/page'),
-  'ai/text-summary': () => import('@/app/tools/ai/text-summary/page'),
-  
-  // 健康工具
-  'health/bmi': () => import('@/app/tools/health/bmi/page'),
-  'health/calorie': () => import('@/app/tools/health/calorie/page'),
-  
-  // 学习工具
-  'learn/calculator': () => import('@/app/tools/learn/calculator/page'),
-  'learn/cheatsheet': () => import('@/app/tools/learn/cheatsheet/page'),
-  'learn/notes': () => import('@/app/tools/learn/notes/page'),
-  'learn/progress': () => import('@/app/tools/learn/progress/page'),
-} as const;
+const defaultConfig: ToolLoaderConfig = {
+  prefetchOnHover: true,
+  prefetchDelay: 300,
+  cacheTimeout: 10 * 60 * 1000, // 10分钟
+  maxCacheSize: 20,
+  enablePreloading: true
+};
 
-type ToolPath = keyof typeof toolPageMap;
+// 工具缓存管理
+class ToolCache {
+  private cache = new Map<string, React.LazyExoticComponent<React.ComponentType<any>>>();
+  private timestamps = new Map<string, number>();
+  private config: ToolLoaderConfig;
 
-// 创建懒加载组件缓存
-const lazyComponentCache = new Map<ToolPath, ComponentType<any>>();
+  constructor(config: ToolLoaderConfig = defaultConfig) {
+    this.config = { ...defaultConfig, ...config };
+  }
 
-// 获取或创建懒加载组件
-function getLazyComponent(toolPath: ToolPath): ComponentType<any> {
-  if (!lazyComponentCache.has(toolPath)) {
-    const loader = toolPageMap[toolPath];
-    if (loader) {
-      const LazyComponent = lazy(loader);
-      lazyComponentCache.set(toolPath, LazyComponent);
+  get(key: string) {
+    const component = this.cache.get(key);
+    if (component) {
+      // 更新访问时间
+      this.timestamps.set(key, Date.now());
+    }
+    return component;
+  }
+
+  set(key: string, component: React.LazyExoticComponent<React.ComponentType<any>>) {
+    // 检查缓存大小限制
+    if (this.cache.size >= this.config.maxCacheSize!) {
+      this.evictOldest();
+    }
+    
+    this.cache.set(key, component);
+    this.timestamps.set(key, Date.now());
+  }
+
+  has(key: string) {
+    return this.cache.has(key);
+  }
+
+  private evictOldest() {
+    let oldestKey = '';
+    let oldestTime = Date.now();
+    
+    this.timestamps.forEach((time, key) => {
+      if (time < oldestTime) {
+        oldestTime = time;
+        oldestKey = key;
+      }
+    });
+    
+    if (oldestKey) {
+      this.cache.delete(oldestKey);
+      this.timestamps.delete(oldestKey);
     }
   }
-  return lazyComponentCache.get(toolPath) || (() => <div>Tool not found</div>);
-}
 
-// 预加载工具组件
-export const preloadTool = (toolPath: ToolPath) => {
-  const loader = toolPageMap[toolPath];
-  if (loader) {
-    loader().catch(() => {
-      // 忽略预加载错误
+  cleanup() {
+    const now = Date.now();
+    const expiredKeys: string[] = [];
+    
+    this.timestamps.forEach((time, key) => {
+      if (now - time > this.config.cacheTimeout!) {
+        expiredKeys.push(key);
+      }
+    });
+    
+    expiredKeys.forEach(key => {
+      this.cache.delete(key);
+      this.timestamps.delete(key);
     });
   }
-};
 
-// 批量预加载工具
-export const preloadTools = (toolPaths: ToolPath[]) => {
-  toolPaths.forEach(preloadTool);
-};
-
-// 懒加载工具组件接口
-interface LazyToolLoaderProps {
-  toolPath: ToolPath;
-  className?: string;
-  fallback?: ComponentType<any>;
-  preload?: boolean;
-}
-
-// 主要的懒加载工具组件
-export function LazyToolLoader({ 
-  toolPath, 
-  className = "", 
-  fallback: CustomFallback,
-  preload = false 
-}: LazyToolLoaderProps) {
-  const LazyComponent = getLazyComponent(toolPath);
-  const FallbackComponent = CustomFallback || ToolLoadingPlaceholder;
-  
-  // 预加载支持
-  if (preload) {
-    preloadTool(toolPath);
+  clear() {
+    this.cache.clear();
+    this.timestamps.clear();
   }
-  
-  return (
-    <Suspense fallback={<FallbackComponent className={className} />}>
-      <LazyComponent />
-    </Suspense>
-  );
+
+  getStats() {
+    return {
+      size: this.cache.size,
+      maxSize: this.config.maxCacheSize,
+      oldestEntry: Math.min(...Array.from(this.timestamps.values())),
+      newestEntry: Math.max(...Array.from(this.timestamps.values()))
+    };
+  }
 }
 
-// 工具路径验证
-export const isValidToolPath = (path: string): path is ToolPath => {
-  return path in toolPageMap;
+// 全局工具缓存实例
+const toolCache = new ToolCache();
+
+// 定期清理缓存
+setInterval(() => {
+  toolCache.cleanup();
+}, 5 * 60 * 1000); // 每5分钟清理一次
+
+// 工具加载器
+const createToolLoader = (toolPath: string, fallbackIcons: string[] = []) => {
+  return lazy(async () => {
+    try {
+      // 预加载页面相关图标
+      if (fallbackIcons.length > 0) {
+        preloadPageIcons(fallbackIcons);
+      }
+      
+      const toolModule = await import(`../app/tools/${toolPath}/page.tsx`);
+      return { default: toolModule.default };
+    } catch (error) {
+      console.error(`Failed to load tool: ${toolPath}`, error);
+      // 返回错误组件
+      return {
+        default: () => (
+          <div className="flex items-center justify-center min-h-[200px] text-red-500">
+            <div className="text-center">
+              <p className="text-lg font-medium">工具加载失败</p>
+              <p className="text-sm text-gray-500 mt-1">请刷新页面重试</p>
+            </div>
+          </div>
+        )
+      };
+    }
+  });
 };
 
-// 获取所有可用的工具路径
-export const getAvailableToolPaths = (): ToolPath[] => {
-  return Object.keys(toolPageMap) as ToolPath[];
-};
+// 性能监控
+class PerformanceMonitor {
+  private loadTimes = new Map<string, number>();
+  private errors = new Map<string, number>();
 
-// 清理懒加载缓存
-export const clearLazyCache = () => {
-  lazyComponentCache.clear();
-};
+  recordLoadTime(toolPath: string, time: number) {
+    this.loadTimes.set(toolPath, time);
+  }
 
-// 按类别预加载工具
-export const preloadToolsByCategory = (category: string) => {
-  const categoryTools = getAvailableToolPaths().filter(path => path.startsWith(category));
-  preloadTools(categoryTools);
-};
+  recordError(toolPath: string) {
+    const count = this.errors.get(toolPath) || 0;
+    this.errors.set(toolPath, count + 1);
+  }
 
-// 智能预加载：基于用户行为预加载相关工具
-export const smartPreload = (currentToolPath: ToolPath) => {
-  const category = currentToolPath.split('/')[0];
-  const relatedTools = getAvailableToolPaths()
-    .filter(path => path.startsWith(category) && path !== currentToolPath)
-    .slice(0, 3); // 只预加载3个相关工具
+  getStats() {
+    return {
+      avgLoadTime: this.getAverageLoadTime(),
+      slowestTool: this.getSlowestTool(),
+      errorCount: Array.from(this.errors.values()).reduce((sum, count) => sum + count, 0),
+      mostProblematicTool: this.getMostProblematicTool()
+    };
+  }
+
+  private getAverageLoadTime() {
+    const times = Array.from(this.loadTimes.values());
+    return times.length > 0 ? times.reduce((sum, time) => sum + time, 0) / times.length : 0;
+  }
+
+  private getSlowestTool() {
+    let slowest = { path: '', time: 0 };
+    this.loadTimes.forEach((time, path) => {
+      if (time > slowest.time) {
+        slowest = { path, time };
+      }
+    });
+    return slowest;
+  }
+
+  private getMostProblematicTool() {
+    let mostProblematic = { path: '', errors: 0 };
+    this.errors.forEach((errors, path) => {
+      if (errors > mostProblematic.errors) {
+        mostProblematic = { path, errors };
+      }
+    });
+    return mostProblematic;
+  }
+}
+
+const performanceMonitor = new PerformanceMonitor();
+
+// 优化的加载状态组件
+const LoadingSpinner = memo(() => (
+  <div className="flex items-center justify-center min-h-[200px]">
+    <div className="relative">
+      <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+      <div className="mt-3 text-sm text-gray-500 text-center">加载中...</div>
+    </div>
+  </div>
+));
+LoadingSpinner.displayName = 'LoadingSpinner';
+
+interface LazyToolLoaderProps {
+  toolPath: string;
+  preloadOnHover?: boolean;
+  fallbackIcons?: string[];
+  className?: string;
+  config?: Partial<ToolLoaderConfig>;
+  onLoadStart?: () => void;
+  onLoadEnd?: (success: boolean) => void;
+  children?: React.ReactNode;
+}
+
+export const LazyToolLoader = memo(({
+  toolPath,
+  preloadOnHover = true,
+  fallbackIcons = [],
+  className = '',
+  config = {},
+  onLoadStart,
+  onLoadEnd,
+  children
+}: LazyToolLoaderProps) => {
+  const [isPreloading, setIsPreloading] = useState(false);
+  const [loadError, setLoadError] = useState<Error | null>(null);
+  const finalConfig = useMemo(() => ({ ...defaultConfig, ...config }), [config]);
+
+  // 获取或创建工具组件
+  const ToolComponent = useMemo(() => {
+    if (!toolCache.has(toolPath)) {
+      toolCache.set(toolPath, createToolLoader(toolPath, fallbackIcons));
+    }
+    return toolCache.get(toolPath)!;
+  }, [toolPath, fallbackIcons]);
+
+  // 预加载处理
+  const handlePreload = useCallback(() => {
+    if (!preloadOnHover || isPreloading || !finalConfig.enablePreloading) return;
+
+    const timeoutId = setTimeout(() => {
+      setIsPreloading(true);
+      const startTime = performance.now();
+      
+      onLoadStart?.();
+      
+      // 触发组件预加载
+      import(`../app/tools/${toolPath}/page.tsx`)
+        .then(() => {
+          const loadTime = performance.now() - startTime;
+          performanceMonitor.recordLoadTime(toolPath, loadTime);
+          onLoadEnd?.(true);
+        })
+        .catch((error) => {
+          performanceMonitor.recordError(toolPath);
+          setLoadError(error);
+          onLoadEnd?.(false);
+        })
+        .finally(() => {
+          setIsPreloading(false);
+        });
+    }, finalConfig.prefetchDelay);
+
+    return () => clearTimeout(timeoutId);
+  }, [toolPath, preloadOnHover, isPreloading, finalConfig, onLoadStart, onLoadEnd]);
+
+  // 错误重试
+  const retryLoad = useCallback(() => {
+    setLoadError(null);
+    toolCache.clear();
+    window.location.reload();
+  }, []);
+
+  // 如果有加载错误，显示错误组件
+  if (loadError) {
+    return (
+      <div className={`min-h-[200px] flex items-center justify-center ${className}`}>
+        <div className="text-center">
+          <div className="text-red-500 mb-2">
+            <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+          </div>
+          <p className="text-lg font-medium text-gray-900 dark:text-white mb-1">工具加载失败</p>
+          <p className="text-sm text-gray-500 mb-3">请检查网络连接或稍后重试</p>
+          <button
+            onClick={retryLoad}
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+          >
+            重新加载
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div 
+      className={className}
+      onMouseEnter={handlePreload}
+    >
+      <Suspense fallback={<LoadingSpinner />}>
+        <ToolComponent />
+      </Suspense>
+      {children}
+    </div>
+  );
+});
+LazyToolLoader.displayName = 'LazyToolLoader';
+
+// 导出工具缓存管理功能
+export const getToolCacheStats = () => toolCache.getStats();
+export const clearToolCache = () => toolCache.clear();
+export const getPerformanceStats = () => performanceMonitor.getStats();
+
+// 预加载相关工具（基于使用模式）
+export const preloadRelatedTools = (currentTool: string, relatedTools: string[]) => {
+  if (!defaultConfig.enablePreloading) return;
   
-  // 延迟预加载，避免影响当前页面性能
-  setTimeout(() => {
-    preloadTools(relatedTools);
-  }, 1000);
+  requestIdleCallback(() => {
+    relatedTools.forEach(toolPath => {
+      if (!toolCache.has(toolPath)) {
+        toolCache.set(toolPath, createToolLoader(toolPath));
+      }
+    });
+  });
 };
+
+// 批量预加载工具（用于特定场景）
+export const batchPreloadTools = (toolPaths: string[], priority: 'high' | 'normal' | 'low' = 'normal') => {
+  const delay = priority === 'high' ? 0 : priority === 'normal' ? 1000 : 3000;
+  
+  setTimeout(() => {
+    toolPaths.forEach(toolPath => {
+      if (!toolCache.has(toolPath)) {
+        toolCache.set(toolPath, createToolLoader(toolPath));
+      }
+    });
+  }, delay);
+};
+
