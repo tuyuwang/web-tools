@@ -146,6 +146,46 @@ export interface Translations {
     'office-document-processor': string;
     'security-tools': string;
     'security-password-strength': string;
+    // 新增实用工具
+    'utility-mortgage-calculator': string;
+    'utility-investment-calculator': string;
+    'utility-habit-tracker': string;
+    'utility-lucky-wheel': string;
+    'utility-ascii-art': string;
+    'utility-color-palette-generator': string;
+    'utility-dice-simulator': string;
+    // 新增金融工具
+    'finance-currency-converter': string;
+    'finance-loan-calculator': string;
+    'finance-investment-calculator': string;
+    'finance-tip-calculator': string;
+    'finance-tax-calculator': string;
+    // 新增设计工具
+    'design-css-generator': string;
+    'design-icon-generator': string;
+    'design-color-palette': string;
+    'design-favicon-generator': string;
+    'design-logo-maker': string;
+    // 新增社交工具
+    'social-link-shortener': string;
+    'social-hashtag-generator': string;
+    'social-post-scheduler': string;
+    'social-bio-generator': string;
+    // 新增生产力工具
+    'productivity-pomodoro': string;
+    'productivity-todo-list': string;
+    'productivity-habit-tracker': string;
+    'productivity-time-tracker': string;
+    // 新增游戏工具
+    'game-random-picker': string;
+    'game-dice-roller': string;
+    'game-lottery': string;
+    'game-word-game': string;
+    // 新增测量工具
+    'measure-screen-ruler': string;
+    'measure-color-picker': string;
+    'measure-pixel-density': string;
+    'measure-viewport-size': string;
   };
   
   toolDescriptions: {
@@ -211,6 +251,46 @@ export interface Translations {
     'office-document-processor': string;
     'security-tools': string;
     'security-password-strength': string;
+    // 新增实用工具
+    'utility-mortgage-calculator': string;
+    'utility-investment-calculator': string;
+    'utility-habit-tracker': string;
+    'utility-lucky-wheel': string;
+    'utility-ascii-art': string;
+    'utility-color-palette-generator': string;
+    'utility-dice-simulator': string;
+    // 新增金融工具
+    'finance-currency-converter': string;
+    'finance-loan-calculator': string;
+    'finance-investment-calculator': string;
+    'finance-tip-calculator': string;
+    'finance-tax-calculator': string;
+    // 新增设计工具
+    'design-css-generator': string;
+    'design-icon-generator': string;
+    'design-color-palette': string;
+    'design-favicon-generator': string;
+    'design-logo-maker': string;
+    // 新增社交工具
+    'social-link-shortener': string;
+    'social-hashtag-generator': string;
+    'social-post-scheduler': string;
+    'social-bio-generator': string;
+    // 新增生产力工具
+    'productivity-pomodoro': string;
+    'productivity-todo-list': string;
+    'productivity-habit-tracker': string;
+    'productivity-time-tracker': string;
+    // 新增游戏工具
+    'game-random-picker': string;
+    'game-dice-roller': string;
+    'game-lottery': string;
+    'game-word-game': string;
+    // 新增测量工具
+    'measure-screen-ruler': string;
+    'measure-color-picker': string;
+    'measure-pixel-density': string;
+    'measure-viewport-size': string;
   };
   
   // 工具详情页面
@@ -759,6 +839,46 @@ export const translations: Record<Locale, Translations> = {
       'office-document-processor': '文档处理器',
       'security-tools': '安全工具集',
       'security-password-strength': '密码强度检测',
+      // 新增实用工具
+      'utility-mortgage-calculator': '抵押贷款计算器',
+      'utility-investment-calculator': '投资收益计算器',
+      'utility-habit-tracker': '习惯追踪器',
+      'utility-lucky-wheel': '幸运转盘',
+      'utility-ascii-art': 'ASCII艺术生成器',
+      'utility-color-palette-generator': '配色方案生成器',
+      'utility-dice-simulator': '骰子模拟器',
+      // 新增金融工具
+      'finance-currency-converter': '汇率转换器',
+      'finance-loan-calculator': '贷款计算器',
+      'finance-investment-calculator': '投资回报计算器',
+      'finance-tip-calculator': '小费计算器',
+      'finance-tax-calculator': '税费计算器',
+      // 新增设计工具
+      'design-css-generator': 'CSS代码生成器',
+      'design-icon-generator': '图标生成器',
+      'design-color-palette': '配色方案生成器',
+      'design-favicon-generator': 'Favicon生成器',
+      'design-logo-maker': '简易Logo制作',
+      // 新增社交工具
+      'social-link-shortener': '链接缩短器',
+      'social-hashtag-generator': '话题标签生成器',
+      'social-post-scheduler': '发布时间优化器',
+      'social-bio-generator': '个人简介生成器',
+      // 新增生产力工具
+      'productivity-pomodoro': '番茄工作法计时器',
+      'productivity-todo-list': '待办事项清单',
+      'productivity-habit-tracker': '习惯追踪器',
+      'productivity-time-tracker': '时间追踪器',
+      // 新增游戏工具
+      'game-random-picker': '随机选择器',
+      'game-dice-roller': '骰子模拟器',
+      'game-lottery': '抽奖工具',
+      'game-word-game': '单词游戏',
+      // 新增测量工具
+      'measure-screen-ruler': '屏幕尺子',
+      'measure-color-picker': '屏幕取色器',
+      'measure-pixel-density': '像素密度检测',
+      'measure-viewport-size': '视口尺寸检测',
     },
     toolDescriptions: {
       // AI工具
@@ -823,6 +943,46 @@ export const translations: Record<Locale, Translations> = {
       'office-document-processor': '文本处理、表格生成、CSV/JSON转换等办公相关工具。',
       'security-tools': '哈希计算、加密解密、密码强度检测、SSL证书检查等安全工具。',
       'security-password-strength': '检测密码安全强度，提供改进建议，确保密码安全。',
+      // 新增实用工具
+      'utility-mortgage-calculator': '计算房屋贷款的月供、总利息和还款计划，支持多种贷款参数。',
+      'utility-investment-calculator': '计算长期投资的复利收益和增长轨迹，支持定投模式。',
+      'utility-habit-tracker': '记录和追踪日常习惯，培养良好生活方式，支持目标设定。',
+      'utility-lucky-wheel': '自定义选项的抽奖转盘，支持旋转动画和历史记录。',
+      'utility-ascii-art': '将文本转换为ASCII艺术字，支持多种字体样式和导出功能。',
+      'utility-color-palette-generator': '根据色彩理论生成和谐的配色方案，支持多种配色规则和导出功能。',
+      'utility-dice-simulator': '虚拟骰子投掷器，支持多种骰子类型、数量设置和投掷动画。',
+      // 新增金融工具
+      'finance-currency-converter': '实时汇率转换，支持全球主要货币，数据来源可靠。',
+      'finance-loan-calculator': '计算房贷、车贷等各种贷款的月供、利息和总额。',
+      'finance-investment-calculator': '计算投资收益、复利增长和投资回报率。',
+      'finance-tip-calculator': '快速计算餐厅小费和人均分摊金额。',
+      'finance-tax-calculator': '计算个人所得税、增值税等各种税费。',
+      // 新增设计工具
+      'design-css-generator': '可视化生成CSS代码，包括阴影、边框、动画等效果。',
+      'design-icon-generator': '在线生成各种风格的图标，支持SVG和PNG格式。',
+      'design-color-palette': '生成和谐的配色方案，提供多种配色规则。',
+      'design-favicon-generator': '从图片生成各种尺寸的网站图标文件。',
+      'design-logo-maker': '快速制作简单的文字Logo和图形Logo。',
+      // 新增社交工具
+      'social-link-shortener': '创建短链接，支持自定义别名和点击统计。',
+      'social-hashtag-generator': '为社交媒体内容生成相关的话题标签。',
+      'social-post-scheduler': '分析最佳发布时间，提高社交媒体互动率。',
+      'social-bio-generator': '为社交媒体账户生成吸引人的个人简介。',
+      // 新增生产力工具
+      'productivity-pomodoro': '专注工作计时器，帮助提高工作效率和专注力。',
+      'productivity-todo-list': '简洁的任务管理工具，支持优先级和分类。',
+      'productivity-habit-tracker': '追踪日常习惯，帮助养成良好的生活习惯。',
+      'productivity-time-tracker': '记录工作时间，分析时间分配和工作效率。',
+      // 新增游戏工具
+      'game-random-picker': '从列表中随机选择项目，支持权重设置。',
+      'game-dice-roller': '模拟投掷各种类型的骰子，支持多个骰子。',
+      'game-lottery': '公平的抽奖工具，支持多种抽奖模式。',
+      'game-word-game': '简单的单词猜测游戏，寓教于乐。',
+      // 新增测量工具
+      'measure-screen-ruler': '在屏幕上测量像素距离和尺寸。',
+      'measure-color-picker': '从屏幕任意位置获取颜色值。',
+      'measure-pixel-density': '检测设备的像素密度和屏幕信息。',
+      'measure-viewport-size': '检测浏览器视口尺寸和设备信息。',
     },
     common: {
       loading: '加载中...',
@@ -1394,6 +1554,46 @@ export const translations: Record<Locale, Translations> = {
       'office-document-processor': 'Document Processor',
       'security-tools': 'Security Tools Suite',
       'security-password-strength': 'Password Strength Checker',
+      // 新增实用工具
+      'utility-mortgage-calculator': 'Mortgage Calculator',
+      'utility-investment-calculator': 'Investment Calculator',
+      'utility-habit-tracker': 'Habit Tracker',
+      'utility-lucky-wheel': 'Lucky Wheel',
+      'utility-ascii-art': 'ASCII Art Generator',
+      'utility-color-palette-generator': 'Color Palette Generator',
+      'utility-dice-simulator': 'Dice Simulator',
+      // 新增金融工具
+      'finance-currency-converter': 'Currency Converter',
+      'finance-loan-calculator': 'Loan Calculator',
+      'finance-investment-calculator': 'Investment Return Calculator',
+      'finance-tip-calculator': 'Tip Calculator',
+      'finance-tax-calculator': 'Tax Calculator',
+      // 新增设计工具
+      'design-css-generator': 'CSS Code Generator',
+      'design-icon-generator': 'Icon Generator',
+      'design-color-palette': 'Color Palette Generator',
+      'design-favicon-generator': 'Favicon Generator',
+      'design-logo-maker': 'Simple Logo Maker',
+      // 新增社交工具
+      'social-link-shortener': 'Link Shortener',
+      'social-hashtag-generator': 'Hashtag Generator',
+      'social-post-scheduler': 'Post Time Optimizer',
+      'social-bio-generator': 'Bio Generator',
+      // 新增生产力工具
+      'productivity-pomodoro': 'Pomodoro Timer',
+      'productivity-todo-list': 'Todo List',
+      'productivity-habit-tracker': 'Habit Tracker',
+      'productivity-time-tracker': 'Time Tracker',
+      // 新增游戏工具
+      'game-random-picker': 'Random Picker',
+      'game-dice-roller': 'Dice Roller',
+      'game-lottery': 'Lottery Tool',
+      'game-word-game': 'Word Game',
+      // 新增测量工具
+      'measure-screen-ruler': 'Screen Ruler',
+      'measure-color-picker': 'Screen Color Picker',
+      'measure-pixel-density': 'Pixel Density Detector',
+      'measure-viewport-size': 'Viewport Size Detector',
     },
     toolDescriptions: {
       // AI工具
@@ -1458,6 +1658,46 @@ export const translations: Record<Locale, Translations> = {
       'office-document-processor': 'Text processing, table generation, CSV/JSON conversion and other office-related tools.',
       'security-tools': 'Hash calculation, encryption/decryption, password strength detection, SSL certificate checking and other security tools.',
       'security-password-strength': 'Check password security strength, provide improvement suggestions to ensure password security.',
+      // 新增实用工具
+      'utility-mortgage-calculator': 'Calculate monthly payments, total interest and repayment schedule for home loans, supporting various loan parameters.',
+      'utility-investment-calculator': 'Calculate long-term investment compound returns and growth trajectory, supporting regular investment mode.',
+      'utility-habit-tracker': 'Record and track daily habits, cultivate good lifestyle, supporting goal setting.',
+      'utility-lucky-wheel': 'Customizable lottery wheel with spinning animation and history records.',
+      'utility-ascii-art': 'Convert text to ASCII art with multiple font styles and export functionality.',
+      'utility-color-palette-generator': 'Generate harmonious color schemes based on color theory, supporting various color rules and export functionality.',
+      'utility-dice-simulator': 'Virtual dice roller supporting multiple dice types, quantity settings and rolling animations.',
+      // 新增金融工具
+      'finance-currency-converter': 'Real-time currency conversion supporting major global currencies with reliable data sources.',
+      'finance-loan-calculator': 'Calculate monthly payments, interest and total amount for various loans including mortgages and car loans.',
+      'finance-investment-calculator': 'Calculate investment returns, compound growth and investment return rates.',
+      'finance-tip-calculator': 'Quickly calculate restaurant tips and per-person split amounts.',
+      'finance-tax-calculator': 'Calculate various taxes including personal income tax and VAT.',
+      // 新增设计工具
+      'design-css-generator': 'Visually generate CSS code including shadows, borders, animations and other effects.',
+      'design-icon-generator': 'Generate various style icons online, supporting SVG and PNG formats.',
+      'design-color-palette': 'Generate harmonious color schemes with multiple color rules.',
+      'design-favicon-generator': 'Generate website icon files of various sizes from images.',
+      'design-logo-maker': 'Quickly create simple text logos and graphic logos.',
+      // 新增社交工具
+      'social-link-shortener': 'Create short links with custom aliases and click statistics support.',
+      'social-hashtag-generator': 'Generate relevant hashtags for social media content.',
+      'social-post-scheduler': 'Analyze optimal posting times to improve social media engagement.',
+      'social-bio-generator': 'Generate attractive personal bios for social media accounts.',
+      // 新增生产力工具
+      'productivity-pomodoro': 'Focus work timer to help improve work efficiency and concentration.',
+      'productivity-todo-list': 'Simple task management tool supporting priorities and categories.',
+      'productivity-habit-tracker': 'Track daily habits to help develop good life habits.',
+      'productivity-time-tracker': 'Record work time, analyze time allocation and work efficiency.',
+      // 新增游戏工具
+      'game-random-picker': 'Randomly select items from a list with weight setting support.',
+      'game-dice-roller': 'Simulate rolling various types of dice, supporting multiple dice.',
+      'game-lottery': 'Fair lottery tool supporting multiple lottery modes.',
+      'game-word-game': 'Simple word guessing game that combines education with entertainment.',
+      // 新增测量工具
+      'measure-screen-ruler': 'Measure pixel distances and dimensions on screen.',
+      'measure-color-picker': 'Get color values from any position on screen.',
+      'measure-pixel-density': 'Detect device pixel density and screen information.',
+      'measure-viewport-size': 'Detect browser viewport size and device information.',
     },
     common: {
       loading: 'Loading...',
