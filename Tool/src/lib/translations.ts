@@ -124,10 +124,22 @@ export interface Translations {
     // 健康工具
     'health-bmi': string;
     'health-calorie': string;
-    // 其他工具
-    'media': string;
-    'office': string;
-    'security': string;
+    'utility-browser-info': string;
+    'utility-pomodoro-timer': string;
+    'utility-speed-test': string;
+    'utility-gps-coordinates': string;
+    'utility-compound-calculator': string;
+    // 文本工具 - 新增
+    'text-character-counter': string;
+    'text-markdown-editor': string;
+    // 开发工具 - 新增
+    'dev-gradient-generator': string;
+    'dev-image-to-base64': string;
+    // 媒体、办公、安全工具
+    'media-player': string;
+    'office-document-processor': string;
+    'security-tools': string;
+    'security-password-strength': string;
   };
   
   toolDescriptions: {
@@ -177,10 +189,22 @@ export interface Translations {
     // 健康工具
     'health-bmi': string;
     'health-calorie': string;
-    // 其他工具
-    'media': string;
-    'office': string;
-    'security': string;
+    'utility-browser-info': string;
+    'utility-pomodoro-timer': string;
+    'utility-speed-test': string;
+    'utility-gps-coordinates': string;
+    'utility-compound-calculator': string;
+    // 文本工具 - 新增
+    'text-character-counter': string;
+    'text-markdown-editor': string;
+    // 开发工具 - 新增
+    'dev-gradient-generator': string;
+    'dev-image-to-base64': string;
+    // 媒体、办公、安全工具
+    'media-player': string;
+    'office-document-processor': string;
+    'security-tools': string;
+    'security-password-strength': string;
   };
   
   // 工具详情页面
@@ -707,10 +731,22 @@ export const translations: Record<Locale, Translations> = {
       // 健康工具
       'health-bmi': 'BMI计算器',
       'health-calorie': '卡路里计算器',
-      // 其他工具
-      'media': '媒体工具',
-      'office': '办公工具',
-      'security': '安全工具',
+      'utility-browser-info': '浏览器信息',
+      'utility-pomodoro-timer': '番茄钟计时器',
+      'utility-speed-test': '网速测试',
+      'utility-gps-coordinates': 'GPS坐标工具',
+      'utility-compound-calculator': '复利计算器',
+      // 文本工具 - 新增
+      'text-character-counter': '字符计数器',
+      'text-markdown-editor': 'Markdown编辑器',
+      // 开发工具 - 新增
+      'dev-gradient-generator': '渐变生成器',
+      'dev-image-to-base64': '图片转Base64',
+      // 媒体、办公、安全工具
+      'media-player': '媒体播放器',
+      'office-document-processor': '文档处理器',
+      'security-tools': '安全工具集',
+      'security-password-strength': '密码强度检测',
     },
     toolDescriptions: {
       // AI工具
@@ -759,10 +795,22 @@ export const translations: Record<Locale, Translations> = {
       // 健康工具
       'health-bmi': '计算身体质量指数，评估健康状态。',
       'health-calorie': '计算每日所需卡路里，制定饮食计划。',
-      // 其他工具
-      'media': '音频、视频处理工具集合。',
-      'office': '文档处理、表格工具等办公相关工具。',
-      'security': '密码强度检测、加密解密等安全工具。',
+      'utility-browser-info': '查看浏览器详细信息、屏幕分辨率、用户代理等。',
+      'utility-pomodoro-timer': '专注工作计时器，帮助提高工作效率和专注度。',
+      'utility-speed-test': '测试网络连接速度，检测延迟和带宽。',
+      'utility-gps-coordinates': '获取地理位置坐标，坐标格式转换。',
+      'utility-compound-calculator': '计算投资复利收益，制定理财计划。',
+      // 文本工具 - 新增
+      'text-character-counter': '实时统计文本字符数、词数、行数，支持多种统计模式。',
+      'text-markdown-editor': '在线Markdown编辑器，支持实时预览和语法高亮。',
+      // 开发工具 - 新增
+      'dev-gradient-generator': '生成CSS渐变代码，支持线性和径向渐变，可视化编辑。',
+      'dev-image-to-base64': '将图片转换为Base64编码，方便在代码中使用。',
+      // 媒体、办公、安全工具
+      'media-player': '支持音频和视频播放，包含格式转换、剪辑等功能。',
+      'office-document-processor': '文本处理、表格生成、CSV/JSON转换等办公相关工具。',
+      'security-tools': '哈希计算、加密解密、密码强度检测、SSL证书检查等安全工具。',
+      'security-password-strength': '检测密码安全强度，提供改进建议，确保密码安全。',
     },
     common: {
       loading: '加载中...',
@@ -1312,10 +1360,22 @@ export const translations: Record<Locale, Translations> = {
       // 健康工具
       'health-bmi': 'BMI Calculator',
       'health-calorie': 'Calorie Calculator',
-      // 其他工具
-      'media': 'Media Tools',
-      'office': 'Office Tools',
-      'security': 'Security Tools',
+      'utility-browser-info': 'Browser Information',
+      'utility-pomodoro-timer': 'Pomodoro Timer',
+      'utility-speed-test': 'Internet Speed Test',
+      'utility-gps-coordinates': 'GPS Coordinates Tool',
+      'utility-compound-calculator': 'Compound Interest Calculator',
+      // 文本工具 - 新增
+      'text-character-counter': 'Character Counter',
+      'text-markdown-editor': 'Markdown Editor',
+      // 开发工具 - 新增
+      'dev-gradient-generator': 'Gradient Generator',
+      'dev-image-to-base64': 'Image to Base64',
+      // 媒体、办公、安全工具
+      'media-player': 'Media Player',
+      'office-document-processor': 'Document Processor',
+      'security-tools': 'Security Tools Suite',
+      'security-password-strength': 'Password Strength Checker',
     },
     toolDescriptions: {
       // AI工具
@@ -1364,10 +1424,22 @@ export const translations: Record<Locale, Translations> = {
       // 健康工具
       'health-bmi': 'Calculate body mass index and assess health status.',
       'health-calorie': 'Calculate daily calorie requirements and develop dietary plans.',
-      // 其他工具
-      'media': 'Audio and video processing tool collection.',
-      'office': 'Document processing, spreadsheet tools and other office-related tools.',
-      'security': 'Password strength detection, encryption/decryption and other security tools.',
+      'utility-browser-info': 'View detailed browser information, screen resolution, user agent, etc.',
+      'utility-pomodoro-timer': 'Focus work timer to help improve work efficiency and concentration.',
+      'utility-speed-test': 'Test internet connection speed, check latency and bandwidth.',
+      'utility-gps-coordinates': 'Get geographic location coordinates and coordinate format conversion.',
+      'utility-compound-calculator': 'Calculate investment compound returns and develop financial plans.',
+      // 文本工具 - 新增
+      'text-character-counter': 'Real-time statistics of text characters, words, lines, supporting multiple counting modes.',
+      'text-markdown-editor': 'Online Markdown editor with real-time preview and syntax highlighting.',
+      // 开发工具 - 新增
+      'dev-gradient-generator': 'Generate CSS gradient code, supporting linear and radial gradients with visual editing.',
+      'dev-image-to-base64': 'Convert images to Base64 encoding for convenient use in code.',
+      // 媒体、办公、安全工具
+      'media-player': 'Support audio and video playback, including format conversion, editing and other functions.',
+      'office-document-processor': 'Text processing, table generation, CSV/JSON conversion and other office-related tools.',
+      'security-tools': 'Hash calculation, encryption/decryption, password strength detection, SSL certificate checking and other security tools.',
+      'security-password-strength': 'Check password security strength, provide improvement suggestions to ensure password security.',
     },
     common: {
       loading: 'Loading...',
