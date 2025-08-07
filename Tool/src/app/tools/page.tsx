@@ -38,6 +38,12 @@ export default function ToolsPage() {
       media: t.tools.categories.media,
       office: t.tools.categories.office,
       security: t.tools.categories.security,
+      finance: t.tools.categories.finance,
+      design: t.tools.categories.design,
+      social: t.tools.categories.social,
+      productivity: t.tools.categories.productivity,
+      game: t.tools.categories.game,
+      measure: t.tools.categories.measure,
     };
     return categoryMap[categoryId] || categoryId;
   };
