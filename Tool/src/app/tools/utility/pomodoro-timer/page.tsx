@@ -65,6 +65,7 @@ export default function PomodoroTimerPage() {
   }, []);
 
   // 计时器逻辑
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (isRunning && timeLeft > 0) {
       intervalRef.current = setInterval(() => {

@@ -5,7 +5,7 @@ import { Navigation } from '@/components/navigation';
 import { ThemeProvider } from '@/components/theme-provider';
 import { LanguageProvider } from '@/components/language-provider';
 import { MetadataProvider } from '@/components/metadata-provider';
-import { SWRegister } from '@/components/sw-register';
+import ServiceWorkerRegister from '@/components/sw-register';
 import { PWAInstaller } from '@/components/pwa-installer';
 import { Analytics } from '@/components/analytics';
 
@@ -100,7 +100,7 @@ export default function RootLayout({
                 {children}
               </main>
             </div>
-            <SWRegister />
+            <ServiceWorkerRegister />
             <PWAInstaller />
             <Analytics />
           </LanguageProvider>
