@@ -68,6 +68,12 @@ export interface Translations {
         media: string;
         office: string;
         security: string;
+        finance: string;
+        design: string;
+        social: string;
+        productivity: string;
+        game: string;
+        measure: string;
       };
     popular: string;
     noResults: {
@@ -677,6 +683,12 @@ export const translations: Record<Locale, Translations> = {
         media: '媒体工具',
         office: '办公工具',
         security: '安全工具',
+        finance: '财务工具',
+        design: '设计工具',
+        social: '社交工具',
+        productivity: '生产力工具',
+        game: '游戏工具',
+        measure: '测量工具',
       },
       popular: '热门',
       noResults: {
@@ -1306,6 +1318,12 @@ export const translations: Record<Locale, Translations> = {
         media: 'Media Tools',
         office: 'Office Tools',
         security: 'Security Tools',
+        finance: 'Financial Tools',
+        design: 'Design Tools',
+        social: 'Social Tools',
+        productivity: 'Productivity Tools',
+        game: 'Game Tools',
+        measure: 'Measurement Tools',
       },
       popular: 'Popular',
       noResults: {
