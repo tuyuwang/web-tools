@@ -40,6 +40,12 @@ export default function RootLayout({
                   >
                     反馈管理
                   </a>
+                  <a
+                    href="/tools/roi"
+                    className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                  >
+                    投资回报计算器
+                  </a>
                 </div>
               </div>
             </div>
