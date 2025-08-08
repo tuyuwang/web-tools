@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>简易Logo制作</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>简易Logo制作</h1>
+    <div class="header-actions">
+      <button id="export-png" class="primary">导出 PNG</button>
+      <button id="export-svg" class="secondary">导出 SVG</button>
+    </div>
+  </header>
+  <main class="app">
+    <aside class="controls">
+      <section>
+        <label>文字</label>
+        <input id="text-input" type="text" value="LOGO" placeholder="输入品牌名" />
+      </section>
+      <section>
+        <label>字体</label>
+        <select id="font-select">
+          <option value="Inter">Inter</option>
+          <option value="Montserrat" selected>Montserrat</option>
+          <option value="system-ui">System UI</option>
+          <option value="serif">Serif</option>
+          <option value="monospace">Monospace</option>
+        </select>
+      </section>
+      <section class="grid-2">
+        <div>
+          <label>字重</label>
+          <input id="font-weight" type="range" min="300" max="900" step="100" value="800" />
+        </div>
+        <div>
+          <label>字号</label>
+          <input id="font-size" type="range" min="24" max="200" step="1" value="96" />
+        </div>
+      </section>
+      <section class="grid-2">
+        <div>
+          <label>文字颜色</label>
+          <input id="text-color" type="color" value="#111827" />
+        </div>
+        <div>
+          <label>背景颜色</label>
+          <input id="bg-color" type="color" value="#ffffff" />
+        </div>
+      </section>
+      <section class="grid-2">
+        <div>
+          <label>内边距</label>
+          <input id="padding" type="range" min="0" max="200" step="1" value="40" />
+        </div>
+        <div>
+          <label>圆角</label>
+          <input id="radius" type="range" min="0" max="200" step="1" value="24" />
+        </div>
+      </section>
+      <section class="grid-2">
+        <div>
+          <label>图标</label>
+          <select id="icon-select">
+            <option value="none">无</option>
+            <option value="circle" selected>圆形</option>
+            <option value="square">方形</option>
+            <option value="triangle">三角形</option>
+            <option value="star">星形</option>
+            <option value="bolt">闪电</option>
+          </select>
+        </div>
+        <div>
+          <label>图标颜色</label>
+          <input id="icon-color" type="color" value="#2563EB" />
+        </div>
+      </section>
+      <section class="grid-2">
+        <div>
+          <label>间距</label>
+          <input id="gap" type="range" min="0" max="120" step="1" value="16" />
+        </div>
+        <div>
+          <label>布局</label>
+          <select id="layout-select">
+            <option value="row" selected>横向</option>
+            <option value="column">纵向</option>
+          </select>
+        </div>
+      </section>
+      <section class="grid-2">
+        <div>
+          <label>画布宽(px)</label>
+          <input id="canvas-width" type="number" value="1024" />
+        </div>
+        <div>
+          <label>画布高(px)</label>
+          <input id="canvas-height" type="number" value="512" />
+        </div>
+      </section>
+      <section>
+        <label>阴影</label>
+        <input id="shadow" type="checkbox" checked />
+      </section>
+      <footer class="tips">支持拖拽移动与缩放。导出前请确认尺寸。</footer>
+    </aside>
+
+    <section class="stage-wrap">
+      <div class="stage" id="stage">
+        <svg id="logo-svg" xmlns="http://www.w3.org/2000/svg" width="1024" height="512" viewBox="0 0 1024 512">
+          <defs>
+            <filter id="shadow-filter" x="-50%" y="-50%" width="200%" height="200%">
+              <feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#000000" flood-opacity="0.15" />
+            </filter>
+          </defs>
+          <rect id="bg-rect" x="0" y="0" width="100%" height="100%" rx="24" fill="#ffffff" />
+          <g id="content" filter="url(#shadow-filter)">
+            <g id="icon" transform="translate(200,256)"></g>
+            <text id="text" x="512" y="256" text-anchor="middle" dominant-baseline="middle" font-family="Montserrat" font-weight="800" font-size="96" fill="#111827">LOGO</text>
+          </g>
+        </svg>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
