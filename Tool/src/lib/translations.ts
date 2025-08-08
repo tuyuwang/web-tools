@@ -895,7 +895,7 @@ export const translations: Record<Locale, Translations> = {
       'ai-language-detect': '自动识别文本的语言类型，支持中英日韩法德西俄阿等多种语言。',
       'ai-keyword-extract': '从文本中智能提取关键词和短语，提供频率统计和重要性评分。',
       'ai-text-summary': '提取文本关键信息，生成简洁摘要，支持多种摘要长度选择。',
-      'ai-sentiment-analysis': '分析文本的情感倾向和语调，提供情感得分、置信度与关键词。'
+      'ai-sentiment-analysis': '分析文本的情感倾向和语调，提供情感得分、置信度与关键词。',
       // 文本工具
       'text-case': '快速转换文本大小写、驼峰命名等格式，支持9种常用格式。',
       'text-encode': 'Base64、URL、HTML等编码解码工具，支持多种格式转换。',
@@ -1616,7 +1616,7 @@ export const translations: Record<Locale, Translations> = {
       'ai-language-detect': 'Automatically identify text language types, supporting Chinese, English, Japanese, Korean, French, German, Spanish, Russian, Arabic and other languages.',
       'ai-keyword-extract': 'Intelligently extract keywords and phrases from text, providing frequency statistics and importance scores.',
       'ai-text-summary': 'Extract key information and generate concise summaries with adjustable lengths.',
-      'ai-sentiment-analysis': 'Analyze sentiment polarity and tone with score, confidence, and keywords.'
+      'ai-sentiment-analysis': 'Analyze sentiment polarity and tone with score, confidence, and keywords.',
       // 文本工具
       'text-case': 'Quickly convert text case, camelCase naming and other formats, supporting 9 common formats.',
       'text-encode': 'Base64, URL, HTML encoding and decoding tools, supporting multiple format conversions.',
