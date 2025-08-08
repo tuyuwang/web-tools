@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>屏幕取色器</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>屏幕取色器</h1>
+      <div class="actions">
+        <button id="btn-start-eyedropper" class="btn primary">开始取色</button>
+        <button id="btn-start-capture" class="btn">屏幕捕获取色</button>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="panel current-color">
+        <div class="swatch" id="current-swatch" aria-label="当前颜色预览"></div>
+        <div class="readouts">
+          <div class="row">
+            <label>HEX</label>
+            <input id="hex-value" class="code" type="text" readonly />
+            <button data-copy-target="#hex-value" class="btn small copy">复制</button>
+          </div>
+          <div class="row">
+            <label>RGB</label>
+            <input id="rgb-value" class="code" type="text" readonly />
+            <button data-copy-target="#rgb-value" class="btn small copy">复制</button>
+          </div>
+          <div class="row">
+            <label>HSL</label>
+            <input id="hsl-value" class="code" type="text" readonly />
+            <button data-copy-target="#hsl-value" class="btn small copy">复制</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel contrast" aria-label="可读性对比">
+        <h2>对比度</h2>
+        <div class="contrast-grid">
+          <div class="contrast-item">
+            <div class="contrast-swatch" id="contrast-on-white"></div>
+            <div class="contrast-meta">
+              <div>与白色对比</div>
+              <div class="ratio" id="ratio-white">-</div>
+            </div>
+          </div>
+          <div class="contrast-item">
+            <div class="contrast-swatch" id="contrast-on-black"></div>
+            <div class="contrast-meta">
+              <div>与黑色对比</div>
+              <div class="ratio" id="ratio-black">-</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel history" aria-label="历史颜色">
+        <h2>历史</h2>
+        <div id="history-list" class="history-list"></div>
+        <button id="btn-clear-history" class="btn small danger">清空历史</button>
+      </section>
+
+      <section class="panel tips">
+        <h2>使用提示</h2>
+        <ul>
+          <li>优先使用浏览器原生 EyeDropper 取色，失败时可使用“屏幕捕获取色”。</li>
+          <li>取色过程中可按 Esc 取消。</li>
+          <li>点击历史色块可快速设为当前颜色。</li>
+        </ul>
+      </section>
+    </main>
+
+    <div id="overlay" class="overlay hidden" aria-hidden="true">
+      <div class="overlay-toolbar">
+        <span>点击以拾取颜色，Esc 取消</span>
+        <button id="btn-cancel-overlay" class="btn small">取消</button>
+      </div>
+      <canvas id="overlay-canvas"></canvas>
+      <canvas id="overlay-zoom" width="140" height="140" class="zoom"></canvas>
+    </div>
+
+    <template id="toast-template">
+      <div class="toast"></div>
+    </template>
+
+    <script src="./main.js" type="module"></script>
+  </body>
+</html>
