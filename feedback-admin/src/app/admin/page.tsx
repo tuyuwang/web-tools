@@ -19,8 +19,7 @@ import {
   Clock,
   Star,
   BarChart3,
-  Settings,
-  ChartBar
+  Settings
 } from 'lucide-react';
 import FeedbackAnalytics from '@/components/feedback-analytics';
 import FeedbackNotification from '@/components/feedback-notification';
@@ -331,7 +330,7 @@ export default function FeedbackAdminPage() {
               onClick={() => setShowAnalytics(!showAnalytics)}
               className="flex items-center gap-2 px-4 py-2 bg-blue-100 hover:bg-blue-200 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-md transition-colors"
             >
-              <ChartBar className="w-4 h-4" />
+              <BarChart3 className="w-4 h-4" />
               {showAnalytics ? '隐藏分析' : '显示分析'}
             </button>
             <button
