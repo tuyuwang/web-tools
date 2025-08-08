@@ -148,7 +148,7 @@ export default function ToolsPage() {
           {filteredTools.map((tool) => (
             <div key={tool.id} className="relative">
               {tool.popular && (
-                <div className="absolute top-2 right-2 z-10">
+                <div className="absolute top-2 right-2 z-10 pointer-events-none">
                   <span className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full shadow-sm">
                     {t.tools.popular}
                   </span>
