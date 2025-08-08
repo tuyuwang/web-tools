@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>配色方案生成器</title>
+    <meta name="description" content="一个快速生成配色方案的工具，支持互补、类似、三分、四分、分裂互补、单色等方案，支持导出和分享。" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%237755ff'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>配色方案生成器</h1>
+      <div class="header-actions">
+        <button id="randomizeBtn" class="btn">🎲 随机</button>
+        <button id="generateBtn" class="btn btn-primary">⚡ 生成</button>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <section class="panel controls-panel">
+        <div class="form-row">
+          <label for="baseColorPicker">基色</label>
+          <div class="color-input-group">
+            <input type="color" id="baseColorPicker" value="#7755ff" />
+            <input type="text" id="baseColorHex" value="#7755ff" spellcheck="false" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label for="schemeType">方案</label>
+          <select id="schemeType">
+            <option value="monochrome">单色</option>
+            <option value="complementary">互补</option>
+            <option value="split-complementary">分裂互补</option>
+            <option value="analogous" selected>类似</option>
+            <option value="triadic">三分</option>
+            <option value="tetradic">四分（矩形）</option>
+            <option value="square">等距（正方）</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <label for="colorCount">颜色数量 <span id="colorCountValue">5</span></label>
+          <input type="range" id="colorCount" min="3" max="10" value="5" />
+        </div>
+
+        <div class="form-row">
+          <label for="formatSelect">显示格式</label>
+          <select id="formatSelect">
+            <option value="hex" selected>HEX</option>
+            <option value="rgb">RGB</option>
+            <option value="hsl">HSL</option>
+          </select>
+        </div>
+
+        <div class="form-row export-row">
+          <button id="exportCssBtn" class="btn">导出 CSS</button>
+          <button id="exportJsonBtn" class="btn">导出 JSON</button>
+          <button id="exportTailwindBtn" class="btn">导出 Tailwind</button>
+          <button id="shareBtn" class="btn">🔗 分享</button>
+        </div>
+      </section>
+
+      <section class="panel palette-panel">
+        <div id="paletteGrid" class="palette-grid" aria-live="polite"></div>
+        <div class="palette-hint">可拖拽排序，点击🔒锁定，点击颜色复制</div>
+      </section>
+
+      <section class="panel contrast-panel">
+        <h2>对比度检测</h2>
+        <div class="contrast-controls">
+          <div class="form-row">
+            <label for="bgSelect">背景</label>
+            <select id="bgSelect"></select>
+          </div>
+          <div class="form-row">
+            <label for="fgSelect">前景</label>
+            <select id="fgSelect"></select>
+          </div>
+          <div class="form-row">
+            <label for="sampleText">示例文本</label>
+            <input type="text" id="sampleText" value="快速的棕色狐狸跳过了懒狗" />
+          </div>
+        </div>
+        <div id="contrastPreview" class="contrast-preview">
+          <div class="preview-card">
+            <div class="preview-top">
+              <span id="contrastRatio">--</span>
+              <span id="contrastGrade" class="badge">—</span>
+            </div>
+            <div id="previewText" class="preview-text">快速的棕色狐狸跳过了懒狗</div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <span>灵感来源：Coolors、Adobe Color 等在线工具。</span>
+      <span>Made with ❤️</span>
+    </footer>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script src="./app.js" defer></script>
+  </body>
+</html>
