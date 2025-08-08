@@ -104,6 +104,7 @@ export interface Translations {
     'image-watermark': string;
     'image-resize': string;
     'image-filter': string;
+    'image-exif': string;
     // 开发工具
     'dev-format': string;
     'dev-json': string;
@@ -118,6 +119,7 @@ export interface Translations {
     'utility-converter': string;
     'utility-data-generator': string;
     'utility-file-converter': string;
+    'utility-barcode-generator': string;
     'utility-network-tools': string;
     'utility-random': string;
     'utility-time-calculator': string;
@@ -144,6 +146,7 @@ export interface Translations {
     // 媒体、办公、安全工具
     'media-player': string;
     'office-document-processor': string;
+    'office-pdf-tools': string;
     'security-tools': string;
     'security-password-strength': string;
     // 新增实用工具
@@ -209,6 +212,7 @@ export interface Translations {
     'image-watermark': string;
     'image-resize': string;
     'image-filter': string;
+    'image-exif': string;
     // 开发工具
     'dev-format': string;
     'dev-json': string;
@@ -223,6 +227,7 @@ export interface Translations {
     'utility-converter': string;
     'utility-data-generator': string;
     'utility-file-converter': string;
+    'utility-barcode-generator': string;
     'utility-network-tools': string;
     'utility-random': string;
     'utility-time-calculator': string;
@@ -249,6 +254,7 @@ export interface Translations {
     // 媒体、办公、安全工具
     'media-player': string;
     'office-document-processor': string;
+    'office-pdf-tools': string;
     'security-tools': string;
     'security-password-strength': string;
     // 新增实用工具
@@ -797,6 +803,7 @@ export const translations: Record<Locale, Translations> = {
       'image-watermark': '水印添加工具',
       'image-resize': '图片尺寸调整',
       'image-filter': '图片滤镜工具',
+      'image-exif': 'EXIF查看/清除',
       // 开发工具
       'dev-format': '代码格式化',
       'dev-json': 'JSON工具',
@@ -811,6 +818,7 @@ export const translations: Record<Locale, Translations> = {
       'utility-converter': '单位转换器',
       'utility-data-generator': '数据生成器',
       'utility-file-converter': '文件转换器',
+      'utility-barcode-generator': '条形码生成器',
       'utility-network-tools': '网络工具',
       'utility-random': '随机数生成器',
       'utility-time-calculator': '时间计算器',
@@ -837,6 +845,7 @@ export const translations: Record<Locale, Translations> = {
       // 媒体、办公、安全工具
       'media-player': '媒体播放器',
       'office-document-processor': '文档处理器',
+      'office-pdf-tools': 'PDF合并拆分',
       'security-tools': '安全工具集',
       'security-password-strength': '密码强度检测',
       // 新增实用工具
@@ -901,6 +910,7 @@ export const translations: Record<Locale, Translations> = {
       'image-watermark': '为图片添加文字水印，支持自定义位置、颜色、透明度等。',
       'image-resize': '调整图片尺寸，支持保持比例、批量处理等功能。',
       'image-filter': '为图片添加各种滤镜效果，支持亮度、对比度、饱和度调节。',
+      'image-exif': 'View and remove image EXIF metadata by re-encoding locally.',
       // 开发工具
       'dev-format': '格式化JavaScript、JSON、CSS等代码，使其更易读。',
       'dev-json': '格式化、验证、压缩JSON数据，支持自定义缩进。',
@@ -915,6 +925,7 @@ export const translations: Record<Locale, Translations> = {
       'utility-converter': '转换长度、重量、温度等各种单位。',
       'utility-data-generator': '生成测试数据，支持多种格式和类型。',
       'utility-file-converter': '转换各种文件格式，支持文档、图片等。',
+      'utility-barcode-generator': '生成条码，支持多种格式和编码方式。',
       'utility-network-tools': 'IP查询、端口扫描等网络相关工具。',
       'utility-random': '生成随机数、随机字符串等。',
       'utility-time-calculator': '计算时间差、日期加减等时间相关计算。',
@@ -941,6 +952,7 @@ export const translations: Record<Locale, Translations> = {
       // 媒体、办公、安全工具
       'media-player': '支持音频和视频播放，包含格式转换、剪辑等功能。',
       'office-document-processor': '文本处理、表格生成、CSV/JSON转换等办公相关工具。',
+      'office-pdf-tools': 'PDF Merge & Split',
       'security-tools': '哈希计算、加密解密、密码强度检测、SSL证书检查等安全工具。',
       'security-password-strength': '检测密码安全强度，提供改进建议，确保密码安全。',
       // 新增实用工具
@@ -1512,6 +1524,7 @@ export const translations: Record<Locale, Translations> = {
       'image-watermark': 'Watermark Adding Tool',
       'image-resize': 'Image Resize Tool',
       'image-filter': 'Image Filter Tool',
+      'image-exif': 'EXIF View/Remove',
       // 开发工具
       'dev-format': 'Code Formatter',
       'dev-json': 'JSON Tool',
@@ -1526,6 +1539,7 @@ export const translations: Record<Locale, Translations> = {
       'utility-converter': 'Unit Converter',
       'utility-data-generator': 'Data Generator',
       'utility-file-converter': 'File Converter',
+      'utility-barcode-generator': 'Barcode Generator',
       'utility-network-tools': 'Network Tools',
       'utility-random': 'Random Number Generator',
       'utility-time-calculator': 'Time Calculator',
@@ -1552,6 +1566,7 @@ export const translations: Record<Locale, Translations> = {
       // 媒体、办公、安全工具
       'media-player': 'Media Player',
       'office-document-processor': 'Document Processor',
+      'office-pdf-tools': 'PDF Merge & Split',
       'security-tools': 'Security Tools Suite',
       'security-password-strength': 'Password Strength Checker',
       // 新增实用工具
@@ -1616,6 +1631,7 @@ export const translations: Record<Locale, Translations> = {
       'image-watermark': 'Add text watermarks to images with customizable position, color, transparency, etc.',
       'image-resize': 'Adjust image dimensions, supporting aspect ratio preservation and batch processing.',
       'image-filter': 'Add various filter effects to images, supporting brightness, contrast, saturation adjustment.',
+      'image-exif': 'View and remove image EXIF metadata by re-encoding locally.',
       // 开发工具
       'dev-format': 'Format JavaScript, JSON, CSS and other code to make it more readable.',
       'dev-json': 'Format, validate, compress JSON data with custom indentation support.',
@@ -1630,6 +1646,7 @@ export const translations: Record<Locale, Translations> = {
       'utility-converter': 'Convert various units such as length, weight, temperature, etc.',
       'utility-data-generator': 'Generate test data, supporting multiple formats and types.',
       'utility-file-converter': 'Convert various file formats, supporting documents, images, etc.',
+      'utility-barcode-generator': 'Generate barcodes, supporting multiple formats and encoding methods.',
       'utility-network-tools': 'IP query, port scanning and other network-related tools.',
       'utility-random': 'Generate random numbers, random strings, etc.',
       'utility-time-calculator': 'Calculate time differences, date addition/subtraction and other time-related calculations.',
@@ -1656,6 +1673,7 @@ export const translations: Record<Locale, Translations> = {
       // 媒体、办公、安全工具
       'media-player': 'Support audio and video playback, including format conversion, editing and other functions.',
       'office-document-processor': 'Text processing, table generation, CSV/JSON conversion and other office-related tools.',
+      'office-pdf-tools': 'PDF Merge & Split',
       'security-tools': 'Hash calculation, encryption/decryption, password strength detection, SSL certificate checking and other security tools.',
       'security-password-strength': 'Check password security strength, provide improvement suggestions to ensure password security.',
       // 新增实用工具
