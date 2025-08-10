@@ -169,6 +169,7 @@ export interface Translations {
     'design-color-palette': string;
     'design-favicon-generator': string;
     'design-logo-maker': string;
+    'design-excalidraw': string;
     // 新增社交工具
     'social-link-shortener': string;
     'social-hashtag-generator': string;
@@ -277,6 +278,7 @@ export interface Translations {
     'design-color-palette': string;
     'design-favicon-generator': string;
     'design-logo-maker': string;
+    'design-excalidraw': string;
     // 新增社交工具
     'social-link-shortener': string;
     'social-hashtag-generator': string;
@@ -868,6 +870,7 @@ export const translations: Record<Locale, Translations> = {
       'design-color-palette': '配色方案生成器',
       'design-favicon-generator': 'Favicon生成器',
       'design-logo-maker': '简易Logo制作',
+      'design-excalidraw': 'Excalidraw 白板',
       // 新增社交工具
       'social-link-shortener': '链接缩短器',
       'social-hashtag-generator': '话题标签生成器',
@@ -975,6 +978,7 @@ export const translations: Record<Locale, Translations> = {
       'design-color-palette': '生成和谐的配色方案，提供多种配色规则。',
       'design-favicon-generator': '从图片生成各种尺寸的网站图标文件。',
       'design-logo-maker': '快速制作简单的文字Logo和图形Logo。',
+      'design-excalidraw': 'Excalidraw 白板',
       // 新增社交工具
       'social-link-shortener': '创建短链接，支持自定义别名和点击统计。',
       'social-hashtag-generator': '为社交媒体内容生成相关的话题标签。',
@@ -1589,6 +1593,7 @@ export const translations: Record<Locale, Translations> = {
       'design-color-palette': 'Color Palette Generator',
       'design-favicon-generator': 'Favicon Generator',
       'design-logo-maker': 'Simple Logo Maker',
+      'design-excalidraw': 'Excalidraw Whiteboard',
       // 新增社交工具
       'social-link-shortener': 'Link Shortener',
       'social-hashtag-generator': 'Hashtag Generator',
@@ -1696,6 +1701,7 @@ export const translations: Record<Locale, Translations> = {
       'design-color-palette': 'Generate harmonious color schemes with multiple color rules.',
       'design-favicon-generator': 'Generate website icon files of various sizes from images.',
       'design-logo-maker': 'Quickly create simple text logos and graphic logos.',
+      'design-excalidraw': 'Online whiteboard with hand-drawn style and collaboration support.',
       // 新增社交工具
       'social-link-shortener': 'Create short links with custom aliases and click statistics support.',
       'social-hashtag-generator': 'Generate relevant hashtags for social media content.',
