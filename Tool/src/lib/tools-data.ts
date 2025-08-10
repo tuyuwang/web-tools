@@ -663,6 +663,15 @@ export const tools: Tool[] = [
     category: 'design',
     popular: false,
   },
+  {
+    id: 'design-excalidraw',
+    name: 'Excalidraw 白板',
+    description: '在线白板绘图，支持手绘风格图形和协作。',
+    href: '/tools/design/excalidraw',
+    icon: 'PenTool',
+    category: 'design',
+    popular: true,
+  },
   // 新增社交媒体工具
   {
     id: 'social-link-shortener',
