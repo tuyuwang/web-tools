@@ -63,12 +63,12 @@ export default function WhiteboardPage(): JSX.Element {
   const handleExport = useCallback(
     async (type: "png" | "svg") => {
       if (!excalidrawRef.current) return;
-      const module = await import("@excalidraw/excalidraw");
+      const excalidrawLib = await import("@excalidraw/excalidraw");
       const elements = excalidrawRef.current.getSceneElements();
       const appState = excalidrawRef.current.getAppState();
       const files = excalidrawRef.current.getFiles();
       const mimeType = type === "png" ? "image/png" : "image/svg+xml";
-      const blob = await module.exportToBlob({ elements, appState, files, mimeType });
+      const blob = await excalidrawLib.exportToBlob({ elements, appState, files, mimeType });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -81,11 +81,11 @@ export default function WhiteboardPage(): JSX.Element {
 
   const handleExportJson = useCallback(async () => {
     if (!excalidrawRef.current) return;
-    const module = await import("@excalidraw/excalidraw");
+    const excalidrawLib = await import("@excalidraw/excalidraw");
     const elements = excalidrawRef.current.getSceneElements();
     const appState = excalidrawRef.current.getAppState();
     const files = excalidrawRef.current.getFiles();
-    const jsonString = module.serializeAsJSON(elements, appState, files, "local");
+    const jsonString = excalidrawLib.serializeAsJSON(elements, appState, files, "local");
     const blob = new Blob([jsonString], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -99,8 +99,8 @@ export default function WhiteboardPage(): JSX.Element {
     const text = await file.text();
     try {
       const data = JSON.parse(text);
-      const module = await import("@excalidraw/excalidraw");
-      const restored = module.restore(data, null, null);
+      const excalidrawLib = await import("@excalidraw/excalidraw");
+      const restored = excalidrawLib.restore(data, null, null);
       excalidrawRef.current?.updateScene({
         elements: restored.elements || [],
         appState: restored.appState || {},
