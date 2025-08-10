@@ -7,6 +7,7 @@ from typing import Optional
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.responses import RedirectResponse, HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 
@@ -25,6 +26,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Mount 2048 static files if present
+STATIC_2048_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "static", "2048"))
+if os.path.isdir(STATIC_2048_DIR):
+    app.mount("/2048", StaticFiles(directory=STATIC_2048_DIR, html=True), name="2048")
 
 
 @app.on_event("startup")
@@ -62,6 +68,7 @@ def index() -> str:
               <button type=\"submit\">生成短链接</button>
               <div class=\"note\">API 文档见 <a href=\"/docs\">/docs</a></div>
             </form>
+            <div style=\"margin-top:16px\"><a href=\"/2048\" target=\"_blank\">小游戏：2048</a></div>
             <div id=\"r\" class=\"result\" style=\"display:none\"></div>
             <script>
               const f = document.getElementById('f');
