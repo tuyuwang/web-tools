@@ -8,7 +8,7 @@ from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.responses import RedirectResponse, HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
-from sqlalchemy import select
+from sqlalchemy import select, text
 
 from .database import Base, engine, get_db
 from .models import Link
@@ -27,9 +27,25 @@ app.add_middleware(
 )
 
 
+def _ensure_original_url_is_text() -> None:
+    """Best-effort migration to widen `original_url` to TEXT on non-SQLite DBs."""
+    try:
+        dialect = engine.dialect.name
+        if dialect in ("postgresql", "mysql", "mariadb"):
+            with engine.begin() as conn:
+                if dialect == "postgresql":
+                    conn.execute(text("ALTER TABLE links ALTER COLUMN original_url TYPE TEXT"))
+                else:  # mysql/mariadb
+                    conn.execute(text("ALTER TABLE links MODIFY original_url TEXT NOT NULL"))
+    except Exception:
+        # Ignore if the column is already TEXT or if the user lacks permissions
+        pass
+
+
 @app.on_event("startup")
 def on_startup() -> None:
     Base.metadata.create_all(bind=engine)
+    _ensure_original_url_is_text()
 
 
 @app.get("/", response_class=HTMLResponse)
