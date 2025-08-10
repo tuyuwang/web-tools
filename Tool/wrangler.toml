@@ -1,14 +1,6 @@
-[build]
-command = "npm run build"
-publish = "out"
-
-[build.environment]
-NODE_VERSION = "18"
+pages_build_output_dir = "out"
 
 [[redirects]]
 from = "/*"
 to = "/index.html"
-status = 200
-
-[site]
-bucket = "out" 
+status = 200 
