@@ -663,6 +663,15 @@ export const tools: Tool[] = [
     category: 'design',
     popular: false,
   },
+  {
+    id: 'design-whiteboard',
+    name: '白板（Excalidraw）',
+    description: '基于 Excalidraw 的在线白板，适合头脑风暴与流程草图。',
+    href: '/tools/design/whiteboard',
+    icon: 'PenTool',
+    category: 'design',
+    popular: true,
+  },
   // 新增社交媒体工具
   {
     id: 'social-link-shortener',
