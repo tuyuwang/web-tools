@@ -111,6 +111,7 @@ export interface Translations {
     'dev-color': string;
     'dev-api': string;
     'dev-timestamp': string;
+    'dev-oc-to-lua': string;
     // 实用工具
     'utility-qr': string;
     'utility-password': string;
@@ -219,6 +220,7 @@ export interface Translations {
     'dev-color': string;
     'dev-api': string;
     'dev-timestamp': string;
+    'dev-oc-to-lua': string;
     // 实用工具
     'utility-qr': string;
     'utility-password': string;
@@ -810,6 +812,7 @@ export const translations: Record<Locale, Translations> = {
       'dev-color': '颜色选择器',
       'dev-api': 'API测试工具',
       'dev-timestamp': '时间戳转换',
+      'dev-oc-to-lua': 'Objective-C 转 Lua',
       // 实用工具
       'utility-qr': '二维码生成器',
       'utility-password': '密码生成器',
@@ -917,6 +920,7 @@ export const translations: Record<Locale, Translations> = {
       'dev-color': '选择颜色并获取多种格式的颜色值，支持RGB、HSL、HEX等格式。',
       'dev-api': '测试API接口，发送HTTP请求并查看响应结果。',
       'dev-timestamp': '时间戳与日期时间相互转换，支持多种格式。',
+      'dev-oc-to-lua': '粘贴 Objective-C 代码，一键转换为 Lua 示例（启发式映射，需校验）。',
       // 实用工具
       'utility-qr': '生成自定义二维码，支持文本和URL，可下载使用。',
       'utility-password': '生成安全、随机的密码，支持自定义长度和字符类型。',
@@ -1531,6 +1535,7 @@ export const translations: Record<Locale, Translations> = {
       'dev-color': 'Color Picker',
       'dev-api': 'API Testing Tool',
       'dev-timestamp': 'Timestamp Converter',
+      'dev-oc-to-lua': 'Objective-C to Lua',
       // 实用工具
       'utility-qr': 'QR Code Generator',
       'utility-password': 'Password Generator',
@@ -1638,6 +1643,7 @@ export const translations: Record<Locale, Translations> = {
       'dev-color': 'Select colors and get color values in multiple formats, supporting RGB, HSL, HEX, etc.',
       'dev-api': 'Test API interfaces, send HTTP requests and view response results.',
       'dev-timestamp': 'Convert between timestamps and date/time, supporting multiple formats.',
+      'dev-oc-to-lua': 'Paste Objective-C code and get a Lua implementation (heuristic mapping).',
       // 实用工具
       'utility-qr': 'Generate custom QR codes, supporting text and URLs, downloadable for use.',
       'utility-password': 'Generate secure, random passwords with customizable length and character types.',

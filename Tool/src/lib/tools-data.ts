@@ -245,6 +245,15 @@ export const tools: Tool[] = [
     popular: false,
   },
   {
+    id: 'dev-oc-to-lua',
+    name: 'Objective-C 转 Lua',
+    description: '粘贴 Objective-C 代码，一键转换为 Lua 实现（启发式映射）。',
+    href: '/tools/dev/oc-to-lua',
+    icon: 'Code',
+    category: 'dev',
+    popular: false,
+  },
+  {
     id: 'utility-qr',
     name: '二维码生成器',
     description: '生成自定义二维码，支持文本和URL，可下载使用。',
